@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multielevación — Gestión de Instalaciones</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange: #E8541A;
+  --orange-hover: #D04A14;
+  --orange-light: #FFF0E9;
+  --orange-mid: #F97B45;
+  --bg: #F7F5F2;
+  --surface: #FFFFFF;
+  --surface2: #F0EDE8;
+  --surface3: #E8E4DE;
+  --border: rgba(0,0,0,0.07);
+  --border-strong: rgba(0,0,0,0.13);
+  --text: #1A1916;
+  --text2: #6B6860;
+  --text3: #9B9890;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.09);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --sidebar: 196px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111110;
+    --surface: #1C1B19;
+    --surface2: #242320;
+    --surface3: #2C2B28;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.13);
+    --text: #EDEBE6;
+    --text2: #9B9890;
+    --text3: #6B6860;
+    --orange-light: #251508;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.6);
+  }
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ======================== LOGIN ======================== */
+#login-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--bg);
+}
+
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: var(--shadow-lg);
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.login-logo-dot {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--orange);
+  display: flex; align-items: center; justify-content: center;
+}
+.login-logo-dot svg { width: 16px; height: 16px; fill: white; }
+.login-logo-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+.login-logo-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+.login-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.login-sub { font-size: 13px; color: var(--text2); margin-bottom: 28px; }
+
+.login-field { margin-bottom: 14px; }
+.login-label {
+  font-size: 11px; font-weight: 600; color: var(--text2);
+  letter-spacing: 0.5px; text-transform: uppercase;
+  display: block; margin-bottom: 5px;
+}
+.login-input {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  background: var(--surface2);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.15s;
+}
+.login-input:focus { outline: none; border-color: var(--orange); }
+
+.login-btn {
+  width: 100%; padding: 11px;
+  background: var(--orange); color: white;
+  border: none; border-radius: 9px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; margin-top: 6px;
+  transition: background 0.15s;
+}
+.login-btn:hover { background: var(--orange-hover); }
+.login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.login-error {
+  display: none;
+  background: #FCEBEB; color: #A32D2D;
+  border-radius: 8px; padding: 9px 12px;
+  font-size: 12px; margin-top: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  .login-error { background: #501313; color: #F09595; }
+}
+
+.login-domain-note {
+  text-align: center; font-size: 11px; color: var(--text3);
+  margin-top: 16px;
+}
+
+/* ======================== APP ======================== */
+#app-screen { display: none; flex-direction: column; height: 100vh; }
+
+/* TOPBAR */
+.topbar {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 0 16px; height: 50px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0; gap: 10px;
+  z-index: 10;
+}
+
+.logo {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px; font-weight: 800;
+  letter-spacing: -0.3px;
+  flex-shrink: 0;
+}
+.logo-dot {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: var(--orange);
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-dot svg { width: 11px; height: 11px; fill: white; }
+
+.nav-tabs {
+  display: flex; gap: 2px;
+  background: var(--surface2);
+  border-radius: 8px; padding: 3px;
+  overflow-x: auto;
+}
+.nav-tab {
+  padding: 5px 11px; border-radius: 6px;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; color: var(--text2);
+  border: none; background: transparent;
+  transition: all 0.15s; white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+}
+.nav-tab.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.nav-tab:hover:not(.active) { color: var(--text); }
+
+.topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+.btn-add {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 13px;
+  background: var(--orange); color: white;
+  border: none; border-radius: 8px;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s; white-space: nowrap;
+}
+.btn-add:hover { background: var(--orange-hover); }
+
+.user-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--orange-light); color: var(--orange);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.user-menu {
+  display: none; position: absolute; top: 36px; right: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 6px;
+  box-shadow: var(--shadow-md); min-width: 160px;
+  z-index: 100;
+}
+.user-menu.open { display: block; }
+.user-menu-item {
+  padding: 7px 10px; border-radius: 6px;
+  font-size: 13px; cursor: pointer; color: var(--text2);
+}
+.user-menu-item:hover { background: var(--surface2); color: var(--text); }
+.user-menu-email {
+  padding: 7px 10px; font-size: 11px; color: var(--text3);
+  border-bottom: 1px solid var(--border); margin-bottom: 4px;
+}
+
+/* MAIN */
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar); flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  padding: 12px 10px;
+  display: flex; flex-direction: column; gap: 2px;
+  overflow-y: auto;
+}
+.sidebar-label {
+  font-size: 9px; font-weight: 700; color: var(--text3);
+  letter-spacing: 0.8px; text-transform: uppercase;
+  padding: 8px 8px 3px; margin-top: 6px;
+}
+.sidebar-label:first-child { margin-top: 0; }
+.sidebar-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 8px; border-radius: 7px;
+  cursor: pointer; font-size: 12px; color: var(--text2);
+  transition: all 0.12s;
+}
+.sidebar-item:hover { background: var(--surface2); color: var(--text); }
+.sidebar-item.active { background: var(--orange-light); color: var(--orange); font-weight: 600; }
+.tec-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* CONTENT */
+.content { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+
+/* VIEWS */
+.view { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+.view.active { display: flex; }
+
+/* LOADING */
+.loading-state {
+  display: flex; align-items: center; justify-content: center;
+  flex: 1; flex-direction: column; gap: 12px; color: var(--text3);
+}
+.spinner {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--orange);
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* EMPTY */
+.empty-state {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  flex: 1; gap: 8px; color: var(--text3); padding: 40px;
+}
+.empty-state p { font-size: 13px; }
+
+/* ======================== DASHBOARD ======================== */
+.dashboard-scroll { overflow-y: auto; padding: 18px; flex: 1; }
+
+.dash-section-title {
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+  color: var(--text2); letter-spacing: 0.3px; margin-bottom: 10px;
+  text-transform: uppercase; font-size: 10px; letter-spacing: 0.8px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px; margin-bottom: 18px;
+}
+.kpi-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 14px 15px;
+}
+.kpi-label { font-size: 10px; color: var(--text3); margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+.kpi-value { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--text); line-height: 1; }
+.kpi-badge {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: 4px; margin-top: 7px;
+}
+.badge-ok { background: #EAF3DE; color: #3B6D11; }
+.badge-warn { background: #FAEEDA; color: #854F0B; }
+.badge-alert { background: #FCEBEB; color: #A32D2D; }
+@media (prefers-color-scheme: dark) {
+  .badge-ok { background: #173404; color: #97C459; }
+  .badge-warn { background: #412402; color: #EF9F27; }
+  .badge-alert { background: #501313; color: #F09595; }
+}
+
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .dash-grid { grid-template-columns: 1fr; } }
+
+.dash-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 15px;
+}
+.dash-card-title { font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.tec-bar-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; }
+.tec-bar-name { font-size: 12px; min-width: 70px; }
+.bar-wrap { height: 5px; flex: 1; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; background: var(--orange); transition: width 0.4s; }
+.tec-bar-count { font-size: 11px; color: var(--text3); min-width: 24px; text-align: right; }
+
+.phase-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 0; border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.phase-row:last-child { border-bottom: none; }
+.phase-left { display: flex; align-items: center; gap: 7px; }
+.phase-dot { width: 6px; height: 6px; border-radius: 50%; }
+.phase-n { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+
+.upcoming-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 8px;
+  margin-bottom: 4px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface2);
+  transition: box-shadow 0.15s;
+}
+.upcoming-item:hover { box-shadow: var(--shadow-md); }
+.upcoming-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.upcoming-main { flex: 1; }
+.upcoming-name { font-size: 12px; font-weight: 600; }
+.upcoming-addr { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.upcoming-right { text-align: right; }
+.upcoming-date { font-size: 10px; color: var(--text3); }
+.eq-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px;
+  background: var(--orange-light); color: var(--orange); margin-top: 3px; display: inline-block;
+}
+
+/* ======================== KANBAN ======================== */
+.kanban-wrap { overflow-x: auto; overflow-y: hidden; flex: 1; padding: 14px; }
+.kanban-board { display: flex; gap: 10px; height: 100%; min-width: max-content; }
+.kanban-col { width: 210px; flex-shrink: 0; display: flex; flex-direction: column; }
+.kanban-col-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-bottom: none; border-radius: 9px 9px 0 0;
+}
+.col-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2); }
+.col-count {
+  font-size: 10px; font-weight: 700;
+  background: var(--surface3); color: var(--text2);
+  padding: 1px 6px; border-radius: 10px;
+}
+.kanban-cards {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-top: none; border-radius: 0 0 9px 9px;
+  padding: 6px; flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 5px; min-height: 60px;
+}
+
+.k-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 9px 10px;
+  cursor: pointer; position: relative;
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+.k-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.k-card-name { font-size: 12px; font-weight: 600; margin-bottom: 3px; line-height: 1.3; }
+.k-card-addr { font-size: 10px; color: var(--text2); margin-bottom: 7px; }
+.k-card-footer { display: flex; align-items: center; justify-content: space-between; }
+.k-equipo { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: var(--orange-light); color: var(--orange); }
+.k-tecs { display: flex; }
+.k-tec-avatar {
+  width: 17px; height: 17px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 7px; font-weight: 700;
+  border: 1.5px solid var(--surface);
+  margin-left: -4px;
+}
+.k-tec-avatar:first-child { margin-left: 0; }
+.k-date { font-size: 9px; color: var(--text3); margin-top: 5px; }
+.k-urgent { position: absolute; top: 8px; right: 8px; width: 5px; height: 5px; border-radius: 50%; background: #E24B4A; }
+.k-empty { text-align: center; padding: 16px; font-size: 11px; color: var(--text3); }
+
+/* ======================== PLANNING ======================== */
+.planning-wrap { flex: 1; overflow: auto; padding: 14px; }
+.planning-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.planning-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+.week-nav { display: flex; align-items: center; gap: 4px; }
+.week-btn {
+  width: 26px; height: 26px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--surface);
+  cursor: pointer; color: var(--text2); font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s;
+}
+.week-btn:hover { background: var(--surface2); color: var(--text); }
+.week-label { font-size: 12px; font-weight: 600; min-width: 130px; text-align: center; }
+
+.planning-grid {
+  display: grid;
+  grid-template-columns: 90px repeat(5, 1fr);
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  overflow: hidden; background: var(--surface); min-width: 560px;
+}
+.pg-header {
+  padding: 8px 8px; background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  font-size: 10px; font-weight: 700; color: var(--text2);
+  text-align: center; text-transform: uppercase; letter-spacing: 0.4px;
+}
+.pg-header.tec-h { text-align: left; }
+.pg-cell {
+  padding: 6px; border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border); vertical-align: top;
+}
+.pg-cell:last-child { border-right: none; }
+.pg-cell.tec-cell {
+  display: flex; align-items: flex-start; gap: 6px; padding: 8px 7px;
+  border-right: 1px solid var(--border-strong);
+}
+.pg-cell.day-cell { display: flex; flex-direction: column; gap: 3px; }
+
+.pg-job {
+  background: var(--orange-light); border-left: 2px solid var(--orange);
+  border-radius: 4px; padding: 3px 6px; cursor: pointer;
+  transition: opacity 0.12s;
+}
+.pg-job:hover { opacity: 0.75; }
+.pg-job-name { font-size: 10px; font-weight: 600; color: var(--text); line-height: 1.3; }
+.pg-job-eq { font-size: 9px; color: var(--orange); font-weight: 700; }
+.pg-empty { color: var(--text3); font-size: 11px; text-align: center; padding: 12px 2px; }
+.pg-tec-name { font-size: 11px; font-weight: 600; }
+.today-col { background: var(--orange-light) !important; }
+
+/* ======================== POR TÉCNICO ======================== */
+.bytec-wrap { flex: 1; overflow: auto; padding: 14px; }
+.tec-section { margin-bottom: 18px; }
+.tec-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.tec-avatar-big {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.tec-name-big { font-size: 13px; font-weight: 700; }
+.tec-count-sub { font-size: 11px; color: var(--text2); }
+
+.job-list { display: flex; flex-direction: column; gap: 5px; padding-left: 44px; }
+.job-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 9px 12px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; transition: box-shadow 0.12s;
+}
+.job-item:hover { box-shadow: var(--shadow-md); }
+.job-estado-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.job-main { flex: 1; }
+.job-name { font-size: 12px; font-weight: 600; }
+.job-addr { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.job-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.job-date { font-size: 10px; color: var(--text3); }
+
+/* ======================== TAREAS ======================== */
+.tareas-wrap { flex: 1; overflow: auto; padding: 14px; }
+.tareas-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+
+.tarea-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 9px 12px; margin-bottom: 5px;
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+  transition: box-shadow 0.12s;
+}
+.tarea-item:hover { box-shadow: var(--shadow-md); }
+.tarea-check {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1.5px solid var(--border-strong); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; cursor: pointer;
+}
+.tarea-check.done { background: #639922; border-color: #639922; }
+.tarea-main { flex: 1; }
+.tarea-title-text { font-size: 12px; font-weight: 600; }
+.tarea-title-text.done { text-decoration: line-through; color: var(--text3); }
+.tarea-sub-text { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.tarea-priority {
+  font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px;
+}
+.pri-high { background: #FCEBEB; color: #A32D2D; }
+.pri-med { background: #FAEEDA; color: #854F0B; }
+.pri-low { background: #EAF3DE; color: #3B6D11; }
+@media (prefers-color-scheme: dark) {
+  .pri-high { background: #501313; color: #F09595; }
+  .pri-med { background: #412402; color: #EF9F27; }
+  .pri-low { background: #173404; color: #97C459; }
+}
+
+/* ======================== MODAL ======================== */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45); z-index: 200;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface); border-radius: 18px;
+  padding: 22px; width: 100%; max-width: 460px;
+  box-shadow: var(--shadow-lg); max-height: 90vh; overflow-y: auto;
+}
+.modal-title {
+  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800;
+  margin-bottom: 18px;
+}
+.form-field { margin-bottom: 11px; }
+.form-label {
+  font-size: 10px; font-weight: 700; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  display: block; margin-bottom: 4px;
+}
+.form-input {
+  width: 100%; padding: 8px 10px;
+  border: 1px solid var(--border-strong); border-radius: 8px;
+  background: var(--surface2); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 13px;
+}
+.form-input:focus { outline: none; border-color: var(--orange); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-textarea {
+  width: 100%; padding: 8px 10px;
+  border: 1px solid var(--border-strong); border-radius: 8px;
+  background: var(--surface2); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 13px;
+  resize: vertical; min-height: 70px;
+}
+.modal-actions {
+  display: flex; gap: 8px; margin-top: 18px; justify-content: flex-end;
+}
+.btn-cancel {
+  padding: 8px 16px; border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background: transparent; color: var(--text2);
+  font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer;
+}
+.btn-save {
+  padding: 8px 18px; border-radius: 8px;
+  border: none; background: var(--orange); color: white;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.btn-save:hover { background: var(--orange-hover); }
+.btn-save:disabled { opacity: 0.6; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 20px; right: 20px;
+  background: var(--text); color: var(--surface);
+  padding: 10px 16px; border-radius: 10px;
+  font-size: 13px; font-weight: 500;
+  z-index: 300; opacity: 0; transition: opacity 0.2s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; }
+
+/* MOBILE */
+@media (max-width: 640px) {
+  :root { --sidebar: 0px; }
+  .sidebar { display: none; }
+  .logo-text { display: none; }
+  .nav-tabs { gap: 1px; }
+  .nav-tab { padding: 5px 8px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ======================== LOGIN ======================== -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-dot">
+        <svg viewBox="0 0 16 16"><path d="M8 1L14 4V12L8 15L2 12V4L8 1Z" fill="white" opacity="0.9"/><path d="M8 5L11 6.5V9.5L8 11L5 9.5V6.5L8 5Z" fill="white"/></svg>
+      </div>
+      <div>
+        <div class="login-logo-text">Multielevación</div>
+        <div class="login-logo-sub">Panel de Instalaciones</div>
+      </div>
+    </div>
+    <div class="login-title">Bienvenido</div>
+    <div class="login-sub">Accede con tu cuenta corporativa</div>
+    <div class="login-field">
+      <label class="login-label">Email</label>
+      <input class="login-input" id="login-email" type="email" placeholder="alberto@multielevacion.com" autocomplete="email">
+    </div>
+    <div class="login-field">
+      <label class="login-label">Contraseña</label>
+      <input class="login-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Entrar</button>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-domain-note">Acceso restringido a @multielevacion.com</div>
+  </div>
+</div>
+
+<!-- ======================== APP ======================== -->
+<div id="app-screen">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-dot">
+        <svg viewBox="0 0 16 16"><path d="M8 1L14 4V12L8 15L2 12V4L8 1Z" fill="white" opacity="0.9"/><path d="M8 5L11 6.5V9.5L8 11L5 9.5V6.5L8 5Z" fill="white"/></svg>
+      </div>
+      <span class="logo-text">Multielevación</span>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchView('dashboard')">Dashboard</button>
+      <button class="nav-tab" onclick="switchView('kanban')">Kanban</button>
+      <button class="nav-tab" onclick="switchView('planning')">Semana</button>
+      <button class="nav-tab" onclick="switchView('bytec')">Técnicos</button>
+      <button class="nav-tab" onclick="switchView('tareas')">Pendientes</button>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-add" onclick="openModal()">+ Nuevo</button>
+      <div class="user-avatar" id="user-avatar" onclick="toggleUserMenu()">
+        <span id="user-initials">AL</span>
+        <div class="user-menu" id="user-menu">
+          <div class="user-menu-email" id="user-menu-email">–</div>
+          <div class="user-menu-item" onclick="doLogout()">Cerrar sesión</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-label">Vistas rápidas</div>
+      <div class="sidebar-item active" id="sf-all" onclick="sidebarFilter('fase','all')">
+        <span style="font-size:13px">◎</span> Todos
+      </div>
+      <div class="sidebar-item" id="sf-Almacen" onclick="sidebarFilter('fase','Almacen')">
+        <span style="font-size:12px">📦</span> Almacén
+      </div>
+      <div class="sidebar-item" id="sf-Planificada" onclick="sidebarFilter('fase','Planificada')">
+        <span style="font-size:12px">📋</span> Planificadas
+      </div>
+      <div class="sidebar-item" id="sf-Empezada" onclick="sidebarFilter('fase','Empezada')">
+        <span style="font-size:12px">🔧</span> En curso
+      </div>
+      <div class="sidebar-item" id="sf-Ajustes" onclick="sidebarFilter('fase','Ajustes')">
+        <span style="font-size:12px">⚡</span> Ajustes
+      </div>
+      <div class="sidebar-item" id="sf-Facturar" onclick="sidebarFilter('fase','Facturar')">
+        <span style="font-size:12px">💶</span> Facturar
+      </div>
+      <div class="sidebar-label">Técnicos</div>
+      <div class="sidebar-item" id="st-all" onclick="sidebarFilter('tec','all')">
+        <span class="tec-dot" style="background:var(--orange)"></span> Todos
+      </div>
+      <div id="sidebar-tecs"></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="view active" id="view-dashboard">
+        <div class="dashboard-scroll">
+          <div class="kpi-grid" id="kpi-grid">
+            <div class="loading-state"><div class="spinner"></div></div>
+          </div>
+          <div class="dash-grid">
+            <div class="dash-card">
+              <div class="dash-card-title">Carga por técnico</div>
+              <div id="tec-bars"></div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-title">Expedientes por fase</div>
+              <div id="phase-counts"></div>
+            </div>
+            <div class="dash-card" style="grid-column:span 2">
+              <div class="dash-card-title">Próximas instalaciones</div>
+              <div id="upcoming-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KANBAN -->
+      <div class="view" id="view-kanban">
+        <div class="kanban-wrap">
+          <div class="kanban-board" id="kanban-board">
+            <div class="loading-state"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLANNING -->
+      <div class="view" id="view-planning">
+        <div class="planning-wrap">
+          <div class="planning-header">
+            <div class="planning-title">Planning semanal</div>
+            <div class="week-nav">
+              <button class="week-btn" onclick="changeWeek(-1)">‹</button>
+              <div class="week-label" id="week-label">–</div>
+              <button class="week-btn" onclick="changeWeek(1)">›</button>
+            </div>
+          </div>
+          <div class="planning-grid" id="planning-grid"></div>
+        </div>
+      </div>
+
+      <!-- POR TÉCNICO -->
+      <div class="view" id="view-bytec">
+        <div class="bytec-wrap" id="bytec-content">
+          <div class="loading-state"><div class="spinner"></div></div>
+        </div>
+      </div>
+
+      <!-- TAREAS -->
+      <div class="view" id="view-tareas">
+        <div class="tareas-wrap">
+          <div class="tareas-title">Tareas pendientes</div>
+          <div id="tareas-list">
+            <div class="loading-state"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Nuevo expediente</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Nombre</label>
+        <input class="form-input" id="f-nombre" placeholder="Nombre del expediente">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Cliente</label>
+        <input class="form-input" id="f-cliente" placeholder="Nombre cliente">
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Dirección</label>
+      <input class="form-input" id="f-dir" placeholder="C/ Ejemplo 12, Madrid">
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Equipo</label>
+        <select class="form-input" id="f-equipo">
+          <option>STR</option><option>STC</option><option>PETR</option>
+          <option>PETC</option><option>EVP</option><option>EVA</option><option>PRV</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Estado</label>
+        <select class="form-input" id="f-estado">
+          <option>Contratada</option><option>En fabricación</option>
+          <option>En tránsito</option><option>Almacen</option>
+          <option>Planificada</option><option>Empezada</option>
+          <option>Ajustes</option><option>Facturar</option><option>Terminada</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Técnico principal</label>
+        <select class="form-input" id="f-tec">
+          <option value="">Sin asignar</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Fecha instalación</label>
+        <input class="form-input" type="date" id="f-fecha">
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Observaciones</label>
+      <textarea class="form-textarea" id="f-obs" placeholder="Notas, incidencias, detalles..."></textarea>
+    </div>
+    <div class="form-field" style="display:flex;align-items:center;gap:8px">
+      <input type="checkbox" id="f-urgente" style="width:14px;height:14px;accent-color:var(--orange)">
+      <label class="form-label" for="f-urgente" style="margin:0;cursor:pointer">Marcar como urgente</label>
+    </div>
+    <input type="hidden" id="f-edit-id">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" id="btn-save" onclick="saveExpediente()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ======================== CONFIG ========================
+// REEMPLAZA ESTOS VALORES CON LOS TUYOS DE SUPABASE
+const SUPABASE_URL = 'https://dyvinpizkifxmsbffhwh.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5dmlucGl6a2lmeG1zYmZmaHdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzgyMTcsImV4cCI6MjA5Mjg1NDIxN30.Hc4QrXS5gEm_omseOVgewivBFm-hdtVkYwxlJ5owQIs';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// ======================== ESTADO ========================
+const TEC_COLORS = {
+  'Christian':'#3B82F6','Borja':'#8B5CF6','Alejandro':'#10B981',
+  'Jose Luís':'#F59E0B','Jorge':'#EC4899','David Arenas':'#14B8A6'
+};
+const FASE_COLORS = {
+  'Contratada':'#3B82F6','En fabricación':'#8B5CF6','En tránsito':'#EC4899',
+  'Almacen':'#6B6860','Planificada':'#60A5FA','Empezada':'#E8541A',
+  'Ajustes':'#E24B4A','Facturar':'#F59E0B','Terminada':'#639922'
+};
+const FASES = ['Contratada','En fabricación','En tránsito','Almacen','Planificada','Empezada','Ajustes','Facturar','Terminada'];
+const DIAS = ['Lun','Mar','Mié','Jue','Vie'];
+
+let expedientes = [];
+let tecnicos = [];
+let tareas = [];
+let weekOffset = 0;
+let currentView = 'dashboard';
+let activeFilter = { type: 'fase', value: 'all' };
+
+// ======================== AUTH ========================
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const btn = document.getElementById('login-btn');
+  const errEl = document.getElementById('login-error');
+
+  if (!email || !pass) { showLoginError('Rellena email y contraseña'); return; }
+
+  btn.disabled = true; btn.textContent = 'Entrando...';
+  errEl.style.display = 'none';
+
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+
+  if (error) {
+    showLoginError(error.message === 'Invalid login credentials'
+      ? 'Email o contraseña incorrectos'
+      : error.message);
+    btn.disabled = false; btn.textContent = 'Entrar';
+  }
+}
+
+function showLoginError(msg) {
+  const el = document.getElementById('login-error');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+}
+
+function toggleUserMenu() {
+  document.getElementById('user-menu').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#user-avatar')) {
+    document.getElementById('user-menu')?.classList.remove('open');
+  }
+});
+
+document.getElementById('login-pass').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') doLogin();
+});
+
+// ======================== INIT ========================
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (session) {
+    const email = session.user.email;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'flex';
+    const initials = email.split('@')[0].split('.').map(p => p[0]?.toUpperCase()).join('').slice(0,2);
+    document.getElementById('user-initials').textContent = initials || 'ME';
+    document.getElementById('user-menu-email').textContent = email;
+    await loadAll();
+    renderSidebarTecs();
+    renderDashboard();
+  } else {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('app-screen').style.display = 'none';
+    document.getElementById('login-btn').disabled = false;
+    document.getElementById('login-btn').textContent = 'Entrar';
+  }
+});
+
+async function loadAll() {
+  const [expRes, tecRes, tarRes] = await Promise.all([
+    sb.from('expedientes').select('*').order('created_at', { ascending: false }),
+    sb.from('tecnicos').select('*').eq('activo', true),
+    sb.from('tareas').select('*').order('created_at', { ascending: false })
+  ]);
+  if (expRes.data) expedientes = expRes.data;
+  if (tecRes.data) tecnicos = tecRes.data;
+  if (tarRes.data) tareas = tarRes.data;
+}
+
+function getFiltered() {
+  if (activeFilter.type === 'fase' && activeFilter.value !== 'all') {
+    return expedientes.filter(e => e.estado === activeFilter.value);
+  }
+  if (activeFilter.type === 'tec' && activeFilter.value !== 'all') {
+    return expedientes.filter(e => e.tecnicos && e.tecnicos.includes(activeFilter.value));
+  }
+  return expedientes;
+}
+
+// ======================== SIDEBAR ========================
+function renderSidebarTecs() {
+  const container = document.getElementById('sidebar-tecs');
+  container.innerHTML = tecnicos.map(t => {
+    const color = TEC_COLORS[t.nombre] || '#888';
+    return `<div class="sidebar-item" id="st-${t.nombre}" onclick="sidebarFilter('tec','${t.nombre}')">
+      <span class="tec-dot" style="background:${color}"></span>${t.nombre.split(' ')[0]}
+    </div>`;
+  }).join('');
+}
+
+function sidebarFilter(type, value) {
+  activeFilter = { type, value };
+  document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+  const id = type === 'fase' ? `sf-${value}` : `st-${value}`;
+  document.getElementById(id)?.classList.add('active');
+  if (currentView !== 'dashboard') renderCurrentView();
+}
+
+// ======================== VIEWS ========================
+function switchView(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  event.target.classList.add('active');
+  currentView = v;
+  renderCurrentView();
+}
+
+function renderCurrentView() {
+  if (currentView === 'dashboard') renderDashboard();
+  if (currentView === 'kanban') renderKanban();
+  if (currentView === 'planning') renderPlanning();
+  if (currentView === 'bytec') renderByTec();
+  if (currentView === 'tareas') renderTareas();
+}
+
+// ======================== DASHBOARD ========================
+function renderDashboard() {
+  const all = expedientes;
+  const activos = all.filter(e => e.estado !== 'Terminada' && e.estado !== 'Facturar');
+  const hoy = new Date().toISOString().split('T')[0];
+  const enMontajeHoy = all.filter(e => e.estado === 'Empezada' && e.fecha_instalacion === hoy);
+  const pendCobro = all.filter(e => e.estado === 'Facturar');
+  const ajustes = all.filter(e => e.estado === 'Ajustes');
+  const terminados = all.filter(e => e.estado === 'Terminada');
+
+  document.getElementById('kpi-grid').innerHTML = `
+    <div class="kpi-card"><div class="kpi-label">Activos</div><div class="kpi-value">${activos.length}</div><div class="kpi-badge badge-ok">expedientes</div></div>
+    <div class="kpi-card"><div class="kpi-label">Montaje hoy</div><div class="kpi-value">${enMontajeHoy.length}</div><div class="kpi-badge ${enMontajeHoy.length > 0 ? 'badge-ok' : 'badge-warn'}">en campo</div></div>
+    <div class="kpi-card"><div class="kpi-label">Pend. cobro</div><div class="kpi-value">${pendCobro.length}</div><div class="kpi-badge ${pendCobro.length > 0 ? 'badge-warn' : 'badge-ok'}">facturas</div></div>
+    <div class="kpi-card"><div class="kpi-label">Ajustes</div><div class="kpi-value">${ajustes.length}</div><div class="kpi-badge ${ajustes.length > 0 ? 'badge-alert' : 'badge-ok'}">pendientes</div></div>
+    <div class="kpi-card"><div class="kpi-label">Terminados</div><div class="kpi-value">${terminados.length}</div><div class="kpi-badge badge-ok">total</div></div>
+  `;
+
+  // Barras técnicos
+  const maxJobs = Math.max(...tecnicos.map(t => all.filter(e => e.tecnicos?.includes(t.nombre)).length), 1);
+  document.getElementById('tec-bars').innerHTML = tecnicos.map(t => {
+    const count = all.filter(e => e.tecnicos?.includes(t.nombre) && e.estado !== 'Terminada').length;
+    const pct = Math.round((count / maxJobs) * 100);
+    const color = TEC_COLORS[t.nombre] || '#888';
+    return `<div class="tec-bar-row">
+      <span class="tec-bar-name" style="color:${color}">${t.nombre.split(' ')[0]}</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+      <span class="tec-bar-count">${count}</span>
+    </div>`;
+  }).join('');
+
+  // Fases
+  document.getElementById('phase-counts').innerHTML = FASES.filter(f => f !== 'Terminada').map(f => {
+    const count = all.filter(e => e.estado === f).length;
+    const color = FASE_COLORS[f] || '#888';
+    return `<div class="phase-row">
+      <div class="phase-left"><div class="phase-dot" style="background:${color}"></div>${f}</div>
+      <span class="phase-n">${count}</span>
+    </div>`;
+  }).join('');
+
+  // Próximas
+  const proximas = all
+    .filter(e => e.fecha_instalacion && e.fecha_instalacion >= hoy && e.estado !== 'Terminada')
+    .sort((a, b) => a.fecha_instalacion.localeCompare(b.fecha_instalacion))
+    .slice(0, 5);
+
+  document.getElementById('upcoming-list').innerHTML = proximas.length
+    ? proximas.map(e => {
+        const color = FASE_COLORS[e.estado] || '#888';
+        const tecs = (e.tecnicos || []).join(', ') || 'Sin asignar';
+        const fecha = formatDateShort(e.fecha_instalacion);
+        return `<div class="upcoming-item">
+          <div class="upcoming-dot" style="background:${color}"></div>
+          <div class="upcoming-main">
+            <div class="upcoming-name">${e.nombre}</div>
+            <div class="upcoming-addr">${e.direccion || '—'} · ${tecs}</div>
+          </div>
+          <div class="upcoming-right">
+            <div class="upcoming-date">${fecha}</div>
+            <div class="eq-badge">${e.equipo || '—'}</div>
+          </div>
+        </div>`;
+      }).join('')
+    : '<div style="font-size:12px;color:var(--text3);padding:12px 0">Sin instalaciones próximas programadas</div>';
+}
+
+// ======================== KANBAN ========================
+function renderKanban() {
+  const data = getFiltered();
+  const board = document.getElementById('kanban-board');
+  board.innerHTML = FASES.map(fase => {
+    const cards = data.filter(e => e.estado === fase);
+    return `<div class="kanban-col">
+      <div class="kanban-col-header">
+        <span class="col-title">${fase}</span>
+        <span class="col-count">${cards.length}</span>
+      </div>
+      <div class="kanban-cards">
+        ${cards.length ? cards.map(c => {
+          const tecs = (c.tecnicos || []);
+          const tecsHtml = tecs.map(t => {
+            const col = TEC_COLORS[t] || '#888';
+            return `<div class="k-tec-avatar" style="background:${col}22;color:${col}">${getInitials(t)}</div>`;
+          }).join('');
+          return `<div class="k-card" onclick="openEditModal('${c.id}')">
+            ${c.urgente ? '<div class="k-urgent"></div>' : ''}
+            <div class="k-card-name">${c.nombre}</div>
+            <div class="k-card-addr">${c.direccion || '—'}</div>
+            <div class="k-card-footer">
+              <span class="k-equipo">${c.equipo || '—'}</span>
+              <div class="k-tecs">${tecsHtml}</div>
+            </div>
+            ${c.fecha_instalacion ? `<div class="k-date">${formatDateShort(c.fecha_instalacion)}</div>` : ''}
+          </div>`;
+        }).join('') : '<div class="k-empty">Sin expedientes</div>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ======================== PLANNING ========================
+function renderPlanning() {
+  const base = getMonday(new Date());
+  base.setDate(base.getDate() + weekOffset * 7);
+  const days = Array.from({length: 5}, (_, i) => {
+    const d = new Date(base); d.setDate(d.getDate() + i); return d;
+  });
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  const fmt = d => d.toISOString().split('T')[0];
+  const fmtLabel = d => `${DIAS[d.getDay() - 1]} ${d.getDate()}/${d.getMonth()+1}`;
+  document.getElementById('week-label').textContent = `${formatDateShort(fmt(days[0]))} – ${formatDateShort(fmt(days[4]))}`;
+
+  const grid = document.getElementById('planning-grid');
+  let html = `<div class="pg-header tec-h">Técnico</div>`;
+  days.forEach(d => {
+    const isToday = fmt(d) === todayStr;
+    html += `<div class="pg-header${isToday?' today-col':''}">${fmtLabel(d)}</div>`;
+  });
+
+  tecnicos.forEach(tec => {
+    html += `<div class="pg-cell tec-cell">
+      <div style="width:7px;height:7px;border-radius:50%;background:${TEC_COLORS[tec.nombre]||'#888'};margin-top:2px;flex-shrink:0"></div>
+      <span class="pg-tec-name">${tec.nombre.split(' ')[0]}</span>
+    </div>`;
+    days.forEach(d => {
+      const dateStr = fmt(d);
+      const isToday = dateStr === todayStr;
+      const jobs = expedientes.filter(e =>
+        e.tecnicos?.includes(tec.nombre) && e.fecha_instalacion === dateStr
+      );
+      html += `<div class="pg-cell day-cell${isToday?' today-col':''}">`;
+      if (jobs.length) {
+        jobs.forEach(j => {
+          html += `<div class="pg-job" onclick="openEditModal('${j.id}')">
+            <div class="pg-job-name">${j.nombre}</div>
+            <div class="pg-job-eq">${j.equipo || ''}</div>
+          </div>`;
+        });
+      } else {
+        html += `<div class="pg-empty">—</div>`;
+      }
+      html += `</div>`;
+    });
+  });
+
+  grid.innerHTML = html;
+}
+
+function changeWeek(delta) { weekOffset += delta; renderPlanning(); }
+
+function getMonday(d) {
+  const day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  return new Date(d.setDate(diff));
+}
+
+// ======================== POR TÉCNICO ========================
+function renderByTec() {
+  const data = getFiltered();
+  const container = document.getElementById('bytec-content');
+  container.innerHTML = tecnicos.map(tec => {
+    const jobs = data.filter(e => e.tecnicos?.includes(tec.nombre));
+    const color = TEC_COLORS[tec.nombre] || '#888';
+    return `<div class="tec-section">
+      <div class="tec-header">
+        <div class="tec-avatar-big" style="background:${color}22;color:${color}">${getInitials(tec.nombre)}</div>
+        <div>
+          <div class="tec-name-big">${tec.nombre}</div>
+          <div class="tec-count-sub">${jobs.length} expediente${jobs.length !== 1 ? 's' : ''}</div>
+        </div>
+      </div>
+      <div class="job-list">
+        ${jobs.length ? jobs.map(j => `
+          <div class="job-item" onclick="openEditModal('${j.id}')">
+            <div class="job-estado-dot" style="background:${FASE_COLORS[j.estado]||'#888'}"></div>
+            <div class="job-main">
+              <div class="job-name">${j.nombre}</div>
+              <div class="job-addr">${j.direccion || '—'}</div>
+            </div>
+            <div class="job-right">
+              <div class="job-date">${j.fecha_instalacion ? formatDateShort(j.fecha_instalacion) : '—'}</div>
+              <div class="eq-badge">${j.equipo || '—'}</div>
+            </div>
+          </div>`).join('')
+        : '<div style="font-size:12px;color:var(--text3);padding:4px 0">Sin expedientes asignados</div>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ======================== TAREAS ========================
+function renderTareas() {
+  const priLabel = { high: 'Alta', med: 'Media', low: 'Baja' };
+  const priClass = { high: 'pri-high', med: 'pri-med', low: 'pri-low' };
+  const container = document.getElementById('tareas-list');
+  const pending = tareas.filter(t => !t.completada);
+  const done = tareas.filter(t => t.completada);
+  const all = [...pending, ...done];
+
+  container.innerHTML = all.length ? all.map((t, i) => `
+    <div class="tarea-item">
+      <div class="tarea-check ${t.completada ? 'done' : ''}" onclick="toggleTarea('${t.id}', ${!t.completada})">
+        ${t.completada ? `<svg width="8" height="6" viewBox="0 0 8 6"><polyline points="1,3 3,5 7,1" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>` : ''}
+      </div>
+      <div class="tarea-main">
+        <div class="tarea-title-text ${t.completada ? 'done' : ''}">${t.titulo}</div>
+        ${t.descripcion ? `<div class="tarea-sub-text">${t.descripcion}</div>` : ''}
+      </div>
+      <div class="tarea-priority ${priClass[t.prioridad] || 'pri-low'}">${priLabel[t.prioridad] || t.prioridad}</div>
+    </div>`).join('')
+    : '<div class="empty-state"><p>No hay tareas pendientes</p></div>';
+}
+
+async function toggleTarea(id, completada) {
+  await sb.from('tareas').update({ completada }).eq('id', id);
+  const t = tareas.find(t => t.id === id);
+  if (t) t.completada = completada;
+  renderTareas();
+  showToast(completada ? 'Tarea completada' : 'Tarea reabierta');
+}
+
+// ======================== MODAL ========================
+let editingId = null;
+
+function openModal() {
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'Nuevo expediente';
+  document.getElementById('f-nombre').value = '';
+  document.getElementById('f-cliente').value = '';
+  document.getElementById('f-dir').value = '';
+  document.getElementById('f-equipo').value = 'STR';
+  document.getElementById('f-estado').value = 'Contratada';
+  document.getElementById('f-tec').value = '';
+  document.getElementById('f-fecha').value = '';
+  document.getElementById('f-obs').value = '';
+  document.getElementById('f-urgente').checked = false;
+  document.getElementById('f-edit-id').value = '';
+  populateTecSelect();
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('f-nombre').focus();
+}
+
+function openEditModal(id) {
+  const e = expedientes.find(x => x.id === id);
+  if (!e) return;
+  editingId = id;
+  document.getElementById('modal-title').textContent = 'Editar expediente';
+  document.getElementById('f-nombre').value = e.nombre || '';
+  document.getElementById('f-cliente').value = e.cliente || '';
+  document.getElementById('f-dir').value = e.direccion || '';
+  document.getElementById('f-equipo').value = e.equipo || 'STR';
+  document.getElementById('f-estado').value = e.estado || 'Contratada';
+  populateTecSelect(e.tecnicos?.[0]);
+  document.getElementById('f-fecha').value = e.fecha_instalacion || '';
+  document.getElementById('f-obs').value = e.observaciones || '';
+  document.getElementById('f-urgente').checked = !!e.urgente;
+  document.getElementById('f-edit-id').value = id;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function populateTecSelect(selected = '') {
+  const sel = document.getElementById('f-tec');
+  sel.innerHTML = '<option value="">Sin asignar</option>' +
+    tecnicos.map(t => `<option value="${t.nombre}" ${t.nombre === selected ? 'selected' : ''}>${t.nombre}</option>`).join('');
+}
+
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function handleOverlayClick(e) { if (e.target === document.getElementById('modal-overlay')) closeModal(); }
+
+async function saveExpediente() {
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const cliente = document.getElementById('f-cliente').value.trim();
+  if (!nombre || !cliente) {
+    showToast('Nombre y cliente son obligatorios'); btn.disabled = false; btn.textContent = 'Guardar'; return;
+  }
+
+  const tec = document.getElementById('f-tec').value;
+  const payload = {
+    nombre,
+    cliente,
+    direccion: document.getElementById('f-dir').value.trim() || null,
+    equipo: document.getElementById('f-equipo').value,
+    estado: document.getElementById('f-estado').value,
+    tecnicos: tec ? [tec] : [],
+    fecha_instalacion: document.getElementById('f-fecha').value || null,
+    observaciones: document.getElementById('f-obs').value.trim() || null,
+    urgente: document.getElementById('f-urgente').checked,
+  };
+
+  let error;
+  if (editingId) {
+    const res = await sb.from('expedientes').update(payload).eq('id', editingId).select().single();
+    error = res.error;
+    if (!error) {
+      const idx = expedientes.findIndex(e => e.id === editingId);
+      if (idx !== -1) expedientes[idx] = res.data;
+    }
+  } else {
+    const res = await sb.from('expedientes').insert(payload).select().single();
+    error = res.error;
+    if (!error) expedientes.unshift(res.data);
+  }
+
+  btn.disabled = false; btn.textContent = 'Guardar';
+  if (error) { showToast('Error: ' + error.message); return; }
+
+  closeModal();
+  showToast(editingId ? 'Expediente actualizado' : 'Expediente creado');
+  renderDashboard();
+  if (currentView !== 'dashboard') renderCurrentView();
+}
+
+// ======================== UTILS ========================
+function getInitials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function formatDateShort(dateStr) {
+  if (!dateStr) return '—';
+  const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const [, m, d] = dateStr.split('-');
+  return `${parseInt(d)} ${months[parseInt(m)-1]}`;
+}
+
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
