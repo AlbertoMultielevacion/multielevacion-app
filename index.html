@@ -112,11 +112,31 @@ button,input,select,textarea{font-family:var(--font)}
 .user-dd-item svg{width:13px;height:13px}
 .app-body{display:flex;flex:1;overflow:hidden}
 
-/* SIDEBAR */
-.sidebar{width:var(--sidebar);flex-shrink:0;border-right:1px solid var(--line);background:var(--surface);padding:14px 12px;display:flex;flex-direction:column;gap:1px;overflow-y:auto}
+/* SIDEBAR — retráctil y fijable */
+:root{--sidebar:248px}
+.sidebar-wrap{position:relative;flex-shrink:0;display:flex}
+/* Tab de apertura siempre visible */
+.sb-tab{position:absolute;right:-22px;top:50%;transform:translateY(-50%);width:22px;height:48px;background:var(--surface);border:1px solid var(--line);border-left:none;border-radius:0 6px 6px 0;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink3);z-index:60;transition:all 0.15s;box-shadow:2px 0 8px rgba(20,20,18,0.06)}
+.sb-tab:hover{color:var(--ink);background:var(--surface2)}
+.sb-tab svg{width:13px;height:13px;transition:transform 0.25s}
+.sidebar-wrap.open .sb-tab svg.icon-open{display:none}
+.sidebar-wrap:not(.open) .sb-tab svg.icon-close{display:none}
+/* Pin button */
+.sb-pin{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--line2);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink4);transition:all 0.15s;z-index:2}
+.sb-pin:hover{color:var(--ink);background:var(--surface2)}
+.sb-pin.pinned{color:var(--accent);background:var(--accent2);border-color:var(--accent)}
+.sb-pin svg{width:13px;height:13px}
+/* Panel */
+.sidebar{width:var(--sidebar);border-right:1px solid var(--line);background:var(--surface);padding:14px 12px 14px;display:flex;flex-direction:column;gap:1px;overflow-y:auto;flex-shrink:0;transition:transform 0.25s cubic-bezier(.4,0,.2,1),box-shadow 0.25s;position:relative}
+/* Flotante (no pinned): se oculta */
+.sidebar-wrap:not(.pinned) .sidebar{position:absolute;top:0;left:0;bottom:0;z-index:55;box-shadow:var(--sh3);transform:translateX(-100%)}
+.sidebar-wrap:not(.pinned).open .sidebar{transform:translateX(0)}
+/* Pinned: ocupa espacio real */
+.sidebar-wrap.pinned .sidebar{position:relative;transform:none !important;box-shadow:none}
+.sidebar-wrap.pinned:not(.open) .sidebar{display:none}
+
 .sb-section{font-size:10px;font-weight:600;color:var(--ink3);letter-spacing:0.6px;text-transform:uppercase;padding:14px 10px 6px}
-.sb-section:first-child{padding-top:2px}
-.sb-section.zone{font-size:9px;color:var(--ink4);padding:10px 10px 4px}
+.sb-section:first-child{padding-top:28px}
 .sb-item{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:500;color:var(--ink2);transition:all 0.1s;user-select:none}
 .sb-item:hover{background:var(--surface2);color:var(--ink)}
 .sb-item.active{background:var(--ink);color:var(--surface)}
@@ -125,6 +145,26 @@ button,input,select,textarea{font-family:var(--font)}
 .sb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .sb-count{margin-left:auto;font-size:10px;font-weight:500;background:var(--surface2);color:var(--ink3);padding:2px 7px;border-radius:10px;font-family:var(--mono)}
 .sb-item.active .sb-count{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9)}
+
+/* Acordeón de personal en sidebar */
+.sb-accordion-btn{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:0.5px;border:none;background:transparent;width:100%;transition:all 0.1s;user-select:none}
+.sb-accordion-btn:hover{background:var(--surface2);color:var(--ink)}
+.sb-accordion-btn svg{width:12px;height:12px;flex-shrink:0;margin-left:auto;transition:transform 0.2s;color:var(--ink4)}
+.sb-accordion-btn.open svg{transform:rotate(180deg)}
+.sb-accordion-body{overflow:hidden;max-height:0;transition:max-height 0.3s cubic-bezier(.4,0,.2,1)}
+.sb-accordion-body.open{max-height:600px}
+.sb-zone-label{font-size:9px;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.6px;padding:8px 10px 3px;font-family:var(--mono)}
+.sb-person{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 14px;border-radius:7px;cursor:pointer;font-size:12.5px;color:var(--ink2);transition:all 0.1s}
+.sb-person:hover{background:var(--surface2);color:var(--ink)}
+.sb-person-av{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;font-family:var(--mono);letter-spacing:0.2px;flex-shrink:0}
+.sb-subrole{font-size:9px;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.5px;padding:6px 14px 2px;font-family:var(--mono)}
+
+/* Info empresa en sidebar */
+.sb-company-info{margin:6px 0 10px;padding:10px 12px;background:var(--surface2);border-radius:var(--r2);border:1px solid var(--line)}
+.sb-company-row{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:11.5px;color:var(--ink2)}
+.sb-company-row svg{width:11px;height:11px;color:var(--ink4);flex-shrink:0}
+.sb-company-row a{color:var(--accent);text-decoration:none;font-size:11px}
+.sb-company-row a:hover{text-decoration:underline}
 
 /* CONTENT */
 .content{flex:1;overflow:hidden;display:flex;flex-direction:column;background:var(--bg)}
@@ -502,7 +542,83 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--surface);padding:11px 18px;border-radius:var(--r2);font-size:13px;font-weight:500;z-index:300;opacity:0;transition:all 0.25s;pointer-events:none;box-shadow:var(--sh3)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* MOBILE */
+/* POSTVENTA MODULE */
+.pv-toolbar{display:flex;align-items:center;gap:8px;padding:12px 24px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap;flex-shrink:0}
+.pv-search{flex:1;min-width:200px;max-width:300px;position:relative}
+.pv-search-input{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--line2);border-radius:var(--r2);background:var(--bg);color:var(--ink);font-size:13px;font-family:var(--font)}
+.pv-search-input:focus{outline:none;border-color:var(--ink)}
+.pv-search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--ink4);pointer-events:none}
+.pv-search-icon svg{width:13px;height:13px}
+.pv-filters{display:flex;gap:5px;flex-wrap:wrap}
+.pv-filter-btn{padding:5px 11px;border-radius:6px;border:1px solid var(--line2);background:var(--surface);cursor:pointer;font-size:11.5px;color:var(--ink2);transition:all 0.12s;font-weight:500}
+.pv-filter-btn:hover{background:var(--surface2)}
+.pv-filter-btn.active{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.pv-view-toggle{display:flex;border:1px solid var(--line2);border-radius:var(--r2);overflow:hidden}
+.pv-view-btn{padding:6px 10px;border:none;background:var(--surface);cursor:pointer;color:var(--ink3);transition:all 0.12s}
+.pv-view-btn:hover{background:var(--surface2);color:var(--ink)}
+.pv-view-btn.active{background:var(--ink);color:var(--surface)}
+.pv-view-btn svg{width:14px;height:14px;display:block}
+/* Cards view */
+.pv-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding:20px 24px}
+.pv-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;cursor:pointer;transition:all 0.15s;position:relative}
+.pv-card:hover{box-shadow:var(--sh2);border-color:var(--line2);transform:translateY(-1px)}
+.pv-card-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:0.3px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.pv-card-cli{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.pv-card-addr{font-size:12px;color:var(--ink3);margin-bottom:10px;line-height:1.4}
+.pv-card-foot{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pv-alert{position:absolute;top:-4px;right:-4px;width:12px;height:12px;border-radius:50%;background:var(--red);border:2px solid var(--surface)}
+/* Table view */
+.pv-table-wrap{padding:0 24px 20px;overflow-x:auto}
+.pv-table{width:100%;border-collapse:collapse;font-size:13px}
+.pv-table th{padding:10px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--line);font-family:var(--mono);white-space:nowrap;cursor:pointer}
+.pv-table th:hover{color:var(--ink)}
+.pv-table td{padding:10px 12px;border-bottom:1px solid var(--line);color:var(--ink);vertical-align:middle}
+.pv-table tr:hover td{background:var(--surface2)}
+.pv-table tr{cursor:pointer}
+/* Aparato detail drawer (reutiliza estilos drawer) */
+.pv-drawer{position:fixed;top:0;right:0;bottom:0;width:520px;max-width:94vw;background:var(--surface);box-shadow:var(--sh3);z-index:160;transform:translateX(100%);transition:transform 0.25s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
+.pv-drawer.open{transform:translateX(0)}
+.pv-drawer-h{display:flex;align-items:flex-start;gap:14px;padding:20px 24px;border-bottom:1px solid var(--line);flex-shrink:0}
+.pv-drawer-icon{width:48px;height:48px;border-radius:12px;background:var(--surface2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink3);border:1px solid var(--line)}
+.pv-drawer-h-info{flex:1;min-width:0}
+.pv-drawer-h-num{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);letter-spacing:0.3px}
+.pv-drawer-h-cli{font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-0.4px;line-height:1.1;margin-top:2px}
+.pv-drawer-h-addr{font-size:11.5px;color:var(--ink3);margin-top:3px}
+.pv-drawer-body{flex:1;overflow-y:auto;padding:18px 24px}
+.pv-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.pv-kpi{background:var(--bg);border:1px solid var(--line);border-radius:var(--r2);padding:10px 12px;text-align:center}
+.pv-kpi-val{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--ink);line-height:1}
+.pv-kpi-label{font-size:9.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.4px;margin-top:3px;font-family:var(--mono)}
+.pv-kpi.alert .pv-kpi-val{color:var(--red)}
+.pv-hist-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.pv-hist-item:last-child{border-bottom:none}
+.pv-hist-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.pv-hist-main{flex:1;min-width:0}
+.pv-hist-title{font-size:13px;font-weight:500;color:var(--ink)}
+.pv-hist-meta{font-size:11px;color:var(--ink3);margin-top:2px;font-family:var(--mono)}
+.pv-hist-desc{font-size:12.5px;color:var(--ink2);margin-top:4px;line-height:1.5}
+/* Planning Postventa */
+.pv-planning-wrap{padding:0 24px 20px}
+.pv-plan-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.pv-plan-grid{border:1px solid var(--line);border-radius:var(--r3);background:var(--surface);overflow:hidden}
+.pv-plan-head{display:grid;grid-template-columns:140px repeat(5,1fr);background:var(--surface2);border-bottom:1px solid var(--line)}
+.pv-plan-head-cell{padding:9px 8px;font-size:10.5px;font-weight:600;color:var(--ink2);text-align:center;text-transform:uppercase;letter-spacing:0.4px;font-family:var(--mono)}
+.pv-plan-head-cell.left{text-align:left;padding-left:14px;border-right:1px solid var(--line2)}
+.pv-plan-row{display:grid;grid-template-columns:140px repeat(5,1fr);border-bottom:1px solid var(--line);min-height:72px}
+.pv-plan-row:last-child{border-bottom:none}
+.pv-plan-tec{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--surface2);border-right:1px solid var(--line2)}
+.pv-plan-tec-name{font-size:12px;font-weight:600;color:var(--ink)}
+.pv-plan-cell{border-right:1px solid var(--line);padding:5px;position:relative}
+.pv-plan-cell:last-child{border-right:none}
+.pv-plan-cell.today-bg{background:var(--accent2)}
+.pv-task-pill{background:var(--surface);border:1px solid var(--line2);border-left:3px solid var(--blue);border-radius:5px;padding:4px 7px;font-size:11px;cursor:pointer;margin-bottom:3px;transition:all 0.12s;display:flex;align-items:center;gap:5px}
+.pv-task-pill:hover{box-shadow:var(--sh1);border-color:var(--line2)}
+.pv-task-pill.urgente{border-left-color:var(--red)}
+.pv-task-pill.mantenimiento{border-left-color:var(--green)}
+.pv-task-pill.averia{border-left-color:var(--red)}
+.pv-task-pill.revision{border-left-color:var(--amber)}
+.pv-task-pill-name{font-size:10.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+.pv-task-pill-num{font-family:var(--mono);font-size:9px;color:var(--ink3)}
 @media(max-width:760px){
   :root{--sidebar:0px}
   .sidebar{display:none}
@@ -564,6 +680,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
       <button class="tab" data-v="ajustes" onclick="switchView('ajustes',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1z"/></svg>Ajustes/PEM</button>
       <button class="tab" data-v="tareas" onclick="switchView('tareas',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 7l2 2 4-4"/></svg>Tareas</button>
       <button class="tab" data-v="pendientes" onclick="switchView('pendientes',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3M8 11h.01"/></svg>Pendientes</button>
+      <button class="tab" data-v="postventa" onclick="switchView('postventa',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12v2L8 10 2 6V4z"/><path d="M2 6v6h12V6"/></svg>Postventa</button>
       <button class="tab" data-v="search" onclick="switchView('search',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M14 14l-3.5-3.5"/></svg>Buscar</button>
     </div>
     <div class="topbar-right">
@@ -586,21 +703,74 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
   </div>
 
   <div class="app-body">
-    <div class="sidebar">
-      <div class="sb-section"><span>Navegación</span></div>
-      <div class="sb-item" onclick="switchView('dashboard',document.querySelector('.tab[data-v=dashboard]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>Dashboard</div>
-      <div class="sb-item" onclick="switchView('hoy',document.querySelector('.tab[data-v=hoy]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l2.5 2.5"/></svg>Hoy</div>
-      <div class="sb-item" onclick="switchView('kanban',document.querySelector('.tab[data-v=kanban]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="3.5" height="12" rx="1"/><rect x="6.5" y="2" width="3.5" height="8" rx="1"/><rect x="11" y="2" width="3" height="10" rx="1"/></svg>Tablero</div>
-      <div class="sb-item" onclick="switchView('planning',document.querySelector('.tab[data-v=planning]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/></svg>Semana</div>
-      <div class="sb-item" onclick="switchView('almacen',document.querySelector('.tab[data-v=almacen]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6l6-3 6 3v8H2z"/></svg>Almacén</div>
-      <div class="sb-item" onclick="switchView('ajustes',document.querySelector('.tab[data-v=ajustes]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1z"/></svg>Ajustes/PEM</div>
-      <div class="sb-item" onclick="switchView('tareas',document.querySelector('.tab[data-v=tareas]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 7l2 2 4-4"/></svg>Tareas</div>
+    <div class="sidebar-wrap" id="sb-wrap">
+      <!-- Tab de apertura/cierre -->
+      <div class="sb-tab" id="sb-tab" onclick="toggleSidebar()" title="Abrir/cerrar panel">
+        <svg class="icon-open" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4l4 4-4 4"/></svg>
+        <svg class="icon-close" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4L7 8l4 4"/></svg>
+      </div>
 
-      <div class="sb-section"><span>Oficina</span></div>
-      <div id="sb-oficina"></div>
+      <div class="sidebar" id="sidebar-panel">
+        <!-- Botón chincheta -->
+        <button class="sb-pin" id="sb-pin" onclick="togglePin()" title="Fijar panel">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2l4 4-2 2-1-1-4 4v3l-1 1-3-3 1-1h3l4-4-1-1z"/></svg>
+        </button>
 
-      <div class="sb-section"><span>Técnicos</span></div>
-      <div id="sb-tecs"></div>
+        <!-- Navegación -->
+        <div class="sb-section"><span>Navegación</span></div>
+        <div class="sb-item" onclick="switchView('dashboard',document.querySelector('.tab[data-v=dashboard]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>Dashboard</div>
+        <div class="sb-item" onclick="switchView('hoy',document.querySelector('.tab[data-v=hoy]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l2.5 2.5"/></svg>Hoy</div>
+        <div class="sb-item" onclick="switchView('kanban',document.querySelector('.tab[data-v=kanban]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="3.5" height="12" rx="1"/><rect x="6.5" y="2" width="3.5" height="8" rx="1"/><rect x="11" y="2" width="3" height="10" rx="1"/></svg>Tablero</div>
+        <div class="sb-item" onclick="switchView('planning',document.querySelector('.tab[data-v=planning]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/></svg>Semana</div>
+        <div class="sb-item" onclick="switchView('almacen',document.querySelector('.tab[data-v=almacen]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6l6-3 6 3v8H2z"/></svg>Almacén</div>
+        <div class="sb-item" onclick="switchView('ajustes',document.querySelector('.tab[data-v=ajustes]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1z"/></svg>Ajustes/PEM</div>
+        <div class="sb-item" onclick="switchView('tareas',document.querySelector('.tab[data-v=tareas]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 7l2 2 4-4"/></svg>Tareas</div>
+        <div class="sb-item" onclick="switchView('postventa',document.querySelector('.tab[data-v=postventa]'))"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12v2L8 10 2 6V4z"/><path d="M2 6v6h12V6"/></svg>Postventa</div>
+
+        <!-- Info empresa -->
+        <div class="sb-section"><span>Empresa</span></div>
+        <div class="sb-company-info">
+          <div class="sb-company-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5.8 1 4 2.8 4 5c0 3 4 8 4 8s4-5 4-8c0-2.2-1.8-4-4-4z"/><circle cx="8" cy="5" r="1.5"/></svg>C/ Ejemplo 28, Madrid</div>
+          <div class="sb-company-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10v10H3z"/><path d="M3 6h10"/><path d="M6 6v7"/></svg><a href="tel:+34910000000">+34 910 000 000</a></div>
+          <div class="sb-company-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12v8H2z"/><path d="M2 4l6 5 6-5"/></svg><a href="mailto:info@multielevacion.com">info@multielevacion.com</a></div>
+        </div>
+
+        <!-- Acordeón: Personal de Oficina -->
+        <button class="sb-accordion-btn" id="acc-oficina-btn" onclick="toggleAccordion('oficina')">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="2.5"/><path d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5"/></svg>
+          Oficina
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+        </button>
+        <div class="sb-accordion-body" id="acc-oficina-body">
+          <div class="sb-zone-label">Zona Centro</div>
+          <div id="sb-oficina-centro"></div>
+          <div class="sb-zone-label">Zona Levante</div>
+          <div id="sb-oficina-levante"></div>
+        </div>
+
+        <!-- Acordeón: Técnicos Zona Centro -->
+        <button class="sb-accordion-btn" id="acc-centro-btn" onclick="toggleAccordion('centro')">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 7l-5-5-5 5M3 7v7h4v-4h2v4h4V7"/></svg>
+          Técnicos Centro
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+        </button>
+        <div class="sb-accordion-body" id="acc-centro-body">
+          <div class="sb-subrole">Montaje</div>
+          <div id="sb-centro-montaje"></div>
+          <div class="sb-subrole">Postventa</div>
+          <div id="sb-centro-postventa"></div>
+        </div>
+
+        <!-- Acordeón: Técnicos Zona Levante -->
+        <button class="sb-accordion-btn" id="acc-levante-btn" onclick="toggleAccordion('levante')">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l6 4v8H2V6z"/><path d="M6 14V9h4v5"/></svg>
+          Técnicos Levante
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+        </button>
+        <div class="sb-accordion-body" id="acc-levante-body">
+          <div id="sb-levante-tecs"></div>
+        </div>
+      </div>
     </div>
 
     <div class="content">
@@ -690,7 +860,65 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
         <div class="view-scroll" id="pend-content"><div class="loading-c"><div class="spinner"></div>Cargando…</div></div>
       </div>
 
+      <!-- POSTVENTA -->
+      <div class="view" id="view-postventa">
+        <div class="view-header">
+          <div class="view-title-wrap">
+            <div class="view-title">Post<em>venta</em></div>
+            <div class="view-sub" id="pv-sub">Repositorio de aparatos · Planning</div>
+          </div>
+          <div class="pill-toggle" id="pv-tabs">
+            <button id="pv-tab-aparatos" class="active" onclick="switchPvTab('aparatos')">Aparatos</button>
+            <button id="pv-tab-planning" onclick="switchPvTab('planning')">Planning</button>
+          </div>
+          <button class="btn-new" id="pv-btn-new" onclick="openAparatoModal()">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg>
+            Nuevo aparato
+          </button>
+        </div>
+
+        <!-- Sub-toolbar aparatos -->
+        <div class="pv-toolbar" id="pv-toolbar-aparatos">
+          <div class="pv-search">
+            <span class="pv-search-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M14 14l-3.5-3.5"/></svg></span>
+            <input class="pv-search-input" id="pv-search" placeholder="Nº aparato, cliente, dirección…" oninput="renderAparatos()">
+          </div>
+          <div class="pv-filters">
+            <button class="pv-filter-btn active" onclick="setPvFilter('estado','')" id="pvf-all">Todos</button>
+            <button class="pv-filter-btn" onclick="setPvFilter('estado','En garantía')" id="pvf-garantia">Garantía</button>
+            <button class="pv-filter-btn" onclick="setPvFilter('estado','Activo')" id="pvf-activo">Activo</button>
+            <button class="pv-filter-btn" onclick="setPvFilter('contrato','si')" id="pvf-contrato">Con contrato</button>
+            <button class="pv-filter-btn" onclick="setPvFilter('zona','Centro')" id="pvf-centro">Centro</button>
+            <button class="pv-filter-btn" onclick="setPvFilter('zona','Levante')" id="pvf-levante">Levante</button>
+          </div>
+          <div class="pv-view-toggle">
+            <button class="pv-view-btn active" id="pvv-cards" onclick="setPvView('cards')" title="Tarjetas"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg></button>
+            <button class="pv-view-btn" id="pvv-table" onclick="setPvView('table')" title="Tabla"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h12M2 12h12M5 2v12M11 2v12"/></svg></button>
+          </div>
+        </div>
+
+        <!-- Sub-toolbar planning -->
+        <div class="pv-toolbar" id="pv-toolbar-planning" style="display:none">
+          <div class="week-nav">
+            <button class="wbtn" onclick="changePvWeek(-1)">‹</button>
+            <div class="week-label" id="pv-week-label">–</div>
+            <button class="wbtn" onclick="changePvWeek(1)">›</button>
+          </div>
+          <button class="btn-today" onclick="pvWeekOffset=0;renderPvPlanning()">Hoy</button>
+          <div class="pv-filters" id="pv-tec-filters" style="margin-left:8px"></div>
+          <button class="btn-new" onclick="openTareaPostventaModal()" style="margin-left:auto">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg>
+            Nueva tarea
+          </button>
+        </div>
+
+        <div class="view-scroll" id="pv-content">
+          <div class="loading-c"><div class="spinner"></div>Cargando…</div>
+        </div>
+      </div>
+
       <!-- BÚSQUEDA -->
+
       <div class="view" id="view-search">
         <div class="view-header"><div class="view-title-wrap"><div class="view-title">Búsqueda</div><div class="view-sub">Busca en cualquier campo de las OTs</div></div></div>
         <div class="view-scroll">
@@ -777,6 +1005,91 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
   </div>
 </div>
 
+<!-- DRAWER APARATO -->
+<div class="drawer-overlay" id="pv-drawer-overlay" onclick="closePvDrawer()"></div>
+<div class="pv-drawer" id="pv-drawer">
+  <div class="pv-drawer-h">
+    <div class="pv-drawer-icon" id="pvd-icon">—</div>
+    <div class="pv-drawer-h-info">
+      <div class="pv-drawer-h-num" id="pvd-num">—</div>
+      <div class="pv-drawer-h-cli" id="pvd-cli">—</div>
+      <div class="pv-drawer-h-addr" id="pvd-addr">—</div>
+    </div>
+    <button class="drawer-close" onclick="closePvDrawer()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+  </div>
+  <div class="pv-drawer-body" id="pvd-body"></div>
+</div>
+
+<!-- MODAL APARATO -->
+<div class="modal-overlay" id="modal-aparato" onclick="handleOverlay(event,'modal-aparato')">
+  <div class="modal">
+    <div class="modal-title" id="modal-aparato-title">Nuevo <em>aparato</em></div>
+    <div class="modal-sub">Registra un equipo en el repositorio de postventa</div>
+    <div class="f-row">
+      <div class="f-field"><label class="f-label">Nº Aparato *</label><input class="f-input" id="fa-num" placeholder="12345"></div>
+      <div class="f-field"><label class="f-label">Estado</label><select class="f-input" id="fa-estado"><option>En garantía</option><option>Activo</option><option>Baja</option></select></div>
+    </div>
+    <div class="f-row">
+      <div class="f-field"><label class="f-label">Cliente / Comunidad *</label><input class="f-input" id="fa-cliente" placeholder="Nombre del propietario"></div>
+      <div class="f-field"><label class="f-label">Administrador de fincas</label><input class="f-input" id="fa-admin" placeholder="Nombre (opcional)"></div>
+    </div>
+    <div class="f-field"><label class="f-label">Dirección completa</label><input class="f-input" id="fa-dir" placeholder="C/ Ejemplo 12, Madrid"></div>
+    <div class="f-row-3">
+      <div class="f-field"><label class="f-label">Tipo de equipo</label><select class="f-input" id="fa-desc"><option>Ascensor</option><option>Plataforma elevadora</option><option>Salvaescalera</option><option>Montacargas</option><option>Elevador hidráulico</option><option>Otro</option></select></div>
+      <div class="f-field"><label class="f-label">Zona</label><select class="f-input" id="fa-zona"><option>Centro</option><option>Levante</option></select></div>
+      <div class="f-field"><label class="f-label">Técnico responsable</label><select class="f-input" id="fa-tec"></select></div>
+    </div>
+    <div class="f-divider"><span>Contrato de mantenimiento</span></div>
+    <div class="f-check" onclick="toggleContratoFields()"><input type="checkbox" id="fa-contrato"><label for="fa-contrato">Tiene contrato de mantenimiento</label></div>
+    <div id="fa-contrato-fields" style="display:none">
+      <div class="f-row">
+        <div class="f-field"><label class="f-label">Tipo de contrato</label><select class="f-input" id="fa-tipo-contrato"><option value="">—</option><option>Básico</option><option>Completo</option><option>Premium</option></select></div>
+        <div class="f-field"><label class="f-label">Inicio contrato</label><input class="f-input" type="date" id="fa-inicio"></div>
+      </div>
+      <div class="f-field"><label class="f-label">Fin / renovación contrato</label><input class="f-input" type="date" id="fa-fin"></div>
+    </div>
+    <div class="f-field"><label class="f-label">OT de origen (referencia)</label><input class="f-input" id="fa-ot-ref" placeholder="OT4200 (opcional)"></div>
+    <div class="f-field"><label class="f-label">Notas</label><textarea class="f-ta" id="fa-notas" placeholder="Observaciones del equipo…"></textarea></div>
+    <input type="hidden" id="fa-edit-id">
+    <div class="modal-actions">
+      <button class="btn-cancel" id="btn-del-aparato" onclick="deleteAparato()" style="margin-right:auto;color:var(--red);display:none">Eliminar</button>
+      <button class="btn-cancel" onclick="closeModal('modal-aparato')">Cancelar</button>
+      <button class="btn-save" id="btn-save-aparato" onclick="saveAparato()">Guardar aparato</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TAREA POSTVENTA -->
+<div class="modal-overlay" id="modal-pv-tarea" onclick="handleOverlay(event,'modal-pv-tarea')">
+  <div class="modal">
+    <div class="modal-title" id="modal-pvt-title">Nueva <em>tarea</em> postventa</div>
+    <div class="modal-sub">Asigna un trabajo a un aparato del repositorio</div>
+    <div class="f-field">
+      <label class="f-label">Aparato *</label>
+      <input class="f-input" id="pvt-aparato-search" placeholder="Busca por nº, cliente o dirección…" oninput="renderAparatoSuggestions()" autocomplete="off">
+      <div id="pvt-aparato-suggestions" style="position:relative"></div>
+      <input type="hidden" id="pvt-aparato-id">
+    </div>
+    <div class="f-row">
+      <div class="f-field"><label class="f-label">Tipo de trabajo</label><select class="f-input" id="pvt-tipo"><option value="mantenimiento">Mantenimiento periódico</option><option value="averia">Avería</option><option value="reparacion">Reparación</option><option value="revision">Revisión oficial</option><option value="otros">Otros</option></select></div>
+      <div class="f-field"><label class="f-label">Prioridad</label><select class="f-input" id="pvt-prioridad"><option value="normal">Normal</option><option value="urgente">Urgente</option><option value="programada">Programada</option></select></div>
+    </div>
+    <div class="f-row">
+      <div class="f-field"><label class="f-label">Técnico asignado *</label><select class="f-input" id="pvt-tec"></select></div>
+      <div class="f-field"><label class="f-label">Fecha prevista *</label><input class="f-input" type="date" id="pvt-fecha"></div>
+    </div>
+    <div class="f-field"><label class="f-label">Estado</label><select class="f-input" id="pvt-estado"><option value="pendiente">Pendiente</option><option value="en_curso">En curso</option><option value="realizada">Realizada</option><option value="cancelada">Cancelada</option></select></div>
+    <div class="f-field"><label class="f-label">Descripción / notas</label><textarea class="f-ta" id="pvt-desc" placeholder="Describe el trabajo a realizar…"></textarea></div>
+    <div class="f-field" id="pvt-resolucion-wrap" style="display:none"><label class="f-label">Notas de resolución</label><textarea class="f-ta" id="pvt-resolucion" placeholder="Describe cómo se resolvió…"></textarea></div>
+    <input type="hidden" id="pvt-edit-id">
+    <div class="modal-actions">
+      <button class="btn-cancel" id="btn-del-pvt" onclick="deleteTareaPostventa()" style="margin-right:auto;color:var(--red);display:none">Eliminar</button>
+      <button class="btn-cancel" onclick="closeModal('modal-pv-tarea')">Cancelar</button>
+      <button class="btn-save" id="btn-save-pvt" onclick="saveTareaPostventa()">Guardar tarea</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -788,10 +1101,16 @@ const sb = supabase.createClient(SB_URL, SB_KEY);
 
 // ═══ STATE ═══
 let expedientes = [], tecnicos = [], oficina = [], tareas = [];
-let weekOffset = 0, monthOffset = 0;
+let aparatos = [], tareasPostventa = [];
+let weekOffset = 0, monthOffset = 0, pvWeekOffset = 0;
 let currentView = 'dashboard', editingId = null, editingTareaId = null;
+let editingAparatoId = null, editingPvTareaId = null;
 let activeFilter = { type: 'fase', value: 'all' };
 let currentAjusteTab = 'ajustes';
+let currentPvTab = 'aparatos';
+let pvView = 'cards';
+let pvFilter = { estado: '', contrato: '', zona: '' };
+let pvTecFilter = '';
 let visibleFases = JSON.parse(localStorage.getItem('mv_visible_fases') || 'null') || ['En fabricación','En tránsito','Almacen','Planificada','Empezada','Ajustes','Facturar'];
 
 const FASES = ['Contratada','En fabricación','En tránsito','Almacen','Planificada','Empezada','Ajustes','Facturar','Terminada'];
@@ -807,6 +1126,11 @@ const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov'
 const DIAS_FULL = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const MESES_FULL = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const COMERCIALES = ['Carolina','Monse','Sandra','Jorge','Salva'];
+const TECS_MONTAJE = ['Javier Alonso','Pablo Piedra','Alejandro Barranco','Cristian Rendón','Borja Yari Burón','David Mora'];
+const TECS_POSTVENTA = ['Alberto Fernandez','David Martin','Juan Carlos Miguélez','Juan Carlos Lebrón'];
+const TECS_LEVANTE = ['Henry Ure','Israel Vázquez'];
+const PV_TIPO_COLOR = { mantenimiento:'var(--green)', averia:'var(--red)', reparacion:'var(--amber)', revision:'var(--blue)', otros:'var(--slate)' };
+const PV_TIPO_LABEL = { mantenimiento:'Mantenimiento', averia:'Avería', reparacion:'Reparación', revision:'Rev. oficial', otros:'Otros' };
 
 function tecColor(name) {
   const i = tecnicos.findIndex(t => t.nombre === name);
@@ -872,17 +1196,21 @@ sb.auth.onAuthStateChange(async (_, session) => {
 });
 
 async function loadAll() {
-  const [e, t, o, ta] = await Promise.all([
+  const [e, t, o, ta, ap, pt] = await Promise.all([
     sb.from('expedientes').select('*').order('created_at', { ascending: false }),
     sb.from('tecnicos').select('*').eq('activo', true).order('nombre'),
     sb.from('personal_oficina').select('*').eq('activo', true).order('orden'),
-    sb.from('tareas').select('*').order('created_at', { ascending: false })
+    sb.from('tareas').select('*').order('created_at', { ascending: false }),
+    sb.from('aparatos').select('*').order('numero_aparato'),
+    sb.from('trabajos_postventa').select('*').order('fecha_prevista', { ascending: true })
   ]);
   if (e.error) console.error('expedientes:', e.error);
   expedientes = e.data || [];
   tecnicos = t.data || [];
   oficina = o.data || [];
   tareas = ta.data || [];
+  aparatos = ap.error ? [] : (ap.data || []);
+  tareasPostventa = pt.error ? [] : (pt.data || []);
 }
 
 function getFiltered() {
@@ -893,25 +1221,96 @@ function getFiltered() {
   return expedientes;
 }
 
-// ═══ SIDEBAR ═══
-function renderSidebar() {
-  document.getElementById('sb-oficina').innerHTML = oficina.map(p =>
-    `<div class="sb-item" onclick="openProfile('oficina','${esc(p.id)}')">
-      <span class="sb-dot" style="background:var(--slate)"></span>${p.nombre}
-    </div>`
-  ).join('');
-
-  const zonas = [...new Set(tecnicos.map(t => t.zona || 'Centro'))];
-  let html = '';
-  zonas.forEach(zona => {
-    html += `<div class="sb-section zone"><span>${zona}</span></div>`;
-    tecnicos.filter(t => (t.zona || 'Centro') === zona).forEach(t => {
-      html += `<div class="sb-item" onclick="openProfile('tec','${esc(t.id)}')">
-        <span class="sb-dot" style="background:${tecColor(t.nombre)}"></span>${t.nombre.split(' ')[0]}
-      </div>`;
-    });
+// ═══ SIDEBAR — retráctil y fijable ═══
+(function initSidebar() {
+  const wrap = document.getElementById('sb-wrap');
+  const pin = document.getElementById('sb-pin');
+  const pinned = localStorage.getItem('mv_sb_pinned') !== 'false';
+  const open = localStorage.getItem('mv_sb_open') !== 'false';
+  if (pinned) { wrap.classList.add('pinned'); pin.classList.add('pinned'); }
+  if (open) wrap.classList.add('open');
+  // Accordions
+  ['oficina','centro','levante'].forEach(id => {
+    const state = localStorage.getItem('mv_acc_' + id);
+    if (state !== 'closed') { openAccordionDom(id); }
   });
-  document.getElementById('sb-tecs').innerHTML = html;
+  // Close on outside click (only when not pinned)
+  document.addEventListener('click', e => {
+    const w = document.getElementById('sb-wrap');
+    if (!w.classList.contains('pinned') && w.classList.contains('open')) {
+      if (!w.contains(e.target)) { w.classList.remove('open'); localStorage.setItem('mv_sb_open','false'); }
+    }
+  });
+})();
+
+function toggleSidebar() {
+  const wrap = document.getElementById('sb-wrap');
+  const isOpen = wrap.classList.toggle('open');
+  localStorage.setItem('mv_sb_open', isOpen ? 'true' : 'false');
+}
+function togglePin() {
+  const wrap = document.getElementById('sb-wrap');
+  const pin = document.getElementById('sb-pin');
+  const isPinned = wrap.classList.toggle('pinned');
+  pin.classList.toggle('pinned', isPinned);
+  localStorage.setItem('mv_sb_pinned', isPinned ? 'true' : 'false');
+  if (!isPinned) wrap.classList.add('open'); // keep open when unpinning
+}
+function openAccordionDom(id) {
+  const btn = document.getElementById('acc-' + id + '-btn');
+  const body = document.getElementById('acc-' + id + '-body');
+  if (btn) btn.classList.add('open');
+  if (body) body.classList.add('open');
+}
+function toggleAccordion(id) {
+  const btn = document.getElementById('acc-' + id + '-btn');
+  const body = document.getElementById('acc-' + id + '-body');
+  const isOpen = btn.classList.toggle('open');
+  body.classList.toggle('open', isOpen);
+  localStorage.setItem('mv_acc_' + id, isOpen ? 'open' : 'closed');
+}
+
+// ═══ SIDEBAR render ═══
+function renderSidebar() {
+  // Oficina: todos Centro menos Salvador (Levante)
+  const ofCentro = oficina.filter(p => p.nombre !== 'Salvador' && (p.zona || 'Centro') !== 'Levante');
+  const ofLevante = oficina.filter(p => p.nombre === 'Salvador' || p.zona === 'Levante');
+
+  document.getElementById('sb-oficina-centro').innerHTML = ofCentro.map(p =>
+    `<div class="sb-person" onclick="openProfile('oficina','${esc(p.id)}')">
+      <div class="sb-person-av" style="background:var(--slate-soft);color:var(--slate)">${getInitials(p.nombre)}</div>
+      ${p.nombre.split(' ')[0]}
+    </div>`).join('');
+  document.getElementById('sb-oficina-levante').innerHTML = ofLevante.map(p =>
+    `<div class="sb-person" onclick="openProfile('oficina','${esc(p.id)}')">
+      <div class="sb-person-av" style="background:var(--violet-soft);color:var(--violet)">${getInitials(p.nombre)}</div>
+      ${p.nombre.split(' ')[0]}
+    </div>`).join('');
+
+  // Técnicos Centro: Montaje y Postventa (hardcoded + enriquecidos con ids de tecnicos)
+  function tecItem(nombre) {
+    const t = tecnicos.find(x => x.nombre === nombre);
+    const c = t ? tecColor(t.nombre) : 'var(--ink4)';
+    const id = t ? t.id : '';
+    const onclick = id ? `openProfile('tec','${esc(id)}')` : '';
+    return `<div class="sb-person" ${onclick ? `onclick="${onclick}"` : ''}>
+      <div class="sb-person-av" style="background:${c}1A;color:${c}">${getInitials(nombre)}</div>
+      ${nombre.split(' ')[0]}
+    </div>`;
+  }
+  document.getElementById('sb-centro-montaje').innerHTML = TECS_MONTAJE.map(tecItem).join('');
+  document.getElementById('sb-centro-postventa').innerHTML = TECS_POSTVENTA.map(tecItem).join('');
+
+  // Técnicos Levante
+  document.getElementById('sb-levante-tecs').innerHTML = TECS_LEVANTE.map(nombre => {
+    const t = tecnicos.find(x => x.nombre === nombre);
+    const c = t ? tecColor(t.nombre) : 'var(--violet)';
+    const id = t ? t.id : '';
+    return `<div class="sb-person" ${id ? `onclick="openProfile('tec','${esc(id)}')"` : ''}>
+      <div class="sb-person-av" style="background:${c}1A;color:${c}">${getInitials(nombre)}</div>
+      ${nombre.split(' ')[0]}
+    </div>`;
+  }).join('');
 }
 
 function switchView(v, btn) {
@@ -928,7 +1327,8 @@ function renderCurrentView() {
     kanban: renderKanban, planning: renderPlanning,
     bytec: renderByTec, almacen: renderAlmacen,
     ajustes: renderAjustes, tareas: renderTareasCalendar,
-    pendientes: renderPendientes, search: renderSearchResults
+    pendientes: renderPendientes, search: renderSearchResults,
+    postventa: renderPostventa
   };
   map[currentView]?.();
 }
@@ -1920,12 +2320,23 @@ async function saveOT() {
   const nombre = document.getElementById('f-nombre').value.trim();
   const cliente = document.getElementById('f-cliente').value.trim();
   if (!nombre || !cliente) { showToast('Nombre y cliente son obligatorios', true); return; }
+
+  // Validar Nº Aparato si se está cerrando la OT
+  const estadoSel = document.getElementById('f-estado').value;
+  const numAparatoInput = document.getElementById('f-num-aparato');
+  if (estadoSel === 'Terminada' && numAparatoInput) {
+    const numAp = numAparatoInput.value.trim();
+    if (!numAp) { showToast('Introduce el Nº de aparato antes de cerrar la OT', true); return; }
+    const exists = aparatos.find(a => a.numero_aparato === numAp);
+    if (exists && !editingId) { showToast(`El nº ${numAp} ya existe en el repositorio de aparatos`, true); return; }
+  }
+
   btn.disabled = true; btn.textContent = 'Guardando…';
   const payload = {
     nombre, cliente,
     direccion: document.getElementById('f-dir').value.trim() || null,
     equipo: document.getElementById('f-equipo').value,
-    estado: document.getElementById('f-estado').value,
+    estado: estadoSel,
     zona: document.getElementById('f-zona').value,
     tecnicos: getSelectedTecs(),
     fecha_instalacion: document.getElementById('f-fecha').value || null,
@@ -1947,10 +2358,26 @@ async function saveOT() {
     error = res.error;
     if (!error && res.data) expedientes.unshift(res.data);
   }
+  // Auto-crear aparato si se cierra como Terminada
+  if (!error && estadoSel === 'Terminada' && numAparatoInput) {
+    const numAp = numAparatoInput.value.trim();
+    if (numAp && !aparatos.find(a => a.numero_aparato === numAp)) {
+      const apPayload = {
+        numero_aparato: numAp, cliente, estado: 'En garantía',
+        descripcion: document.getElementById('f-equipo').value || null,
+        direccion: document.getElementById('f-dir').value.trim() || null,
+        zona: document.getElementById('f-zona').value || 'Centro',
+        ot_ref: nombre,
+      };
+      const apRes = await sb.from('aparatos').insert(apPayload).select().single();
+      if (!apRes.error && apRes.data) { aparatos.push(apRes.data); showToast('OT cerrada · Aparato Nº ' + numAp + ' creado en Postventa'); }
+      else showToast('OT guardada, pero error al crear aparato: ' + (apRes.error?.message || ''), true);
+    }
+  }
   btn.disabled = false; btn.textContent = 'Guardar OT';
   if (error) { console.error(error); showToast('Error: ' + (error.message || 'desconocido'), true); return; }
+  if (estadoSel !== 'Terminada' || !numAparatoInput) showToast(editingId ? 'OT actualizada' : 'OT creada');
   closeModal('modal-ot');
-  showToast(editingId ? 'OT actualizada' : 'OT creada');
   renderCurrentView();
 }
 
@@ -2024,6 +2451,544 @@ async function deleteTarea() {
   showToast('Tarea eliminada');
   renderCurrentView();
 }
+
+// ═══ POSTVENTA ═══
+function renderPostventa() {
+  if (currentPvTab === 'aparatos') {
+    renderAparatos();
+  } else {
+    renderPvPlanning();
+  }
+}
+
+function switchPvTab(tab) {
+  currentPvTab = tab;
+  document.getElementById('pv-tab-aparatos').classList.toggle('active', tab === 'aparatos');
+  document.getElementById('pv-tab-planning').classList.toggle('active', tab === 'planning');
+  document.getElementById('pv-toolbar-aparatos').style.display = tab === 'aparatos' ? 'flex' : 'none';
+  document.getElementById('pv-toolbar-planning').style.display = tab === 'planning' ? 'flex' : 'none';
+  document.getElementById('pv-btn-new').textContent = tab === 'aparatos' ? 'Nuevo aparato' : 'Nueva tarea';
+  document.getElementById('pv-btn-new').onclick = tab === 'aparatos' ? openAparatoModal : openTareaPostventaModal;
+  renderPostventa();
+}
+
+function setPvFilter(key, val) {
+  // Toggle: if same value, clear
+  pvFilter[key] = pvFilter[key] === val ? '' : val;
+  // Clear mutually exclusive keys
+  if (key === 'estado') pvFilter.contrato = '';
+  if (key === 'contrato') pvFilter.estado = '';
+  // Update button states
+  document.querySelectorAll('.pv-filter-btn').forEach(b => b.classList.remove('active'));
+  const noFilter = !pvFilter.estado && !pvFilter.contrato && !pvFilter.zona;
+  if (noFilter) document.getElementById('pvf-all')?.classList.add('active');
+  if (pvFilter.estado === 'En garantía') document.getElementById('pvf-garantia')?.classList.add('active');
+  if (pvFilter.estado === 'Activo') document.getElementById('pvf-activo')?.classList.add('active');
+  if (pvFilter.contrato === 'si') document.getElementById('pvf-contrato')?.classList.add('active');
+  if (pvFilter.zona === 'Centro') document.getElementById('pvf-centro')?.classList.add('active');
+  if (pvFilter.zona === 'Levante') document.getElementById('pvf-levante')?.classList.add('active');
+  renderAparatos();
+}
+
+function setPvView(v) {
+  pvView = v;
+  document.getElementById('pvv-cards').classList.toggle('active', v === 'cards');
+  document.getElementById('pvv-table').classList.toggle('active', v === 'table');
+  renderAparatos();
+}
+
+function getFilteredAparatos() {
+  const q = (document.getElementById('pv-search')?.value || '').toLowerCase().trim();
+  return aparatos.filter(a => {
+    if (q && !`${a.numero_aparato} ${a.cliente} ${a.direccion} ${a.administrador||''}`.toLowerCase().includes(q)) return false;
+    if (pvFilter.estado && a.estado !== pvFilter.estado) return false;
+    if (pvFilter.contrato === 'si' && !a.contrato_mantenimiento) return false;
+    if (pvFilter.zona && a.zona !== pvFilter.zona) return false;
+    return true;
+  });
+}
+
+function aparatoContratoAlert(a) {
+  if (!a.contrato_mantenimiento || !a.fecha_fin_contrato) return null;
+  const today = todayISO();
+  const diff = daysBetween(today, a.fecha_fin_contrato);
+  if (diff < 0) return 'vencido';
+  if (diff <= 30) return 'proximo';
+  return null;
+}
+
+function renderAparatos() {
+  const list = getFilteredAparatos();
+  document.getElementById('pv-sub').textContent = `${aparatos.length} APARATOS · ${list.length} MOSTRADOS`;
+  let html = '';
+  if (!list.length) {
+    html = `<div style="padding:40px 24px"><div class="empty"><p class="title">Sin aparatos</p><p>No hay equipos que coincidan con los filtros</p></div></div>`;
+    document.getElementById('pv-content').innerHTML = html; return;
+  }
+  if (pvView === 'cards') {
+    html = `<div class="pv-cards">`;
+    list.forEach(a => {
+      const alert = aparatoContratoAlert(a);
+      const estadoBadge = a.estado === 'En garantía' ? 'b-blue' : a.estado === 'Activo' ? 'b-green' : 'b-slate';
+      html += `<div class="pv-card" onclick="openPvDrawer('${esc(a.id)}')">
+        ${alert ? `<div class="pv-alert" title="${alert === 'vencido' ? 'Contrato vencido' : 'Contrato próximo a vencer'}"></div>` : ''}
+        <div class="pv-card-num">
+          <span class="badge b-accent b-mono">${a.numero_aparato || '—'}</span>
+          <span class="badge ${estadoBadge}">${a.estado}</span>
+        </div>
+        <div class="pv-card-cli">${a.cliente}</div>
+        <div class="pv-card-addr">${a.direccion || '—'}</div>
+        <div class="pv-card-foot">
+          <span class="badge b-line b-mono">${a.descripcion || '—'}</span>
+          ${a.zona ? `<span class="badge b-slate">${a.zona}</span>` : ''}
+          ${a.contrato_mantenimiento ? `<span class="badge ${alert === 'vencido' ? 'b-red' : alert === 'proximo' ? 'b-amber' : 'b-green'}">Contrato${alert === 'vencido' ? ' vencido' : alert === 'proximo' ? ' próx.' : ''}</span>` : '<span class="badge b-line">Sin contrato</span>'}
+          ${a.tecnico_asignado ? `<span class="badge b-line">${a.tecnico_asignado.split(' ')[0]}</span>` : ''}
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else {
+    html = `<div class="pv-table-wrap"><table class="pv-table"><thead><tr>
+      <th>Nº Aparato</th><th>Cliente</th><th>Dirección</th><th>Equipo</th><th>Estado</th><th>Contrato</th><th>Técnico</th><th>Zona</th>
+    </tr></thead><tbody>`;
+    list.forEach(a => {
+      const alert = aparatoContratoAlert(a);
+      html += `<tr onclick="openPvDrawer('${esc(a.id)}')">
+        <td><span class="badge b-accent b-mono">${a.numero_aparato || '—'}</span></td>
+        <td style="font-weight:500">${a.cliente}</td>
+        <td style="font-size:12px;color:var(--ink3)">${a.direccion || '—'}</td>
+        <td>${a.descripcion || '—'}</td>
+        <td><span class="badge ${a.estado === 'En garantía' ? 'b-blue' : a.estado === 'Activo' ? 'b-green' : 'b-slate'}">${a.estado}</span></td>
+        <td>${a.contrato_mantenimiento ? `<span class="badge ${alert === 'vencido' ? 'b-red' : alert === 'proximo' ? 'b-amber' : 'b-green'}">Sí${alert ? (alert === 'vencido' ? ' ⚠' : ' !') : ''}</span>` : '<span class="badge b-line">No</span>'}</td>
+        <td style="font-size:12px">${a.tecnico_asignado || '—'}</td>
+        <td>${a.zona || '—'}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+  document.getElementById('pv-content').innerHTML = html;
+}
+
+// ── APARATO DRAWER ──
+let currentAparatoId = null;
+function openPvDrawer(id) {
+  const a = aparatos.find(x => x.id === id);
+  if (!a) return;
+  currentAparatoId = id;
+  document.getElementById('pvd-icon').textContent = (a.descripcion || 'EQ').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('pvd-num').textContent = `Nº ${a.numero_aparato || '—'}`;
+  document.getElementById('pvd-cli').innerHTML = a.cliente;
+  document.getElementById('pvd-addr').textContent = a.direccion || '—';
+  renderPvDrawerBody(a);
+  document.getElementById('pv-drawer').classList.add('open');
+  document.getElementById('pv-drawer-overlay').classList.add('open');
+}
+function closePvDrawer() {
+  document.getElementById('pv-drawer').classList.remove('open');
+  document.getElementById('pv-drawer-overlay').classList.remove('open');
+  currentAparatoId = null;
+}
+function renderPvDrawerBody(a) {
+  const trabajos = tareasPostventa.filter(t => t.aparato_id === a.id);
+  const realizados = trabajos.filter(t => t.estado === 'realizada');
+  const averias12m = realizados.filter(t => {
+    if (t.tipo !== 'averia') return false;
+    const diff = daysBetween(t.fecha_prevista || t.fecha_realizado || '', todayISO());
+    return Math.abs(diff) <= 365;
+  }).length;
+  const mants = realizados.filter(t => t.tipo === 'mantenimiento').length;
+  const ultima = realizados.sort((a,b) => (b.fecha_realizado||'') > (a.fecha_realizado||'') ? 1 : -1)[0];
+  const proxima = trabajos.filter(t => t.estado === 'pendiente' && t.fecha_prevista >= todayISO()).sort((a,b) => a.fecha_prevista > b.fecha_prevista ? 1 : -1)[0];
+  const isConflictivo = averias12m >= 3;
+  const alert = aparatoContratoAlert(a);
+
+  let html = '';
+  // KPIs
+  html += `<div class="pv-kpi-row">
+    <div class="pv-kpi ${isConflictivo ? 'alert' : ''}"><div class="pv-kpi-val">${averias12m}${isConflictivo ? ' ⚠' : ''}</div><div class="pv-kpi-label">Averías 12m</div></div>
+    <div class="pv-kpi"><div class="pv-kpi-val">${mants}</div><div class="pv-kpi-label">Mantenimientos</div></div>
+    <div class="pv-kpi"><div class="pv-kpi-val" style="font-size:12px">${ultima ? fmtDate(ultima.fecha_prevista || ultima.fecha_realizado) : '—'}</div><div class="pv-kpi-label">Última visita</div></div>
+    <div class="pv-kpi"><div class="pv-kpi-val" style="font-size:12px">${proxima ? fmtDate(proxima.fecha_prevista) : '—'}</div><div class="pv-kpi-label">Próxima visita</div></div>
+  </div>`;
+  // Info
+  html += `<div class="drawer-section"><div class="drawer-section-h">Datos del aparato</div>`;
+  const fields = [
+    ['Tipo de equipo', a.descripcion],['Zona', a.zona],['Estado', a.estado],
+    ['Técnico asignado', a.tecnico_asignado],['Administrador', a.administrador],
+    ['Ref. OT', a.ot_ref],['Notas', a.notas]
+  ];
+  fields.forEach(([label, val]) => {
+    if (val) html += `<div class="drawer-info-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3M8 11h.01"/></svg><span style="font-size:11px;color:var(--ink3);min-width:100px">${label}</span><span>${val}</span></div>`;
+  });
+  html += `</div>`;
+  // Contrato
+  html += `<div class="drawer-section"><div class="drawer-section-h">Contrato de mantenimiento</div>`;
+  if (a.contrato_mantenimiento) {
+    html += `<div class="drawer-info-row" style="${alert ? 'border-color:var(--' + (alert === 'vencido' ? 'red' : 'amber') + ')' : ''}">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M5 8l2 2 4-4"/></svg>
+      <span>${a.tipo_contrato || 'Contrato activo'}</span>
+      ${a.fecha_fin_contrato ? `<span style="margin-left:auto;font-family:var(--mono);font-size:11px;color:${alert ? 'var(--' + (alert === 'vencido' ? 'red' : 'amber') + ')' : 'var(--ink3)'}">hasta ${fmtDate(a.fecha_fin_contrato)}</span>` : ''}
+    </div>`;
+  } else {
+    html += `<div class="drawer-info-row empty" style="font-style:italic;color:var(--ink3)">Sin contrato de mantenimiento</div>`;
+  }
+  html += `</div>`;
+  // Historial
+  html += `<div class="drawer-section"><div class="drawer-section-h" style="display:flex;align-items:center;justify-content:space-between">
+    Historial de trabajos · ${realizados.length}
+    <button class="drawer-mini-btn" onclick="openTareaPostventaModalForAparato('${esc(a.id)}')">+ Nuevo trabajo</button>
+  </div>`;
+  if (realizados.length) {
+    const sorted = [...realizados].sort((a,b) => (b.fecha_prevista||'') > (a.fecha_prevista||'') ? 1 : -1);
+    sorted.slice(0, 10).forEach(t => {
+      html += `<div class="pv-hist-item">
+        <div class="pv-hist-dot" style="background:${PV_TIPO_COLOR[t.tipo] || 'var(--slate)'}"></div>
+        <div class="pv-hist-main">
+          <div class="pv-hist-title">${PV_TIPO_LABEL[t.tipo] || t.tipo} · ${t.tecnico_asignado || '—'}</div>
+          <div class="pv-hist-meta">${fmtDate(t.fecha_prevista).toUpperCase()}${t.fecha_realizado ? ' · REALIZADA ' + fmtDate(t.fecha_realizado).toUpperCase() : ''}</div>
+          ${t.descripcion ? `<div class="pv-hist-desc">${t.descripcion}</div>` : ''}
+          ${t.notas_resolucion ? `<div class="pv-hist-desc" style="color:var(--green)">✓ ${t.notas_resolucion}</div>` : ''}
+        </div>
+        <button class="drawer-mini-btn" onclick="editTareaPostventa('${esc(t.id)}')" style="flex-shrink:0;margin-left:8px">Editar</button>
+      </div>`;
+    });
+  } else {
+    html += `<div class="empty-mini">Sin trabajos registrados</div>`;
+  }
+  html += `</div>`;
+  // Pendientes
+  const pendientes = trabajos.filter(t => t.estado !== 'realizada' && t.estado !== 'cancelada');
+  if (pendientes.length) {
+    html += `<div class="drawer-section"><div class="drawer-section-h">Trabajos pendientes · ${pendientes.length}</div>`;
+    pendientes.forEach(t => {
+      html += `<div class="drawer-ot-row" onclick="editTareaPostventa('${esc(t.id)}')">
+        <div class="drawer-ot-dot" style="background:${PV_TIPO_COLOR[t.tipo] || 'var(--slate)'}"></div>
+        <div class="drawer-ot-name">${PV_TIPO_LABEL[t.tipo] || t.tipo} · ${t.tecnico_asignado || '—'}</div>
+        <div class="drawer-ot-meta">${fmtDate(t.fecha_prevista).toUpperCase()}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  // Actions
+  html += `<div class="drawer-info-actions" style="margin-top:16px;gap:6px">
+    <button class="drawer-mini-btn primary" onclick="closePvDrawer();openAparatoModalEdit('${esc(a.id)}')">Editar ficha</button>
+  </div>`;
+  document.getElementById('pvd-body').innerHTML = html;
+}
+
+// ── PLANNING POSTVENTA ──
+const TECS_PV_LIST = ['Alberto Fernandez','David Martin','Juan Carlos Miguélez','Juan Carlos Lebrón'];
+function changePvWeek(d) { pvWeekOffset += d; renderPvPlanning(); }
+function renderPvPlanning() {
+  // Render tec filter buttons
+  const filterWrap = document.getElementById('pv-tec-filters');
+  if (filterWrap) {
+    filterWrap.innerHTML = `<button class="pv-filter-btn ${!pvTecFilter ? 'active' : ''}" onclick="setPvTecFilter('')">Todos</button>` +
+      TECS_PV_LIST.map(t => `<button class="pv-filter-btn ${pvTecFilter === t ? 'active' : ''}" onclick="setPvTecFilter('${esc(t)}')">${t.split(' ')[0]}</button>`).join('');
+  }
+  const base = getMonday(new Date());
+  base.setDate(base.getDate() + pvWeekOffset * 7);
+  const days = Array.from({length: 5}, (_, i) => { const d = new Date(base); d.setDate(d.getDate()+i); return d; });
+  const today = todayISO();
+  const fmt = d => d.toISOString().split('T')[0];
+  const weekN = isoWeek(days[0]);
+  document.getElementById('pv-week-label').innerHTML =
+    `${days[0].getDate()} ${MESES[days[0].getMonth()]} – ${days[4].getDate()} ${MESES[days[4].getMonth()]}<span class="week-tag">S${weekN}</span>`;
+
+  const tecs = pvTecFilter ? [pvTecFilter] : TECS_PV_LIST;
+  let html = `<div class="pv-planning-wrap">`;
+  html += `<div class="pv-plan-grid">`;
+  // Header
+  html += `<div class="pv-plan-head">`;
+  html += `<div class="pv-plan-head-cell left">Técnico</div>`;
+  days.forEach(d => {
+    const isT = fmt(d) === today;
+    html += `<div class="pv-plan-head-cell${isT ? ' today-bg' : ''}">${DIAS[d.getDay()-1]} ${d.getDate()}${isT ? '<br><span style="font-size:8px;color:var(--accent);font-weight:700">HOY</span>' : ''}</div>`;
+  });
+  html += `</div>`;
+  // Rows
+  tecs.forEach(tec => {
+    const t = tecnicos.find(x => x.nombre === tec);
+    const c = t ? tecColor(t.nombre) : 'var(--blue)';
+    html += `<div class="pv-plan-row">`;
+    html += `<div class="pv-plan-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div class="pv-plan-tec-name">${tec.split(' ')[0]}</div></div>`;
+    days.forEach(d => {
+      const ds = fmt(d);
+      const isT = ds === today;
+      const tareasDia = tareasPostventa.filter(t => t.tecnico_asignado === tec && t.fecha_prevista === ds && t.estado !== 'cancelada');
+      html += `<div class="pv-plan-cell${isT ? ' today-bg' : ''}">`;
+      tareasDia.forEach(t => {
+        const ap = aparatos.find(a => a.id === t.aparato_id);
+        html += `<div class="pv-task-pill ${t.tipo} ${t.prioridad === 'urgente' ? 'urgente' : ''}" onclick="editTareaPostventa('${esc(t.id)}')">
+          <div style="width:5px;height:5px;border-radius:50%;background:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'};flex-shrink:0"></div>
+          <div><div class="pv-task-pill-name">${ap ? ap.cliente.split(' ')[0] : 'Ap.'}</div><div class="pv-task-pill-num">${ap ? ap.numero_aparato : '—'}</div></div>
+          ${t.prioridad === 'urgente' ? '<span style="margin-left:auto;font-size:8px;color:var(--red);font-weight:700">URG</span>' : ''}
+        </div>`;
+      });
+      html += `</div>`;
+    });
+    html += `</div>`;
+  });
+  html += `</div></div>`;
+  document.getElementById('pv-content').innerHTML = html;
+}
+function setPvTecFilter(tec) {
+  pvTecFilter = tec;
+  renderPvPlanning();
+}
+
+// ── MODAL APARATO ──
+function openAparatoModal() {
+  editingAparatoId = null;
+  document.getElementById('modal-aparato-title').innerHTML = 'Nuevo <em>aparato</em>';
+  ['fa-num','fa-cliente','fa-admin','fa-dir','fa-ot-ref','fa-notas','fa-inicio','fa-fin'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('fa-estado').value = 'En garantía';
+  document.getElementById('fa-zona').value = 'Centro';
+  document.getElementById('fa-contrato').checked = false;
+  document.getElementById('fa-tipo-contrato').value = '';
+  document.getElementById('fa-contrato-fields').style.display = 'none';
+  document.getElementById('btn-del-aparato').style.display = 'none';
+  document.getElementById('fa-edit-id').value = '';
+  populatePvTecSelect('');
+  document.getElementById('modal-aparato').classList.add('open');
+  setTimeout(() => document.getElementById('fa-num').focus(), 100);
+}
+function openAparatoModalEdit(id) {
+  const a = aparatos.find(x => x.id === id);
+  if (!a) return;
+  editingAparatoId = id;
+  document.getElementById('modal-aparato-title').innerHTML = 'Editar <em>aparato</em>';
+  document.getElementById('fa-num').value = a.numero_aparato || '';
+  document.getElementById('fa-cliente').value = a.cliente || '';
+  document.getElementById('fa-admin').value = a.administrador || '';
+  document.getElementById('fa-dir').value = a.direccion || '';
+  document.getElementById('fa-estado').value = a.estado || 'Activo';
+  document.getElementById('fa-zona').value = a.zona || 'Centro';
+  document.getElementById('fa-contrato').checked = !!a.contrato_mantenimiento;
+  document.getElementById('fa-tipo-contrato').value = a.tipo_contrato || '';
+  document.getElementById('fa-inicio').value = a.fecha_inicio_contrato || '';
+  document.getElementById('fa-fin').value = a.fecha_fin_contrato || '';
+  document.getElementById('fa-contrato-fields').style.display = a.contrato_mantenimiento ? 'block' : 'none';
+  document.getElementById('fa-ot-ref').value = a.ot_ref || '';
+  document.getElementById('fa-notas').value = a.notas || '';
+  document.getElementById('fa-edit-id').value = id;
+  document.getElementById('btn-del-aparato').style.display = 'inline-block';
+  populatePvTecSelect(a.tecnico_asignado || '');
+  document.getElementById('modal-aparato').classList.add('open');
+}
+function toggleContratoFields() {
+  const checked = document.getElementById('fa-contrato').checked;
+  document.getElementById('fa-contrato-fields').style.display = checked ? 'block' : 'none';
+}
+function populatePvTecSelect(selected) {
+  const sel = document.getElementById('fa-tec');
+  sel.innerHTML = '<option value="">— Sin asignar —</option>' +
+    TECS_PV_LIST.map(t => `<option value="${t}"${t === selected ? ' selected' : ''}>${t}</option>`).join('');
+}
+async function saveAparato() {
+  const btn = document.getElementById('btn-save-aparato');
+  const num = document.getElementById('fa-num').value.trim();
+  const cli = document.getElementById('fa-cliente').value.trim();
+  if (!num || !cli) { showToast('Nº aparato y cliente son obligatorios', true); return; }
+  // Check duplicates
+  if (!editingAparatoId) {
+    const exists = aparatos.find(a => a.numero_aparato === num);
+    if (exists) { showToast(`El nº ${num} ya existe en el repositorio`, true); return; }
+  }
+  btn.disabled = true; btn.textContent = 'Guardando…';
+  const payload = {
+    numero_aparato: num, cliente: cli,
+    administrador: document.getElementById('fa-admin').value.trim() || null,
+    direccion: document.getElementById('fa-dir').value.trim() || null,
+    descripcion: document.getElementById('fa-desc').value,
+    estado: document.getElementById('fa-estado').value,
+    zona: document.getElementById('fa-zona').value,
+    tecnico_asignado: document.getElementById('fa-tec').value || null,
+    contrato_mantenimiento: document.getElementById('fa-contrato').checked,
+    tipo_contrato: document.getElementById('fa-tipo-contrato').value || null,
+    fecha_inicio_contrato: document.getElementById('fa-inicio').value || null,
+    fecha_fin_contrato: document.getElementById('fa-fin').value || null,
+    ot_ref: document.getElementById('fa-ot-ref').value.trim() || null,
+    notas: document.getElementById('fa-notas').value.trim() || null,
+  };
+  let error;
+  if (editingAparatoId) {
+    const res = await sb.from('aparatos').update(payload).eq('id', editingAparatoId).select().single();
+    error = res.error;
+    if (!error && res.data) { const i = aparatos.findIndex(x => x.id === editingAparatoId); if (i >= 0) aparatos[i] = res.data; }
+  } else {
+    const res = await sb.from('aparatos').insert(payload).select().single();
+    error = res.error;
+    if (!error && res.data) aparatos.push(res.data);
+  }
+  btn.disabled = false; btn.textContent = 'Guardar aparato';
+  if (error) { showToast('Error: ' + (error.message || 'desconocido'), true); return; }
+  closeModal('modal-aparato');
+  showToast(editingAparatoId ? 'Aparato actualizado' : 'Aparato creado');
+  renderPostventa();
+  if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); }
+}
+async function deleteAparato() {
+  if (!editingAparatoId) return;
+  if (!confirm('¿Eliminar este aparato? Se perderá todo el historial asociado.')) return;
+  const { error } = await sb.from('aparatos').delete().eq('id', editingAparatoId);
+  if (error) { showToast('Error: ' + error.message, true); return; }
+  aparatos = aparatos.filter(a => a.id !== editingAparatoId);
+  closeModal('modal-aparato');
+  closePvDrawer();
+  showToast('Aparato eliminado');
+  renderPostventa();
+}
+
+// ── MODAL TAREA POSTVENTA ──
+function openTareaPostventaModal() {
+  editingPvTareaId = null;
+  document.getElementById('modal-pvt-title').innerHTML = 'Nueva <em>tarea</em> postventa';
+  ['pvt-aparato-search','pvt-desc','pvt-resolucion'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pvt-aparato-id').value = '';
+  document.getElementById('pvt-tipo').value = 'mantenimiento';
+  document.getElementById('pvt-prioridad').value = 'normal';
+  document.getElementById('pvt-estado').value = 'pendiente';
+  document.getElementById('pvt-fecha').value = todayISO();
+  document.getElementById('pvt-resolucion-wrap').style.display = 'none';
+  document.getElementById('btn-del-pvt').style.display = 'none';
+  populatePvTecSelectTarea('');
+  document.getElementById('modal-pv-tarea').classList.add('open');
+  setTimeout(() => document.getElementById('pvt-aparato-search').focus(), 100);
+}
+function openTareaPostventaModalForAparato(aparatoId) {
+  openTareaPostventaModal();
+  const a = aparatos.find(x => x.id === aparatoId);
+  if (a) {
+    document.getElementById('pvt-aparato-search').value = `${a.numero_aparato} · ${a.cliente}`;
+    document.getElementById('pvt-aparato-id').value = aparatoId;
+    if (a.tecnico_asignado) document.getElementById('pvt-tec').value = a.tecnico_asignado;
+  }
+}
+function editTareaPostventa(id) {
+  const t = tareasPostventa.find(x => x.id === id);
+  if (!t) return;
+  editingPvTareaId = id;
+  const a = aparatos.find(x => x.id === t.aparato_id);
+  document.getElementById('modal-pvt-title').innerHTML = 'Editar <em>tarea</em> postventa';
+  document.getElementById('pvt-aparato-search').value = a ? `${a.numero_aparato} · ${a.cliente}` : t.aparato_id;
+  document.getElementById('pvt-aparato-id').value = t.aparato_id || '';
+  document.getElementById('pvt-tipo').value = t.tipo || 'mantenimiento';
+  document.getElementById('pvt-prioridad').value = t.prioridad || 'normal';
+  document.getElementById('pvt-fecha').value = t.fecha_prevista || '';
+  document.getElementById('pvt-estado').value = t.estado || 'pendiente';
+  document.getElementById('pvt-desc').value = t.descripcion || '';
+  document.getElementById('pvt-resolucion').value = t.notas_resolucion || '';
+  document.getElementById('pvt-resolucion-wrap').style.display = t.estado === 'realizada' ? 'block' : 'none';
+  document.getElementById('btn-del-pvt').style.display = 'inline-block';
+  populatePvTecSelectTarea(t.tecnico_asignado || '');
+  document.getElementById('modal-pv-tarea').classList.add('open');
+}
+document.addEventListener('change', e => {
+  if (e.target.id === 'pvt-estado') {
+    document.getElementById('pvt-resolucion-wrap').style.display = e.target.value === 'realizada' ? 'block' : 'none';
+  }
+});
+function populatePvTecSelectTarea(selected) {
+  document.getElementById('pvt-tec').innerHTML = '<option value="">— Sin asignar —</option>' +
+    TECS_PV_LIST.map(t => `<option value="${t}"${t === selected ? ' selected' : ''}>${t}</option>`).join('');
+}
+
+// Autocomplete aparatos
+function renderAparatoSuggestions() {
+  const q = document.getElementById('pvt-aparato-search').value.toLowerCase().trim();
+  const wrap = document.getElementById('pvt-aparato-suggestions');
+  if (q.length < 2) { wrap.innerHTML = ''; return; }
+  const matches = aparatos.filter(a => `${a.numero_aparato} ${a.cliente} ${a.direccion||''}`.toLowerCase().includes(q)).slice(0, 5);
+  if (!matches.length) { wrap.innerHTML = ''; return; }
+  wrap.innerHTML = `<div style="position:absolute;top:2px;left:0;right:0;background:var(--surface);border:1px solid var(--line2);border-radius:var(--r2);z-index:10;box-shadow:var(--sh2);overflow:hidden">` +
+    matches.map(a => `<div onclick="selectAparatoSuggestion('${esc(a.id)}')" style="padding:9px 12px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''">
+      <span class="badge b-accent b-mono">${a.numero_aparato}</span>
+      <span style="font-weight:500">${a.cliente}</span>
+      <span style="font-size:11px;color:var(--ink3)">${(a.direccion||'').substring(0,30)}</span>
+    </div>`).join('') + `</div>`;
+}
+function selectAparatoSuggestion(id) {
+  const a = aparatos.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById('pvt-aparato-search').value = `${a.numero_aparato} · ${a.cliente}`;
+  document.getElementById('pvt-aparato-id').value = id;
+  document.getElementById('pvt-aparato-suggestions').innerHTML = '';
+  if (a.tecnico_asignado) document.getElementById('pvt-tec').value = a.tecnico_asignado;
+}
+
+async function saveTareaPostventa() {
+  const btn = document.getElementById('btn-save-pvt');
+  const aparatoId = document.getElementById('pvt-aparato-id').value;
+  const tec = document.getElementById('pvt-tec').value;
+  const fecha = document.getElementById('pvt-fecha').value;
+  if (!aparatoId) { showToast('Selecciona un aparato', true); return; }
+  if (!fecha) { showToast('La fecha es obligatoria', true); return; }
+  btn.disabled = true; btn.textContent = 'Guardando…';
+  const estado = document.getElementById('pvt-estado').value;
+  const payload = {
+    aparato_id: aparatoId,
+    tipo: document.getElementById('pvt-tipo').value,
+    prioridad: document.getElementById('pvt-prioridad').value,
+    tecnico_asignado: tec || null,
+    fecha_prevista: fecha,
+    estado,
+    descripcion: document.getElementById('pvt-desc').value.trim() || null,
+    notas_resolucion: document.getElementById('pvt-resolucion').value.trim() || null,
+    fecha_realizado: estado === 'realizada' ? todayISO() : null,
+  };
+  let error;
+  if (editingPvTareaId) {
+    const res = await sb.from('trabajos_postventa').update(payload).eq('id', editingPvTareaId).select().single();
+    error = res.error;
+    if (!error && res.data) { const i = tareasPostventa.findIndex(x => x.id === editingPvTareaId); if (i >= 0) tareasPostventa[i] = res.data; }
+  } else {
+    const res = await sb.from('trabajos_postventa').insert(payload).select().single();
+    error = res.error;
+    if (!error && res.data) tareasPostventa.push(res.data);
+  }
+  btn.disabled = false; btn.textContent = 'Guardar tarea';
+  if (error) { showToast('Error: ' + (error.message || 'desconocido'), true); return; }
+  closeModal('modal-pv-tarea');
+  showToast(editingPvTareaId ? 'Tarea actualizada' : 'Tarea creada');
+  if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); }
+  renderPostventa();
+}
+async function deleteTareaPostventa() {
+  if (!editingPvTareaId) return;
+  if (!confirm('¿Eliminar esta tarea?')) return;
+  const { error } = await sb.from('trabajos_postventa').delete().eq('id', editingPvTareaId);
+  if (error) { showToast('Error: ' + error.message, true); return; }
+  tareasPostventa = tareasPostventa.filter(t => t.id !== editingPvTareaId);
+  closeModal('modal-pv-tarea');
+  showToast('Tarea eliminada');
+  if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); }
+  renderPostventa();
+}
+
+// ── INTEGRACIÓN: campo Nº Aparato al cerrar OT ──
+// Se añade al modal OT cuando el estado es "Terminada"
+document.addEventListener('change', e => {
+  if (e.target.id === 'f-estado') {
+    let wrap = document.getElementById('f-num-aparato-wrap');
+    if (e.target.value === 'Terminada') {
+      if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.id = 'f-num-aparato-wrap';
+        wrap.className = 'f-field';
+        wrap.innerHTML = `<label class="f-label" style="color:var(--accent)">⚠ Nº Aparato (obligatorio para cerrar)</label><input class="f-input" id="f-num-aparato" placeholder="Número de aparato del equipo instalado" style="border-color:var(--accent)">`;
+        e.target.closest('.modal').querySelector('.f-divider').before(wrap);
+      }
+    } else {
+      if (wrap) wrap.remove();
+    }
+  }
+});
+
+// Intercept saveOT para crear aparato automáticamente al pasar a Terminada
+const _origSaveOT = window.saveOT;
 
 // ═══ UTILS ═══
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
