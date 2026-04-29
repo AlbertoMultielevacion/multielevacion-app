@@ -672,7 +672,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
     <div class="login-h">Hola de <em>nuevo</em></div>
     <div class="login-sub">Accede con tu cuenta corporativa para continuar</div>
     <label class="l-label">Email corporativo</label>
-    <input class="l-input" id="li-email" type="email" placeholder="alberto@multielevacion.com" autocomplete="email">
+    <input class="l-input" id="li-email" type="email" placeholder="tuemail@multielevacion.com" autocomplete="email">
     <label class="l-label">Contraseña</label>
     <input class="l-input" id="li-pass" type="password" placeholder="••••••••" autocomplete="current-password">
     <button class="l-btn" id="li-btn" onclick="doLogin()"><span>Entrar</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
@@ -1121,9 +1121,11 @@ sb.auth.onAuthStateChange(async (_, session) => {
     const initials = email.split('@')[0].split(/[._-]/).map(p => p[0]?.toUpperCase()).join('').slice(0,2) || 'ME';
     document.getElementById('av-initials').textContent = initials;
     document.getElementById('ud-email').textContent = email;
-    await loadAll();
-    renderSidebar();
-    renderDashboard();
+    try {
+      await loadAll();
+      renderSidebar();
+      renderDashboard();
+    } catch(ex) { console.error('Init error:', ex); alert('Error al cargar: ' + ex.message); }
   } else {
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('app').style.display = 'none';
@@ -1951,3 +1953,6 @@ function esc(s) { return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
 let toastT;
 function showToast(msg, isError) { const el = document.getElementById('toast'); el.innerHTML = `${isError?'⚠':'✓'} ${msg}`; el.style.background = isError ? 'var(--red)' : 'var(--ink)'; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 2800); }
 
+</script>
+</body>
+</html>
