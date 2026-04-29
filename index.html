@@ -153,7 +153,7 @@ button,input,select,textarea{font-family:var(--font)}
 .sb-accordion-btn svg{width:12px;height:12px;flex-shrink:0;margin-left:auto;transition:transform 0.2s;color:var(--ink4)}
 .sb-accordion-btn.open svg{transform:rotate(180deg)}
 .sb-accordion-body{overflow:hidden;max-height:0;transition:max-height 0.3s cubic-bezier(.4,0,.2,1)}
-.sb-accordion-body.open{max-height:600px}
+.sb-accordion-body.open{max-height:2000px}
 .sb-zone-label{font-size:9px;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.6px;padding:8px 10px 3px;font-family:var(--mono)}
 .sb-person{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 14px;border-radius:7px;cursor:pointer;font-size:12.5px;color:var(--ink2);transition:all 0.1s}
 .sb-person:hover{background:var(--surface2);color:var(--ink)}
@@ -180,7 +180,6 @@ button,input,select,textarea{font-family:var(--font)}
 .pill-toggle{display:inline-flex;background:var(--surface2);border:1px solid var(--line);border-radius:var(--r2);padding:3px;gap:1px}
 .pill-toggle button{padding:6px 14px;border-radius:7px;font-size:12px;font-weight:500;color:var(--ink2);border:none;background:transparent;cursor:pointer;transition:all 0.15s}
 .pill-toggle button.active{background:var(--ink);color:var(--surface)}
-.pill-toggle button.active span{color:var(--surface) !important}
 .pill-toggle button:hover:not(.active){background:var(--surface3);color:var(--ink)}
 
 /* BADGES */
@@ -686,11 +685,10 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 <div id="app">
   <div class="topbar">
     <div class="brand" onclick="switchView('dashboard',document.querySelector('.tab[data-v=dashboard]'))">
-      <div class="brand-icon"><svg viewBox="0 0 20 20"><path d="M3 17 L10 4 L17 17 M6.5 11 L13.5 11"/></svg></div>
-      <span class="brand-name">Multielevación</span>
+      <span class="brand-name">Multielevación S.L.</span>
     </div>
     <span class="brand-sep">/</span>
-    <span class="brand-section">Instalaciones</span>
+    <span class="brand-section">Panel de Control</span>
     <div class="divider"></div>
     <div class="tabs">
       <button class="tab active" data-v="dashboard" onclick="switchView('dashboard',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>Dashboard</button>
@@ -733,14 +731,14 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
         <div class="sb-company-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12v8H2z"/><path d="M2 4l6 5 6-5"/></svg><a href="mailto:info@multielevacion.com">info@multielevacion.com</a></div>
       </div>
 
-      <!-- 1. Oficina (accordion) -->
+      <!-- Personal Oficina -->
       <button class="sb-accordion-btn open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
         <span>Oficina</span>
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
       </button>
       <div class="sb-accordion-body open" id="sb-oficina"></div>
 
-      <!-- 2. Técnicos (accordion) -->
+      <!-- Técnicos -->
       <button class="sb-accordion-btn" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
         <span>Técnicos</span>
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
@@ -788,11 +786,11 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
       <!-- MONTAJES (planning + ajustes + PEM) -->
       <div class="view" id="view-montajes">
         <div class="view-header">
-          <div class="view-title-wrap"><div class="view-title" id="mont-title">Montajes</div><div class="view-sub" id="mont-sub">Planning semanal de instalaciones</div></div>
+          <div class="view-title-wrap"><div class="view-title" id="mont-title">Montajes <em id="mont-active-label">Planning</em></div><div class="view-sub" id="mont-sub">Planning semanal de instalaciones</div></div>
           <div class="pill-toggle" id="mont-pills">
-            <button id="mont-tab-planning" class="active" onclick="switchMontTab('planning')"><span style="color:var(--accent)">Planning</span></button>
-            <button id="mont-tab-ajustes" onclick="switchMontTab('ajustes')"><span style="color:var(--accent)">Ajustes</span></button>
-            <button id="mont-tab-pem" onclick="switchMontTab('pem')"><span style="color:var(--accent)">PEM</span></button>
+            <button id="mont-tab-planning" class="active" onclick="switchMontTab('planning')">Planning</button>
+            <button id="mont-tab-ajustes" onclick="switchMontTab('ajustes')">Ajustes</button>
+            <button id="mont-tab-pem" onclick="switchMontTab('pem')">PEM</button>
           </div>
         </div>
         <!-- Planning sub-toolbar -->
@@ -806,12 +804,12 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
       <!-- POSTVENTA (planning + piezas + ocas + aparatos) -->
       <div class="view" id="view-postventa">
         <div class="view-header">
-          <div class="view-title-wrap"><div class="view-title" id="pv-title">Postventa</div><div class="view-sub" id="pv-sub">—</div></div>
+          <div class="view-title-wrap"><div class="view-title" id="pv-title">Postventa <em id="pv-active-label">Planning</em></div><div class="view-sub" id="pv-sub">—</div></div>
           <div class="pill-toggle" id="pv-pills">
-            <button id="pv-tab-planning" class="active" onclick="switchPvTab('planning')"><span style="color:var(--accent)">Planning</span></button>
-            <button id="pv-tab-piezas" onclick="switchPvTab('piezas')"><span style="color:var(--accent)">Piezas</span></button>
-            <button id="pv-tab-ocas" onclick="switchPvTab('ocas')"><span style="color:var(--accent)">OCAS</span></button>
-            <button id="pv-tab-aparatos" onclick="switchPvTab('aparatos')"><span style="color:var(--accent)">Aparatos</span></button>
+            <button id="pv-tab-planning" class="active" onclick="switchPvTab('planning')">Planning</button>
+            <button id="pv-tab-piezas" onclick="switchPvTab('piezas')">Piezas</button>
+            <button id="pv-tab-ocas" onclick="switchPvTab('ocas')">OCAS</button>
+            <button id="pv-tab-aparatos" onclick="switchPvTab('aparatos')">Aparatos</button>
           </div>
           <button class="btn-new" id="pv-btn-new" onclick="openAparatoModal()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg><span>Nuevo aparato</span></button>
         </div>
@@ -1064,7 +1062,8 @@ const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov'
 const DIAS_FULL = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const MESES_FULL = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const COMERCIALES = ['Carolina','Monse','Sandra','Jorge','Salva'];
-const TECS_POSTVENTA = ['Alberto Fernandez','David Martin','Juan Carlos Miguélez','Juan Carlos Lebrón'];
+const TECS_POSTVENTA = ['David Martin','Juan Carlos Miguélez','Alberto Fernandez','Juan Carlos Lebrón'];
+const TECS_LEVANTE_NAMES = ['Henry Ure','Israel Vázquez'];
 const PV_TIPO_COLOR = { reparacion:'var(--green)', aviso:'var(--blue)', oca:'var(--violet)', mantenimiento:'var(--amber)', otros:'var(--slate)' };
 
 function tecColor(name) { const i = tecnicos.findIndex(t => t.nombre === name); return TEC_PALETTE[(i >= 0 ? i : 0) % TEC_PALETTE.length]; }
@@ -1086,7 +1085,7 @@ async function doLogin() {
   if (error) { err.textContent = error.message === 'Invalid login credentials' ? 'Email o contraseña incorrectos' : error.message; err.style.display = 'block'; btn.disabled = false; btn.querySelector('span').textContent = 'Entrar'; }
 }
 document.addEventListener('DOMContentLoaded', () => { document.getElementById('li-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); }); });
-async function doLogout() { await sb.auth.signOut(); }
+async function doLogout() { await sb.auth.signOut(); location.reload(); }
 function toggleUserDd() { document.getElementById('user-dd').classList.toggle('open'); }
 document.addEventListener('click', e => { if (!e.target.closest('#av-btn')) document.getElementById('user-dd')?.classList.remove('open'); });
 
@@ -1128,7 +1127,7 @@ function getFiltered() {
   return expedientes;
 }
 
-// ═══ SIDEBAR (accordion groups) ═══
+// ═══ SIDEBAR (accordion groups with full names) ═══
 const OFICINA_CENTRO = ['Juan Diego Martínez','Alberto Lougedo','Víctor Gómez','Cristina Urgiles','Carolina Gascueña','María Mora','Jorge Arjona','Sandra Hernández','Tania Ortega','Josefa Rodríguez','Nacho Díez','Aura Acosta','Monserrat Rangel','Luiyi Rodríguez','Minerva Baroja'];
 const OFICINA_LEVANTE = ['Salvador Renat'];
 const TECS_MONTAJE_CENTRO = ['Javier Alonso','Pablo Piedra','Alejandro Barranco','Cristian Rendón','Borja Yari Burón','David Mora'];
@@ -1136,26 +1135,24 @@ const TECS_PV_CENTRO = ['David Martín','Juan Carlos Miguélez','Alberto Fernán
 const TECS_LEVANTE = ['Henry Ure','Israel Vázquez'];
 
 function sbPersonHtml(name, type, list) {
-  const p = list.find(x => x.nombre === name);
+  // Match by first word (nombre) to handle accent mismatches between hardcoded names and DB
+  const firstName = name.split(' ')[0].toLowerCase();
+  const p = list.find(x => x.nombre && x.nombre.toLowerCase().startsWith(firstName));
   const id = p ? p.id : '';
-  const isTec = type === 'tec';
-  const c = isTec && p ? tecColor(p.nombre) : 'var(--slate)';
-  const display = name.split(' ').slice(0,2).join(' ');
-  return `<div class="sb-person" ${id ? `onclick="openProfile('${type}','${esc(id)}')"` : ''}><span class="sb-person-av" style="background:${c}1A;color:${c}">${getInitials(name)}</span>${display}</div>`;
+  const c = type === 'tec' && p ? tecColor(p.nombre) : 'var(--slate)';
+  return `<div class="sb-person" ${id ? `onclick="openProfile('${type}','${esc(id)}')"` : `onclick="openProfileByName('${type}','${esc(name)}')" `}><span class="sb-person-av" style="background:${c}1A;color:${c}">${getInitials(name)}</span>${name}</div>`;
 }
 
 function renderSidebar() {
   // Oficina
-  let oHtml = '';
-  oHtml += '<div class="sb-zone-label">Centro</div>';
+  let oHtml = '<div class="sb-zone-label">Centro</div>';
   OFICINA_CENTRO.forEach(n => { oHtml += sbPersonHtml(n, 'oficina', oficina); });
   oHtml += '<div class="sb-zone-label">Levante</div>';
   OFICINA_LEVANTE.forEach(n => { oHtml += sbPersonHtml(n, 'oficina', oficina); });
   document.getElementById('sb-oficina').innerHTML = oHtml;
 
   // Técnicos
-  let tHtml = '';
-  tHtml += '<div class="sb-zone-label">Centro</div>';
+  let tHtml = '<div class="sb-zone-label">Centro</div>';
   tHtml += '<div class="sb-subrole">Montajes</div>';
   TECS_MONTAJE_CENTRO.forEach(n => { tHtml += sbPersonHtml(n, 'tec', tecnicos); });
   tHtml += '<div class="sb-subrole">Postventa</div>';
@@ -1163,6 +1160,16 @@ function renderSidebar() {
   tHtml += '<div class="sb-zone-label">Levante</div>';
   TECS_LEVANTE.forEach(n => { tHtml += sbPersonHtml(n, 'tec', tecnicos); });
   document.getElementById('sb-tecnicos').innerHTML = tHtml;
+}
+
+// Fallback profile for persons not yet in DB
+function openProfileByName(type, name) {
+  currentProfile = { type, id: null, data: { nombre: name, email: null, telefono: null, notas: '' } };
+  document.getElementById('drawer-name').textContent = name;
+  document.getElementById('drawer-rol').textContent = type === 'tec' ? 'Técnico' : 'Oficina';
+  document.getElementById('drawer-av').style.background = 'var(--slate-soft)'; document.getElementById('drawer-av').style.color = 'var(--slate)';
+  document.getElementById('drawer-av').textContent = getInitials(name);
+  renderDrawerBody(); document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open');
 }
 
 // ═══ VIEW SWITCHING ═══
@@ -1256,7 +1263,7 @@ function renderHoy() {
     html += `<div class="hoy-sub-h">Zona <em>${zona}</em></div>`;
     const tecsZona = tecnicos.filter(t => (t.zona || 'Centro') === zona && !TECS_POSTVENTA.includes(t.nombre));
     const tecsZonaNombres = new Set(tecsZona.map(t => t.nombre));
-    const otsZona = hoyOTs.filter(e => (e.tecnicos || []).some(t => tecsZonaNombres.has(t)) || (!e.tecnicos?.length && (e.zona||'Centro') === zona));
+    const otsZona = hoyOTs.filter(e => (e.tecnicos || []).some(t => tecsZonaNombres.has(t)));
     const ocupados = new Set(); otsZona.forEach(e => (e.tecnicos || []).forEach(t => { if (tecsZonaNombres.has(t)) ocupados.add(t); }));
     if (otsZona.length) {
       otsZona.forEach(ot => {
@@ -1280,10 +1287,13 @@ function renderHoy() {
         html += `<div class="hoy-ot-card" style="border-left-color:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}" onclick="editTareaPostventa('${t.id}')"><div class="hoy-ot-h"><span class="hoy-ot-name">${ap?ap.numero_aparato:'—'}</span><span class="badge b-line b-mono">${(t.tipo||'PV').toUpperCase()}</span></div><div class="hoy-ot-cli">${ap?ap.cliente:'—'}</div><div class="hoy-ot-addr">${ap?ap.direccion||'—':'—'}</div><div class="hoy-ot-tecs"><span style="font-size:11px;color:var(--ink2)">${t.tecnico_asignado||'Sin asignar'}</span></div></div>`;
       });
     } else { html += '<div class="empty-mini">Sin postventa hoy</div>'; }
+    // Técnicos PV libres en esta zona
+    const pvTecsZona = tecnicos.filter(t => TECS_POSTVENTA.includes(t.nombre) && (t.zona || 'Centro') === zona);
+    const pvOcupados = new Set(pvHoy.filter(t => { const ap = aparatos.find(a => a.id === t.aparato_id); return ap && (ap.zona || 'Centro') === zona; }).map(t => t.tecnico_asignado).filter(Boolean));
+    const pvLibres = pvTecsZona.filter(t => !pvOcupados.has(t.nombre));
+    if (pvLibres.length) { html += `<div class="hoy-sub-h" style="margin-top:8px">Libres · ${pvLibres.length}</div><div class="hoy-libres">${pvLibres.map(t=>`<span class="hoy-libre-pill"><span class="dot" style="background:${tecColor(t.nombre)}"></span>${t.nombre.split(' ')[0]}</span>`).join('')}</div>`; }
   });
-  html += '</div>';
-
-  html += '</div>';
+  html += '</div></div>';
   document.getElementById('hoy-zonas').innerHTML = html;
 }
 // ═══ KANBAN / FASES ═══
@@ -1332,6 +1342,8 @@ function switchMontTab(tab) {
   document.getElementById('mont-tab-ajustes').classList.toggle('active', tab === 'ajustes');
   document.getElementById('mont-tab-pem').classList.toggle('active', tab === 'pem');
   document.getElementById('mont-planning-toolbar').style.display = tab === 'planning' ? 'flex' : 'none';
+  const labels = {planning:'Planning',ajustes:'Ajustes',pem:'PEM'};
+  document.getElementById('mont-active-label').textContent = labels[tab];
   renderMontajes();
 }
 function renderMontajes() {
@@ -1373,7 +1385,6 @@ function renderPlanning() {
 }
 
 let draggingBarId = null;
-
 function initPlanningDragDrop(dayStrs) {
   document.querySelectorAll('.pg-bar').forEach(bar => {
     bar.setAttribute('draggable','true');
@@ -1385,7 +1396,8 @@ function initPlanningDragDrop(dayStrs) {
     cell.addEventListener('dragleave', () => cell.classList.remove('drop-target'));
     cell.addEventListener('drop', async e => {
       e.preventDefault(); cell.classList.remove('drop-target');
-      let id = draggingBarId; try { id = id || e.dataTransfer.getData('text/plain'); } catch(_) {}
+      let id = draggingBarId; try { const dt = e.dataTransfer.getData('text/plain'); if (dt) id = dt; } catch(_) {}
+      if (!id) return;
       const newDate = cell.dataset.date, newTec = cell.dataset.tec;
       const exp = expedientes.find(x => x.id === id); if (!exp) return;
       let newTecs = (exp.tecnicos || []).slice();
@@ -1428,7 +1440,6 @@ function changeWeek(d) { weekOffset += d; renderPlanning(); }
 // Ajustes/PEM (dentro de Montajes)
 function renderAjustes() {
   const isPem = currentMontTab === 'pem';
-  document.getElementById('mont-title').textContent = 'Montajes';
   let actualList;
   if (isPem) { actualList = expedientes.filter(e => e.tipo_ajuste === 'pem' || (e.estado === 'Facturar' && !e.tipo_ajuste)); }
   else { actualList = expedientes.filter(e => e.estado === 'Ajustes' && e.tipo_ajuste !== 'pem'); }
@@ -1440,39 +1451,40 @@ function renderAjustes() {
   }).join('')}</div></div>`;
 }
 
-// ═══ TÉCNICOS (montaje + PV en 2 columnas) ═══
+// ═══ TÉCNICOS (2 columnas: Montajes / Postventa) ═══
 function renderByTec() {
   const ESTADOS_ACTIVOS = ['Empezada','Ajustes','Facturar','Planificada'];
   const tecsMontaje = tecnicos.filter(t => !TECS_POSTVENTA.includes(t.nombre));
-  let html = '';
+  let html = '<div class="hoy-zonas">';
   // Col Montajes
-  html += `<div class="tec-zone-h">Montajes</div><div class="tec-grid">`;
+  html += '<div class="hoy-zona"><div class="hoy-zona-h">Montajes</div>';
   ['Centro','Levante'].forEach(zona => {
     const tecsZona = tecsMontaje.filter(t => (t.zona||'Centro') === zona);
     if (!tecsZona.length) return;
-    html += `<div style="grid-column:1/-1;padding:10px 0 4px"><span class="badge b-line b-mono">${zona.toUpperCase()}</span></div>`;
+    html += `<div class="hoy-sub-h">Zona <em>${zona}</em></div><div class="tec-grid">`;
     tecsZona.forEach(tec => {
       const c = tecColor(tec.nombre);
       const ots = expedientes.filter(e => (e.tecnicos||[]).includes(tec.nombre) && ESTADOS_ACTIVOS.includes(e.estado));
       html += `<div class="tec-card"><div class="tec-card-h" onclick="openProfile('tec','${esc(tec.id)}')"><div class="tec-big-av" style="background:${c}1A;color:${c}">${getInitials(tec.nombre)}</div><div><div class="tec-card-name">${tec.nombre}</div><div class="tec-card-meta">${ots.length} OTs ACTIVAS</div></div></div><div class="tec-card-list">${ots.length?ots.map(j=>`<div class="tec-card-row" onclick="openEditModal('${j.id}')"><div class="tec-card-dot" style="background:${FASE_COLOR[j.estado]||'#888'}"></div><div class="tec-card-row-main"><div class="tec-card-row-ot">${j.nombre}</div><div class="tec-card-row-cli">${j.cliente}</div></div><div class="tec-card-row-status">${j.estado.slice(0,7)}</div></div>`).join(''):'<div class="tec-card-empty">Sin OTs activas</div>'}</div></div>`;
     });
+    html += '</div>';
   });
-  html += `</div>`;
+  html += '</div>';
   // Col Postventa
-  html += `<div class="tec-zone-h">Postventa</div><div class="tec-grid">`;
+  html += '<div class="hoy-zona"><div class="hoy-zona-h">Postventa</div>';
   ['Centro','Levante'].forEach(zona => {
-    const pvTecsZona = zona === 'Centro' ? TECS_PV_CENTRO : TECS_LEVANTE;
-    const pvNames = pvTecsZona.filter(n => TECS_POSTVENTA.includes(n) || zona === 'Levante');
-    if (!pvNames.length) return;
-    html += `<div style="grid-column:1/-1;padding:10px 0 4px"><span class="badge b-line b-mono">${zona.toUpperCase()}</span></div>`;
-    pvNames.forEach(name => {
-      const tec = tecnicos.find(x => x.nombre === name);
-      const c = tec ? tecColor(tec.nombre) : 'var(--blue)';
-      const trabajos = tareasPostventa.filter(t => t.tecnico_asignado === name && t.estado !== 'cancelada' && t.estado !== 'realizada');
-      html += `<div class="tec-card"><div class="tec-card-h" ${tec?`onclick="openProfile('tec','${esc(tec.id)}')"`:''} style="cursor:pointer"><div class="tec-big-av" style="background:${c}1A;color:${c}">${getInitials(name)}</div><div><div class="tec-card-name">${name}</div><div class="tec-card-meta">${trabajos.length} TRABAJOS ABIERTOS</div></div></div><div class="tec-card-list">${trabajos.length?trabajos.map(t => { const ap = aparatos.find(a=>a.id===t.aparato_id); return `<div class="tec-card-row" onclick="editTareaPostventa('${t.id}')"><div class="tec-card-dot" style="background:${PV_TIPO_COLOR[t.tipo]||'#888'}"></div><div class="tec-card-row-main"><div class="tec-card-row-ot">${ap?ap.numero_aparato:'—'}</div><div class="tec-card-row-cli">${ap?ap.cliente:'—'}</div></div><div class="tec-card-row-status">${(t.tipo||'').toUpperCase()}</div></div>`; }).join(''):'<div class="tec-card-empty">Sin trabajos abiertos</div>'}</div></div>`;
+    const pvNames = zona === 'Centro' ? TECS_POSTVENTA : TECS_LEVANTE_NAMES;
+    const pvTecsZona = pvNames.map(n => tecnicos.find(t => t.nombre === n)).filter(Boolean);
+    if (!pvTecsZona.length) return;
+    html += `<div class="hoy-sub-h">Zona <em>${zona}</em></div><div class="tec-grid">`;
+    pvTecsZona.forEach(tec => {
+      const c = tecColor(tec.nombre);
+      const trabajos = tareasPostventa.filter(t => t.tecnico_asignado === tec.nombre && t.estado !== 'cancelada' && t.estado !== 'realizada');
+      html += `<div class="tec-card"><div class="tec-card-h" onclick="openProfile('tec','${esc(tec.id)}')" style="cursor:pointer"><div class="tec-big-av" style="background:${c}1A;color:${c}">${getInitials(tec.nombre)}</div><div><div class="tec-card-name">${tec.nombre}</div><div class="tec-card-meta">${trabajos.length} TRABAJOS ABIERTOS</div></div></div><div class="tec-card-list">${trabajos.length?trabajos.map(t => { const ap = aparatos.find(a=>a.id===t.aparato_id); return `<div class="tec-card-row" onclick="editTareaPostventa('${t.id}')"><div class="tec-card-dot" style="background:${PV_TIPO_COLOR[t.tipo]||'#888'}"></div><div class="tec-card-row-main"><div class="tec-card-row-ot">${ap?ap.numero_aparato:'—'}</div><div class="tec-card-row-cli">${ap?ap.cliente:'—'}</div></div><div class="tec-card-row-status">${(t.tipo||'').toUpperCase()}</div></div>`; }).join(''):'<div class="tec-card-empty">Sin trabajos abiertos</div>'}</div></div>`;
     });
+    html += '</div>';
   });
-  html += `</div>`;
+  html += '</div></div>';
   document.getElementById('bytec-content').innerHTML = html;
 }
 
@@ -1495,11 +1507,11 @@ function switchPvTab(tab) {
   ['planning','piezas','ocas','aparatos'].forEach(t => document.getElementById('pv-tab-'+t).classList.toggle('active', tab === t));
   document.getElementById('pv-planning-toolbar').style.display = tab === 'planning' ? 'flex' : 'none';
   document.getElementById('pv-toolbar-aparatos').style.display = tab === 'aparatos' ? 'flex' : 'none';
+  const labels = {planning:'Planning',piezas:'Piezas',ocas:'OCAS',aparatos:'Aparatos'};
+  document.getElementById('pv-active-label').textContent = labels[tab];
   const btnNew = document.getElementById('pv-btn-new');
   if (tab === 'aparatos') { btnNew.querySelector('span').textContent = 'Nuevo aparato'; btnNew.onclick = openAparatoModal; btnNew.style.display = ''; }
-  else if (tab === 'planning') { btnNew.querySelector('span').textContent = 'Nueva tarea PV'; btnNew.onclick = openTareaPostventaModal; btnNew.style.display = ''; }
-  else if (tab === 'piezas' || tab === 'ocas') { btnNew.querySelector('span').textContent = 'Nuevo aparato'; btnNew.onclick = openAparatoModal; btnNew.style.display = ''; }
-  else { btnNew.style.display = 'none'; }
+  else { btnNew.querySelector('span').textContent = 'Nueva tarea PV'; btnNew.onclick = openTareaPostventaModal; btnNew.style.display = ''; }
   renderPostventa();
 }
 function renderPostventa() {
@@ -1517,10 +1529,11 @@ function renderPvPlanning() {
   const today = todayISO(), fmt = d => d.toISOString().split('T')[0], weekN = isoWeek(days[0]);
   document.getElementById('pv-week-label').innerHTML = `${days[0].getDate()} ${MESES[days[0].getMonth()]} – ${days[4].getDate()} ${MESES[days[4].getMonth()]}<span class="week-tag">S${weekN}</span>`;
   document.getElementById('pv-sub').textContent = `PLANNING POSTVENTA · SEMANA ${weekN}`;
+  const pvTecsList = [...TECS_POSTVENTA, ...TECS_LEVANTE_NAMES.filter(n => !TECS_POSTVENTA.includes(n))];
   let html = `<div class="pv-planning-wrap"><div class="pv-plan-grid"><div class="pv-plan-head"><div class="pv-plan-head-cell left">Técnico</div>`;
   days.forEach(d => { const isT = fmt(d) === today; html += `<div class="pv-plan-head-cell${isT?' today-bg':''}">${DIAS[d.getDay()-1]} ${d.getDate()}${isT?'<br><span style="font-size:8px;color:var(--accent);font-weight:700">HOY</span>':''}</div>`; });
   html += `</div>`;
-  TECS_POSTVENTA.forEach(tec => {
+  pvTecsList.forEach(tec => {
     const t = tecnicos.find(x => x.nombre === tec); const c = t ? tecColor(t.nombre) : 'var(--blue)';
     html += `<div class="pv-plan-row"><div class="pv-plan-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div class="pv-plan-tec-name">${tec.split(' ')[0]}</div></div>`;
     days.forEach(d => {
@@ -1885,13 +1898,15 @@ async function saveOT() {
   const nombre = document.getElementById('f-nombre').value.trim(), cliente = document.getElementById('f-cliente').value.trim();
   if (!nombre || !cliente) { showToast('Nombre y cliente obligatorios', true); return; }
   btn.disabled = true; btn.textContent = 'Guardando…';
-  const payload = { nombre, cliente, direccion: document.getElementById('f-dir').value.trim()||null, equipo: document.getElementById('f-equipo').value, estado: document.getElementById('f-estado').value, zona: document.getElementById('f-zona').value, tecnicos: getSelectedTecs(), fecha_instalacion: document.getElementById('f-fecha').value||null, dias_montaje: parseInt(document.getElementById('f-dias').value)||1, tipo_ajuste: document.getElementById('f-tipo-ajuste').value, comercial: document.getElementById('f-comercial').value||null, condicionante: document.getElementById('f-cond').value.trim()||null, pendiente_descripcion: document.getElementById('f-pend').value.trim()||null, observaciones: document.getElementById('f-obs').value.trim()||null, urgente: document.getElementById('f-urgente').checked };
-  let error;
-  if (editingId) { const res = await sb.from('expedientes').update(payload).eq('id', editingId).select().single(); error = res.error; if (!error && res.data) { const i = expedientes.findIndex(x => x.id === editingId); if (i >= 0) expedientes[i] = res.data; } }
-  else { const res = await sb.from('expedientes').insert(payload).select().single(); error = res.error; if (!error && res.data) expedientes.unshift(res.data); }
-  btn.disabled = false; btn.textContent = 'Guardar OT';
-  if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; }
-  closeModal('modal-ot'); showToast(editingId ? 'OT actualizada' : 'OT creada'); renderCurrentView();
+  try {
+    const payload = { nombre, cliente, direccion: document.getElementById('f-dir').value.trim()||null, equipo: document.getElementById('f-equipo').value, estado: document.getElementById('f-estado').value, zona: document.getElementById('f-zona').value, tecnicos: getSelectedTecs(), fecha_instalacion: document.getElementById('f-fecha').value||null, dias_montaje: parseInt(document.getElementById('f-dias').value)||1, tipo_ajuste: document.getElementById('f-tipo-ajuste').value, comercial: document.getElementById('f-comercial').value||null, condicionante: document.getElementById('f-cond').value.trim()||null, pendiente_descripcion: document.getElementById('f-pend').value.trim()||null, observaciones: document.getElementById('f-obs').value.trim()||null, urgente: document.getElementById('f-urgente').checked };
+    let error;
+    if (editingId) { const res = await sb.from('expedientes').update(payload).eq('id', editingId).select().single(); error = res.error; if (!error && res.data) { const i = expedientes.findIndex(x => x.id === editingId); if (i >= 0) expedientes[i] = res.data; } }
+    else { const res = await sb.from('expedientes').insert(payload).select().single(); error = res.error; if (!error && res.data) expedientes.unshift(res.data); }
+    btn.disabled = false; btn.textContent = 'Guardar OT';
+    if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; }
+    closeModal('modal-ot'); showToast(editingId ? 'OT actualizada' : 'OT creada'); renderCurrentView();
+  } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar OT'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveOT error:', ex); }
 }
 
 // ═══ MODAL TAREA ═══
@@ -1905,7 +1920,7 @@ function openAparatoModal() { editingAparatoId = null; document.getElementById('
 function openAparatoModalEdit(id) { const a = aparatos.find(x => x.id === id); if (!a) return; editingAparatoId = id; document.getElementById('modal-aparato-title').innerHTML = 'Editar <em>aparato</em>'; document.getElementById('fa-num').value = a.numero_aparato||''; document.getElementById('fa-cli').value = a.cliente||''; document.getElementById('fa-admin').value = a.administrador||''; document.getElementById('fa-dir').value = a.direccion||''; document.getElementById('fa-desc').value = a.descripcion||''; document.getElementById('fa-estado').value = a.estado||'En garantía'; document.getElementById('fa-zona').value = a.zona||'Centro'; populatePvTecSelect(a.tecnico_asignado||''); document.getElementById('fa-contrato').checked = !!a.contrato_mantenimiento; document.getElementById('fa-tipo-contrato').value = a.tipo_contrato||''; document.getElementById('fa-inicio').value = a.fecha_inicio_contrato||''; document.getElementById('fa-fin').value = a.fecha_fin_contrato||''; document.getElementById('fa-ot-ref').value = a.ot_ref||''; document.getElementById('fa-notas').value = a.notas||''; toggleContratoFields(); document.getElementById('btn-del-aparato').style.display = 'inline-block'; document.getElementById('modal-aparato').classList.add('open'); }
 function toggleContratoFields() { const show = document.getElementById('fa-contrato').checked; ['fa-tipo-contrato','fa-inicio','fa-fin'].forEach(id => document.getElementById(id).closest('.f-field').style.display = show ? '' : 'none'); }
 function populatePvTecSelect(selected) { document.getElementById('fa-tec').innerHTML = '<option value="">— Sin asignar —</option>' + TECS_POSTVENTA.map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
-async function saveAparato() { const btn = document.getElementById('btn-save-aparato'); const num = document.getElementById('fa-num').value.trim(), cli = document.getElementById('fa-cli').value.trim(); if (!num || !cli) { showToast('Nº aparato y cliente obligatorios', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; const payload = { numero_aparato: num, cliente: cli, administrador: document.getElementById('fa-admin').value.trim()||null, direccion: document.getElementById('fa-dir').value.trim()||null, descripcion: document.getElementById('fa-desc').value, estado: document.getElementById('fa-estado').value, zona: document.getElementById('fa-zona').value, tecnico_asignado: document.getElementById('fa-tec').value||null, contrato_mantenimiento: document.getElementById('fa-contrato').checked, tipo_contrato: document.getElementById('fa-tipo-contrato').value||null, fecha_inicio_contrato: document.getElementById('fa-inicio').value||null, fecha_fin_contrato: document.getElementById('fa-fin').value||null, ot_ref: document.getElementById('fa-ot-ref').value.trim()||null, notas: document.getElementById('fa-notas').value.trim()||null }; let error; if (editingAparatoId) { const res = await sb.from('aparatos').update(payload).eq('id', editingAparatoId).select().single(); error = res.error; if (!error && res.data) { const i = aparatos.findIndex(x => x.id === editingAparatoId); if (i >= 0) aparatos[i] = res.data; } } else { const res = await sb.from('aparatos').insert(payload).select().single(); error = res.error; if (!error && res.data) aparatos.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar aparato'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-aparato'); showToast(editingAparatoId ? 'Aparato actualizado' : 'Aparato creado'); renderPostventa(); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } }
+async function saveAparato() { const btn = document.getElementById('btn-save-aparato'); const num = document.getElementById('fa-num').value.trim(), cli = document.getElementById('fa-cli').value.trim(); if (!num || !cli) { showToast('Nº aparato y cliente obligatorios', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const payload = { numero_aparato: num, cliente: cli, administrador: document.getElementById('fa-admin').value.trim()||null, direccion: document.getElementById('fa-dir').value.trim()||null, descripcion: document.getElementById('fa-desc').value, estado: document.getElementById('fa-estado').value, zona: document.getElementById('fa-zona').value, tecnico_asignado: document.getElementById('fa-tec').value||null, contrato_mantenimiento: document.getElementById('fa-contrato').checked, tipo_contrato: document.getElementById('fa-tipo-contrato').value||null, fecha_inicio_contrato: document.getElementById('fa-inicio').value||null, fecha_fin_contrato: document.getElementById('fa-fin').value||null, ot_ref: document.getElementById('fa-ot-ref').value.trim()||null, notas: document.getElementById('fa-notas').value.trim()||null }; let error; if (editingAparatoId) { const res = await sb.from('aparatos').update(payload).eq('id', editingAparatoId).select().single(); error = res.error; if (!error && res.data) { const i = aparatos.findIndex(x => x.id === editingAparatoId); if (i >= 0) aparatos[i] = res.data; } } else { const res = await sb.from('aparatos').insert(payload).select().single(); error = res.error; if (!error && res.data) aparatos.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar aparato'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-aparato'); showToast(editingAparatoId ? 'Aparato actualizado' : 'Aparato creado'); renderPostventa(); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar aparato'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveAparato error:', ex); } }
 async function deleteAparato() { if (!editingAparatoId) return; if (!confirm('¿Eliminar este aparato?')) return; const { error } = await sb.from('aparatos').delete().eq('id', editingAparatoId); if (error) { showToast('Error: ' + error.message, true); return; } aparatos = aparatos.filter(a => a.id !== editingAparatoId); closeModal('modal-aparato'); closePvDrawer(); showToast('Aparato eliminado'); renderPostventa(); }
 
 // ═══ MODAL TAREA POSTVENTA ═══
