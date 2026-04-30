@@ -152,8 +152,8 @@ button,input,select,textarea{font-family:var(--font)}
 .sb-accordion-btn:hover{background:var(--surface2);color:var(--ink)}
 .sb-accordion-btn svg{width:12px;height:12px;flex-shrink:0;margin-left:auto;transition:transform 0.2s;color:var(--ink4)}
 .sb-accordion-btn.open svg{transform:rotate(180deg)}
-.sb-accordion-body{overflow:hidden;max-height:0;overflow-y:visible;transition:max-height 0.3s cubic-bezier(.4,0,.2,1)}
-.sb-accordion-body.open{max-height:none}
+.sb-accordion-body{overflow:hidden;max-height:0;transition:max-height 0.3s cubic-bezier(.4,0,.2,1)}
+.sb-accordion-body.open{max-height:2000px}
 .sb-zone-label{font-size:9px;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.6px;padding:8px 10px 3px;font-family:var(--mono)}
 .sb-person{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 14px;border-radius:7px;cursor:pointer;font-size:12.5px;color:var(--ink2);transition:all 0.1s}
 .sb-person:hover{background:var(--surface2);color:var(--ink)}
@@ -672,7 +672,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
     <div class="login-h">Hola de <em>nuevo</em></div>
     <div class="login-sub">Accede con tu cuenta corporativa para continuar</div>
     <label class="l-label">Email corporativo</label>
-    <input class="l-input" id="li-email" type="email" placeholder="tuemail@multielevacion.com" autocomplete="email">
+    <input class="l-input" id="li-email" type="email" placeholder="alberto@multielevacion.com" autocomplete="email">
     <label class="l-label">Contraseña</label>
     <input class="l-input" id="li-pass" type="password" placeholder="••••••••" autocomplete="current-password">
     <button class="l-btn" id="li-btn" onclick="doLogin()"><span>Entrar</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
@@ -712,7 +712,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
         <span id="av-initials">ME</span>
         <div class="user-dd" id="user-dd">
           <div class="user-dd-email" id="ud-email">–</div>
-          <div class="user-dd-item" onclick="event.stopPropagation();doLogout()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3v12h3M11 5l3 3-3 3M7 8h7"/></svg>Cerrar sesión</div>
+          <div class="user-dd-item" onclick="doLogout()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3v12h3M11 5l3 3-3 3M7 8h7"/></svg>Cerrar sesión</div>
         </div>
       </div>
     </div>
@@ -731,11 +731,18 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
         <div class="sb-company-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12v8H2z"/><path d="M2 4l6 5 6-5"/></svg><a href="mailto:info@multielevacion.com">info@multielevacion.com</a></div>
       </div>
 
-      <!-- Oficina accordion -->
-      <button class="sb-accordion-btn open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>Oficina</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg></button>
+      <!-- Personal Oficina -->
+      <button class="sb-accordion-btn open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+        <span>Oficina</span>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
       <div class="sb-accordion-body open" id="sb-oficina"></div>
-      <!-- Técnicos accordion -->
-      <button class="sb-accordion-btn" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>Técnicos</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg></button>
+
+      <!-- Técnicos -->
+      <button class="sb-accordion-btn" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+        <span>Técnicos</span>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
       <div class="sb-accordion-body" id="sb-tecnicos"></div>
     </div>
 
@@ -779,7 +786,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
       <!-- MONTAJES (planning + ajustes + PEM) -->
       <div class="view" id="view-montajes">
         <div class="view-header">
-          <div class="view-title-wrap"><div class="view-title">Montajes <em id="mont-active-label">Planning</em></div><div class="view-sub" id="mont-sub">Planning semanal de instalaciones</div></div>
+          <div class="view-title-wrap"><div class="view-title" id="mont-title">Montajes <em id="mont-active-label">Planning</em></div><div class="view-sub" id="mont-sub">Planning semanal de instalaciones</div></div>
           <div class="pill-toggle" id="mont-pills">
             <button id="mont-tab-planning" class="active" onclick="switchMontTab('planning')">Planning</button>
             <button id="mont-tab-ajustes" onclick="switchMontTab('ajustes')">Ajustes</button>
@@ -797,7 +804,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
       <!-- POSTVENTA (planning + piezas + ocas + aparatos) -->
       <div class="view" id="view-postventa">
         <div class="view-header">
-          <div class="view-title-wrap"><div class="view-title">Postventa <em id="pv-active-label">Planning</em></div><div class="view-sub" id="pv-sub">—</div></div>
+          <div class="view-title-wrap"><div class="view-title" id="pv-title">Postventa <em id="pv-active-label">Planning</em></div><div class="view-sub" id="pv-sub">—</div></div>
           <div class="pill-toggle" id="pv-pills">
             <button id="pv-tab-planning" class="active" onclick="switchPvTab('planning')">Planning</button>
             <button id="pv-tab-piezas" onclick="switchPvTab('piezas')">Piezas</button>
@@ -1046,7 +1053,6 @@ let currentMontTab = 'planning', currentPvTab = 'planning';
 let pvFilter = { estado: '', contrato: '', zona: '' }, pvView = 'cards';
 let visibleFases = JSON.parse(localStorage.getItem('mv_visible_fases') || 'null') || ['En fabricación','En tránsito','Almacen','Planificada','Empezada','Ajustes','Facturar'];
 let currentProfile = null, currentAparatoId = null;
-let draggingBarId = null;
 
 const FASES = ['Contratada','En fabricación','En tránsito','Almacen','Planificada','Empezada','Ajustes','Facturar','Terminada'];
 const FASE_COLOR = {'Contratada':'#1E3A8A','En fabricación':'#5B21B6','En tránsito':'#9D174D','Almacen':'#475569','Planificada':'#0369A1','Empezada':'#D9450B','Ajustes':'#9F1B14','Facturar':'#7C4A03','Terminada':'#0F6E3D'};
@@ -1056,39 +1062,9 @@ const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov'
 const DIAS_FULL = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const MESES_FULL = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const COMERCIALES = ['Carolina','Monse','Sandra','Jorge','Salva'];
-
-// ── Names used to classify technicians ──
-// These must match Supabase exactly OR we use fuzzy matching
-const TECS_PV_NAMES = ['David Martin','Juan Carlos Miguélez','Alberto Fernandez','Juan Carlos Lebrón'];
+const TECS_POSTVENTA = ['David Martin','Juan Carlos Miguélez','Alberto Fernandez','Juan Carlos Lebrón'];
 const TECS_LEVANTE_NAMES = ['Henry Ure','Israel Vázquez'];
 const PV_TIPO_COLOR = { reparacion:'var(--green)', aviso:'var(--blue)', oca:'var(--violet)', mantenimiento:'var(--amber)', otros:'var(--slate)' };
-
-// Sidebar display names (full names with proper accents for display)
-const OFICINA_CENTRO = ['Juan Diego Martínez','Alberto Lougedo','Víctor Gómez','Cristina Urgiles','Carolina Gascueña','María Mora','Jorge Arjona','Sandra Hernández','Tania Ortega','Josefa Rodríguez','Nacho Díez','Aura Acosta','Monserrat Rangel','Luiyi Rodríguez','Minerva Baroja'];
-const OFICINA_LEVANTE = ['Salvador Renat'];
-const TECS_MONTAJE_CENTRO_DISPLAY = ['Javier Alonso','Pablo Piedra','Alejandro Barranco','Cristian Rendón','Borja Yari Burón','David Mora'];
-const TECS_PV_CENTRO_DISPLAY = ['David Martín','Juan Carlos Miguélez','Alberto Fernández','Juan Carlos Lebrón'];
-const TECS_LEVANTE_DISPLAY = ['Henry Ure','Israel Vázquez'];
-
-// Fuzzy match: is this technician a PV tech?
-function isPvTec(nombre) {
-  if (!nombre) return false;
-  const n = nombre.toLowerCase();
-  return TECS_PV_NAMES.some(pv => {
-    const p = pv.toLowerCase();
-    return n.includes(p.split(' ')[0]) && (p.split(' ').length < 2 || n.includes(p.split(' ')[1]?.slice(0,4)||''));
-  });
-}
-function isLevanteTec(nombre) {
-  if (!nombre) return false;
-  const n = nombre.toLowerCase();
-  return TECS_LEVANTE_NAMES.some(lv => n.includes(lv.toLowerCase().split(' ')[0]));
-}
-function isMontajeTec(t) { return !isPvTec(t.nombre) && !isLevanteTec(t.nombre); }
-// Get all PV tech names from DB
-function getPvTecs() { return tecnicos.filter(t => isPvTec(t.nombre)); }
-function getMontajeTecs() { return tecnicos.filter(t => !isPvTec(t.nombre)); }
-function getPvTecNames() { return getPvTecs().map(t => t.nombre); }
 
 function tecColor(name) { const i = tecnicos.findIndex(t => t.nombre === name); return TEC_PALETTE[(i >= 0 ? i : 0) % TEC_PALETTE.length]; }
 
@@ -1109,7 +1085,7 @@ async function doLogin() {
   if (error) { err.textContent = error.message === 'Invalid login credentials' ? 'Email o contraseña incorrectos' : error.message; err.style.display = 'block'; btn.disabled = false; btn.querySelector('span').textContent = 'Entrar'; }
 }
 document.addEventListener('DOMContentLoaded', () => { document.getElementById('li-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); }); });
-async function doLogout() { try { await sb.auth.signOut(); } catch(e) { console.error(e); } window.location.reload(); }
+async function doLogout() { await sb.auth.signOut(); location.reload(); }
 function toggleUserDd() { document.getElementById('user-dd').classList.toggle('open'); }
 document.addEventListener('click', e => { if (!e.target.closest('#av-btn')) document.getElementById('user-dd')?.classList.remove('open'); });
 
@@ -1121,11 +1097,9 @@ sb.auth.onAuthStateChange(async (_, session) => {
     const initials = email.split('@')[0].split(/[._-]/).map(p => p[0]?.toUpperCase()).join('').slice(0,2) || 'ME';
     document.getElementById('av-initials').textContent = initials;
     document.getElementById('ud-email').textContent = email;
-    try {
-      await loadAll();
-      renderSidebar();
-      renderDashboard();
-    } catch(ex) { console.error('Init error:', ex); alert('Error al cargar: ' + ex.message); }
+    await loadAll();
+    renderSidebar();
+    renderDashboard();
   } else {
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('app').style.display = 'none';
@@ -1153,39 +1127,47 @@ function getFiltered() {
   return expedientes;
 }
 
-// ═══ SIDEBAR ═══
-function findPerson(name, list) {
-  const low = name.toLowerCase();
-  return list.find(x => x.nombre && x.nombre.toLowerCase() === low) || list.find(x => x.nombre && x.nombre.toLowerCase().startsWith(low.split(' ')[0]));
-}
+// ═══ SIDEBAR (accordion groups with full names) ═══
+const OFICINA_CENTRO = ['Juan Diego Martínez','Alberto Lougedo','Víctor Gómez','Cristina Urgiles','Carolina Gascueña','María Mora','Jorge Arjona','Sandra Hernández','Tania Ortega','Josefa Rodríguez','Nacho Díez','Aura Acosta','Monserrat Rangel','Luiyi Rodríguez','Minerva Baroja'];
+const OFICINA_LEVANTE = ['Salvador Renat'];
+const TECS_MONTAJE_CENTRO = ['Javier Alonso','Pablo Piedra','Alejandro Barranco','Cristian Rendón','Borja Yari Burón','David Mora'];
+const TECS_PV_CENTRO = ['David Martín','Juan Carlos Miguélez','Alberto Fernández','Juan Carlos Lebrón'];
+const TECS_LEVANTE = ['Henry Ure','Israel Vázquez'];
+
 function sbPersonHtml(name, type, list) {
-  const p = findPerson(name, list);
+  // Match by first word (nombre) to handle accent mismatches between hardcoded names and DB
+  const firstName = name.split(' ')[0].toLowerCase();
+  const p = list.find(x => x.nombre && x.nombre.toLowerCase().startsWith(firstName));
   const id = p ? p.id : '';
-  const displayName = p ? p.nombre : name;
   const c = type === 'tec' && p ? tecColor(p.nombre) : 'var(--slate)';
-  const onclick = id ? `onclick="openProfile('${type}','${esc(id)}')"` : `onclick="openProfileByName('${type}','${esc(name)}')"`;
-  return `<div class="sb-person" ${onclick}><span class="sb-person-av" style="background:${c}1A;color:${c}">${getInitials(displayName)}</span>${displayName}</div>`;
+  return `<div class="sb-person" ${id ? `onclick="openProfile('${type}','${esc(id)}')"` : `onclick="openProfileByName('${type}','${esc(name)}')" `}><span class="sb-person-av" style="background:${c}1A;color:${c}">${getInitials(name)}</span>${name}</div>`;
 }
+
 function renderSidebar() {
+  // Oficina
   let oHtml = '<div class="sb-zone-label">Centro</div>';
   OFICINA_CENTRO.forEach(n => { oHtml += sbPersonHtml(n, 'oficina', oficina); });
   oHtml += '<div class="sb-zone-label">Levante</div>';
   OFICINA_LEVANTE.forEach(n => { oHtml += sbPersonHtml(n, 'oficina', oficina); });
   document.getElementById('sb-oficina').innerHTML = oHtml;
-  let tHtml = '<div class="sb-zone-label">Centro</div><div class="sb-subrole">Montajes</div>';
-  TECS_MONTAJE_CENTRO_DISPLAY.forEach(n => { tHtml += sbPersonHtml(n, 'tec', tecnicos); });
+
+  // Técnicos
+  let tHtml = '<div class="sb-zone-label">Centro</div>';
+  tHtml += '<div class="sb-subrole">Montajes</div>';
+  TECS_MONTAJE_CENTRO.forEach(n => { tHtml += sbPersonHtml(n, 'tec', tecnicos); });
   tHtml += '<div class="sb-subrole">Postventa</div>';
-  TECS_PV_CENTRO_DISPLAY.forEach(n => { tHtml += sbPersonHtml(n, 'tec', tecnicos); });
+  TECS_PV_CENTRO.forEach(n => { tHtml += sbPersonHtml(n, 'tec', tecnicos); });
   tHtml += '<div class="sb-zone-label">Levante</div>';
-  TECS_LEVANTE_DISPLAY.forEach(n => { tHtml += sbPersonHtml(n, 'tec', tecnicos); });
+  TECS_LEVANTE.forEach(n => { tHtml += sbPersonHtml(n, 'tec', tecnicos); });
   document.getElementById('sb-tecnicos').innerHTML = tHtml;
 }
+
+// Fallback profile for persons not yet in DB
 function openProfileByName(type, name) {
   currentProfile = { type, id: null, data: { nombre: name, email: null, telefono: null, notas: '' } };
   document.getElementById('drawer-name').textContent = name;
   document.getElementById('drawer-rol').textContent = type === 'tec' ? 'Técnico' : 'Oficina';
-  document.getElementById('drawer-av').style.background = 'var(--slate-soft)';
-  document.getElementById('drawer-av').style.color = 'var(--slate)';
+  document.getElementById('drawer-av').style.background = 'var(--slate-soft)'; document.getElementById('drawer-av').style.color = 'var(--slate)';
   document.getElementById('drawer-av').textContent = getInitials(name);
   renderDrawerBody(); document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open');
 }
@@ -1234,7 +1216,7 @@ function renderDashboard() {
     const c = tecColor(tec);
     hoyHtml += `<div class="dash-hoy-row" onclick="editTareaPostventa('${t.id}')"><div class="dash-hoy-tec"><div class="dash-hoy-av" style="background:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'};color:white;font-size:8px">${(t.tipo||'PV').slice(0,3).toUpperCase()}</div><span class="dash-hoy-tec-name">${tec.split(' ')[0]}</span></div><span class="dash-hoy-arrow">→</span><div class="dash-hoy-job"><span class="dash-hoy-ot">${ap?ap.numero_aparato:'—'}</span><span class="dash-hoy-cli">${ap?ap.cliente:'—'}</span><span class="badge b-line b-mono" style="margin-left:auto">PV</span></div></div>`;
   });
-  const libres = tecnicos.filter(t => !tecsConOT.has(t.nombre) && !isPvTec(t.nombre));
+  const libres = tecnicos.filter(t => !tecsConOT.has(t.nombre) && !TECS_POSTVENTA.includes(t.nombre));
   if (libres.length) { hoyHtml += `<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:11px;color:var(--ink3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px">Sin OT asignada hoy</div><div class="hoy-libres">${libres.map(t=>`<span class="hoy-libre-pill"><span class="dot" style="background:${tecColor(t.nombre)}"></span>${t.nombre.split(' ')[0]}</span>`).join('')}</div>`; }
   if (!hoyOTs.length && !pvHoy.length && !libres.length) hoyHtml = `<div class="empty-mini">Sin datos</div>`;
   document.getElementById('dash-hoy-list').innerHTML = hoyHtml;
@@ -1266,7 +1248,7 @@ function isOnDate(ot, dateStr) {
   return ot.fecha_instalacion <= dateStr && dateStr <= addDays(ot.fecha_instalacion, dur - 1);
 }
 
-// ═══ HOY (Montajes | Postventa) ═══
+// ═══ HOY (columnas Montajes / Postventa) ═══
 function renderHoy() {
   const today = todayISO(), now = new Date();
   const hoyOTs = expedientes.filter(e => isOnDate(e, today));
@@ -1274,31 +1256,42 @@ function renderHoy() {
   document.getElementById('hoy-title').innerHTML = `Hoy <em>${now.getDate()}</em>`;
   document.getElementById('hoy-sub').textContent = `${DIAS_FULL[now.getDay()].toUpperCase()} · ${MESES_FULL[now.getMonth()].toUpperCase()} · ${hoyOTs.length} MONTAJE${hoyOTs.length===1?'':'S'} · ${pvHoy.length} POSTVENTA`;
   let html = '<div class="hoy-zonas">';
+
   // Col 1: Montajes
   html += '<div class="hoy-zona"><div class="hoy-zona-h">Montajes</div>';
   ['Centro','Levante'].forEach(zona => {
     html += `<div class="hoy-sub-h">Zona <em>${zona}</em></div>`;
-    const tecsZona = tecnicos.filter(t => (t.zona || 'Centro') === zona && !isPvTec(t.nombre));
-    const tecsZonaN = new Set(tecsZona.map(t => t.nombre));
-    const otsZona = hoyOTs.filter(e => (e.tecnicos || []).some(t => tecsZonaN.has(t)));
-    const ocupados = new Set(); otsZona.forEach(e => (e.tecnicos || []).forEach(t => { if (tecsZonaN.has(t)) ocupados.add(t); }));
-    if (otsZona.length) { otsZona.forEach(ot => { const tecsHtml = (ot.tecnicos || []).map(t => { const c = tecColor(t); return `<div class="hoy-ot-av" style="background:${c}1A;color:${c}" title="${t}">${getInitials(t)}</div>`; }).join(''); html += `<div class="hoy-ot-card" onclick="openEditModal('${ot.id}')"><div class="hoy-ot-h"><span class="hoy-ot-name">${ot.nombre}</span><span class="badge b-accent b-mono">${ot.equipo||'—'}</span></div><div class="hoy-ot-cli">${ot.cliente}</div><div class="hoy-ot-addr">${ot.direccion||'—'}</div><div class="hoy-ot-tecs">${tecsHtml||'<span style="font-size:11px;color:var(--ink3);font-style:italic">Sin asignar</span>'}</div></div>`; }); }
-    else html += '<div class="empty-mini">Sin montajes</div>';
+    const tecsZona = tecnicos.filter(t => (t.zona || 'Centro') === zona && !TECS_POSTVENTA.includes(t.nombre));
+    const tecsZonaNombres = new Set(tecsZona.map(t => t.nombre));
+    const otsZona = hoyOTs.filter(e => (e.tecnicos || []).some(t => tecsZonaNombres.has(t)));
+    const ocupados = new Set(); otsZona.forEach(e => (e.tecnicos || []).forEach(t => { if (tecsZonaNombres.has(t)) ocupados.add(t); }));
+    if (otsZona.length) {
+      otsZona.forEach(ot => {
+        const tecsHtml = (ot.tecnicos || []).map(t => { const c = tecColor(t); return `<div class="hoy-ot-av" style="background:${c}1A;color:${c}" title="${t}">${getInitials(t)}</div>`; }).join('');
+        html += `<div class="hoy-ot-card" onclick="openEditModal('${ot.id}')"><div class="hoy-ot-h"><span class="hoy-ot-name">${ot.nombre}</span><span class="badge b-accent b-mono">${ot.equipo||'—'}</span></div><div class="hoy-ot-cli">${ot.cliente}</div><div class="hoy-ot-addr">${ot.direccion||'—'}</div><div class="hoy-ot-tecs">${tecsHtml || '<span style="font-size:11px;color:var(--ink3);font-style:italic">Sin asignar</span>'}</div></div>`;
+      });
+    } else { html += '<div class="empty-mini">Sin montajes hoy</div>'; }
     const libres = tecsZona.filter(t => !ocupados.has(t.nombre));
-    if (libres.length) html += `<div class="hoy-sub-h" style="margin-top:8px">Libres · ${libres.length}</div><div class="hoy-libres">${libres.map(t=>`<span class="hoy-libre-pill"><span class="dot" style="background:${tecColor(t.nombre)}"></span>${t.nombre}</span>`).join('')}</div>`;
+    if (libres.length) { html += `<div class="hoy-sub-h" style="margin-top:8px">Libres · ${libres.length}</div><div class="hoy-libres">${libres.map(t=>`<span class="hoy-libre-pill"><span class="dot" style="background:${tecColor(t.nombre)}"></span>${t.nombre.split(' ')[0]}</span>`).join('')}</div>`; }
   });
   html += '</div>';
+
   // Col 2: Postventa
   html += '<div class="hoy-zona"><div class="hoy-zona-h">Postventa</div>';
   ['Centro','Levante'].forEach(zona => {
     html += `<div class="hoy-sub-h">Zona <em>${zona}</em></div>`;
-    const pvZona = pvHoy.filter(t => { const ap = aparatos.find(a => a.id === t.aparato_id); return ap ? (ap.zona || 'Centro') === zona : zona === 'Centro'; });
-    if (pvZona.length) { pvZona.forEach(t => { const ap = aparatos.find(a => a.id === t.aparato_id); html += `<div class="hoy-ot-card" style="border-left-color:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}" onclick="editTareaPostventa('${t.id}')"><div class="hoy-ot-h"><span class="hoy-ot-name">${ap?ap.numero_aparato:'—'}</span><span class="badge b-line b-mono">${(t.tipo||'PV').toUpperCase()}</span></div><div class="hoy-ot-cli">${ap?ap.cliente:'—'}</div><div class="hoy-ot-addr">${ap?ap.direccion||'—':'—'}</div><div class="hoy-ot-tecs"><span style="font-size:11px;color:var(--ink2)">${t.tecnico_asignado||'Sin asignar'}</span></div></div>`; }); }
-    else html += '<div class="empty-mini">Sin postventa</div>';
-    const pvTecsZona = tecnicos.filter(t => isPvTec(t.nombre) && (t.zona || 'Centro') === zona);
-    const pvOcupados = new Set(pvZona.map(t => t.tecnico_asignado).filter(Boolean));
+    const pvZona = pvHoy.filter(t => { const ap = aparatos.find(a => a.id === t.aparato_id); return ap && (ap.zona || 'Centro') === zona; });
+    if (pvZona.length) {
+      pvZona.forEach(t => {
+        const ap = aparatos.find(a => a.id === t.aparato_id);
+        html += `<div class="hoy-ot-card" style="border-left-color:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}" onclick="editTareaPostventa('${t.id}')"><div class="hoy-ot-h"><span class="hoy-ot-name">${ap?ap.numero_aparato:'—'}</span><span class="badge b-line b-mono">${(t.tipo||'PV').toUpperCase()}</span></div><div class="hoy-ot-cli">${ap?ap.cliente:'—'}</div><div class="hoy-ot-addr">${ap?ap.direccion||'—':'—'}</div><div class="hoy-ot-tecs"><span style="font-size:11px;color:var(--ink2)">${t.tecnico_asignado||'Sin asignar'}</span></div></div>`;
+      });
+    } else { html += '<div class="empty-mini">Sin postventa hoy</div>'; }
+    // Técnicos PV libres en esta zona
+    const pvTecsZona = tecnicos.filter(t => TECS_POSTVENTA.includes(t.nombre) && (t.zona || 'Centro') === zona);
+    const pvOcupados = new Set(pvHoy.filter(t => { const ap = aparatos.find(a => a.id === t.aparato_id); return ap && (ap.zona || 'Centro') === zona; }).map(t => t.tecnico_asignado).filter(Boolean));
     const pvLibres = pvTecsZona.filter(t => !pvOcupados.has(t.nombre));
-    if (pvLibres.length) html += `<div class="hoy-sub-h" style="margin-top:8px">Libres · ${pvLibres.length}</div><div class="hoy-libres">${pvLibres.map(t=>`<span class="hoy-libre-pill"><span class="dot" style="background:${tecColor(t.nombre)}"></span>${t.nombre}</span>`).join('')}</div>`;
+    if (pvLibres.length) { html += `<div class="hoy-sub-h" style="margin-top:8px">Libres · ${pvLibres.length}</div><div class="hoy-libres">${pvLibres.map(t=>`<span class="hoy-libre-pill"><span class="dot" style="background:${tecColor(t.nombre)}"></span>${t.nombre.split(' ')[0]}</span>`).join('')}</div>`; }
   });
   html += '</div></div>';
   document.getElementById('hoy-zonas').innerHTML = html;
@@ -1349,8 +1342,8 @@ function switchMontTab(tab) {
   document.getElementById('mont-tab-ajustes').classList.toggle('active', tab === 'ajustes');
   document.getElementById('mont-tab-pem').classList.toggle('active', tab === 'pem');
   document.getElementById('mont-planning-toolbar').style.display = tab === 'planning' ? 'flex' : 'none';
-  const montLabels = {planning:'Planning',ajustes:'Ajustes',pem:'PEM'};
-  document.getElementById('mont-active-label').textContent = montLabels[tab];
+  const labels = {planning:'Planning',ajustes:'Ajustes',pem:'PEM'};
+  document.getElementById('mont-active-label').textContent = labels[tab];
   renderMontajes();
 }
 function renderMontajes() {
@@ -1366,13 +1359,13 @@ function renderPlanning() {
   const today = todayISO(), fmt = d => d.toISOString().split('T')[0], weekN = isoWeek(days[0]);
   document.getElementById('week-label').innerHTML = `${days[0].getDate()} ${MESES[days[0].getMonth()]} – ${days[4].getDate()} ${MESES[days[4].getMonth()]}<span class="week-tag">S${weekN}</span>`;
   const dayStrs = days.map(fmt);
-  const tecsMontaje = getMontajeTecs();
+  const tecsMontaje = tecnicos.filter(t => !TECS_POSTVENTA.includes(t.nombre));
   let html = `<div class="pg-grid"><div class="pg-head left">Técnico</div>`;
   days.forEach(d => { const isT = fmt(d) === today; html += `<div class="pg-head${isT?' today-bg':''}">${DIAS[d.getDay()-1]} ${d.getDate()}${isT?'<div class="today-mark">HOY</div>':''}</div>`; });
   html += `</div>`;
   tecsMontaje.forEach(tec => {
     const c = tecColor(tec.nombre);
-    html += `<div style="display:grid;grid-template-columns:140px repeat(5,minmax(140px,1fr))"><div class="pg-row-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div><div class="pg-row-tec-name">${tec.nombre}</div><div class="pg-row-tec-zone">${(tec.zona||'Centro').slice(0,3)}</div></div></div>`;
+    html += `<div style="display:grid;grid-template-columns:140px repeat(5,minmax(140px,1fr))"><div class="pg-row-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div><div class="pg-row-tec-name">${tec.nombre.split(' ')[0]}</div><div class="pg-row-tec-zone">${(tec.zona||'Centro').slice(0,3)}</div></div></div>`;
     html += `<div class="pg-day-cells" data-tec="${esc(tec.nombre)}" style="grid-column:span 5">`;
     days.forEach((d,idx) => { const ds = fmt(d); html += `<div class="pg-day-cell${ds===today?' today-bg':''}" data-tec="${esc(tec.nombre)}" data-date="${ds}" data-idx="${idx}"></div>`; });
     const otsTec = expedientes.filter(e => (e.tecnicos || []).includes(tec.nombre) && e.fecha_instalacion);
@@ -1391,6 +1384,7 @@ function renderPlanning() {
   initPlanningDragDrop(dayStrs); initPlanningResize();
 }
 
+let draggingBarId = null;
 function initPlanningDragDrop(dayStrs) {
   document.querySelectorAll('.pg-bar').forEach(bar => {
     bar.setAttribute('draggable','true');
@@ -1402,7 +1396,9 @@ function initPlanningDragDrop(dayStrs) {
     cell.addEventListener('dragleave', () => cell.classList.remove('drop-target'));
     cell.addEventListener('drop', async e => {
       e.preventDefault(); cell.classList.remove('drop-target');
-      let id = draggingBarId; try { const dt = e.dataTransfer.getData('text/plain'); if (dt) id = dt; } catch(_) {} if (!id) return; const newDate = cell.dataset.date, newTec = cell.dataset.tec;
+      let id = draggingBarId; try { const dt = e.dataTransfer.getData('text/plain'); if (dt) id = dt; } catch(_) {}
+      if (!id) return;
+      const newDate = cell.dataset.date, newTec = cell.dataset.tec;
       const exp = expedientes.find(x => x.id === id); if (!exp) return;
       let newTecs = (exp.tecnicos || []).slice();
       if (!newTecs.includes(newTec)) { newTecs = newTecs.filter(t => t !== (exp.tecnicos?.[0]||'')); newTecs.unshift(newTec); }
@@ -1444,7 +1440,6 @@ function changeWeek(d) { weekOffset += d; renderPlanning(); }
 // Ajustes/PEM (dentro de Montajes)
 function renderAjustes() {
   const isPem = currentMontTab === 'pem';
-  // title is handled by switchMontTab
   let actualList;
   if (isPem) { actualList = expedientes.filter(e => e.tipo_ajuste === 'pem' || (e.estado === 'Facturar' && !e.tipo_ajuste)); }
   else { actualList = expedientes.filter(e => e.estado === 'Ajustes' && e.tipo_ajuste !== 'pem'); }
@@ -1456,14 +1451,15 @@ function renderAjustes() {
   }).join('')}</div></div>`;
 }
 
-// ═══ TÉCNICOS (2 cols: Montajes | Postventa) ═══
+// ═══ TÉCNICOS (2 columnas: Montajes / Postventa) ═══
 function renderByTec() {
   const ESTADOS_ACTIVOS = ['Empezada','Ajustes','Facturar','Planificada'];
+  const tecsMontaje = tecnicos.filter(t => !TECS_POSTVENTA.includes(t.nombre));
   let html = '<div class="hoy-zonas">';
   // Col Montajes
   html += '<div class="hoy-zona"><div class="hoy-zona-h">Montajes</div>';
   ['Centro','Levante'].forEach(zona => {
-    const tecsZona = getMontajeTecs().filter(t => (t.zona||'Centro') === zona);
+    const tecsZona = tecsMontaje.filter(t => (t.zona||'Centro') === zona);
     if (!tecsZona.length) return;
     html += `<div class="hoy-sub-h">Zona <em>${zona}</em></div><div class="tec-grid">`;
     tecsZona.forEach(tec => {
@@ -1477,13 +1473,11 @@ function renderByTec() {
   // Col Postventa
   html += '<div class="hoy-zona"><div class="hoy-zona-h">Postventa</div>';
   ['Centro','Levante'].forEach(zona => {
-    const pvTecsZona = tecnicos.filter(t => isPvTec(t.nombre) && (t.zona || 'Centro') === zona);
-    // Also include levante techs in Levante zone
-    const levTecsZona = zona === 'Levante' ? tecnicos.filter(t => isLevanteTec(t.nombre) && !isPvTec(t.nombre)) : [];
-    const allPvZona = [...pvTecsZona, ...levTecsZona];
-    if (!allPvZona.length) return;
+    const pvNames = zona === 'Centro' ? TECS_POSTVENTA : TECS_LEVANTE_NAMES;
+    const pvTecsZona = pvNames.map(n => tecnicos.find(t => t.nombre === n)).filter(Boolean);
+    if (!pvTecsZona.length) return;
     html += `<div class="hoy-sub-h">Zona <em>${zona}</em></div><div class="tec-grid">`;
-    allPvZona.forEach(tec => {
+    pvTecsZona.forEach(tec => {
       const c = tecColor(tec.nombre);
       const trabajos = tareasPostventa.filter(t => t.tecnico_asignado === tec.nombre && t.estado !== 'cancelada' && t.estado !== 'realizada');
       html += `<div class="tec-card"><div class="tec-card-h" onclick="openProfile('tec','${esc(tec.id)}')" style="cursor:pointer"><div class="tec-big-av" style="background:${c}1A;color:${c}">${getInitials(tec.nombre)}</div><div><div class="tec-card-name">${tec.nombre}</div><div class="tec-card-meta">${trabajos.length} TRABAJOS ABIERTOS</div></div></div><div class="tec-card-list">${trabajos.length?trabajos.map(t => { const ap = aparatos.find(a=>a.id===t.aparato_id); return `<div class="tec-card-row" onclick="editTareaPostventa('${t.id}')"><div class="tec-card-dot" style="background:${PV_TIPO_COLOR[t.tipo]||'#888'}"></div><div class="tec-card-row-main"><div class="tec-card-row-ot">${ap?ap.numero_aparato:'—'}</div><div class="tec-card-row-cli">${ap?ap.cliente:'—'}</div></div><div class="tec-card-row-status">${(t.tipo||'').toUpperCase()}</div></div>`; }).join(''):'<div class="tec-card-empty">Sin trabajos abiertos</div>'}</div></div>`;
@@ -1513,8 +1507,8 @@ function switchPvTab(tab) {
   ['planning','piezas','ocas','aparatos'].forEach(t => document.getElementById('pv-tab-'+t).classList.toggle('active', tab === t));
   document.getElementById('pv-planning-toolbar').style.display = tab === 'planning' ? 'flex' : 'none';
   document.getElementById('pv-toolbar-aparatos').style.display = tab === 'aparatos' ? 'flex' : 'none';
-  const pvLabels = {planning:'Planning',piezas:'Piezas',ocas:'OCAS',aparatos:'Aparatos'};
-  document.getElementById('pv-active-label').textContent = pvLabels[tab];
+  const labels = {planning:'Planning',piezas:'Piezas',ocas:'OCAS',aparatos:'Aparatos'};
+  document.getElementById('pv-active-label').textContent = labels[tab];
   const btnNew = document.getElementById('pv-btn-new');
   if (tab === 'aparatos') { btnNew.querySelector('span').textContent = 'Nuevo aparato'; btnNew.onclick = openAparatoModal; btnNew.style.display = ''; }
   else { btnNew.querySelector('span').textContent = 'Nueva tarea PV'; btnNew.onclick = openTareaPostventaModal; btnNew.style.display = ''; }
@@ -1535,13 +1529,13 @@ function renderPvPlanning() {
   const today = todayISO(), fmt = d => d.toISOString().split('T')[0], weekN = isoWeek(days[0]);
   document.getElementById('pv-week-label').innerHTML = `${days[0].getDate()} ${MESES[days[0].getMonth()]} – ${days[4].getDate()} ${MESES[days[4].getMonth()]}<span class="week-tag">S${weekN}</span>`;
   document.getElementById('pv-sub').textContent = `PLANNING POSTVENTA · SEMANA ${weekN}`;
+  const pvTecsList = [...TECS_POSTVENTA, ...TECS_LEVANTE_NAMES.filter(n => !TECS_POSTVENTA.includes(n))];
   let html = `<div class="pv-planning-wrap"><div class="pv-plan-grid"><div class="pv-plan-head"><div class="pv-plan-head-cell left">Técnico</div>`;
   days.forEach(d => { const isT = fmt(d) === today; html += `<div class="pv-plan-head-cell${isT?' today-bg':''}">${DIAS[d.getDay()-1]} ${d.getDate()}${isT?'<br><span style="font-size:8px;color:var(--accent);font-weight:700">HOY</span>':''}</div>`; });
   html += `</div>`;
-  const pvTecsList = [...getPvTecs(), ...tecnicos.filter(t => isLevanteTec(t.nombre) && !isPvTec(t.nombre))];
-  pvTecsList.forEach(tecObj => {
-    const tec = tecObj.nombre; const t = tecObj; const c = t ? tecColor(t.nombre) : 'var(--blue)';
-    html += `<div class="pv-plan-row"><div class="pv-plan-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div class="pv-plan-tec-name">${tec}</div></div>`;
+  pvTecsList.forEach(tec => {
+    const t = tecnicos.find(x => x.nombre === tec); const c = t ? tecColor(t.nombre) : 'var(--blue)';
+    html += `<div class="pv-plan-row"><div class="pv-plan-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div class="pv-plan-tec-name">${tec.split(' ')[0]}</div></div>`;
     days.forEach(d => {
       const ds = fmt(d), isT = ds === today;
       const tareasDia = tareasPostventa.filter(t => t.tecnico_asignado === tec && t.fecha_prevista === ds && t.estado !== 'cancelada');
@@ -1867,7 +1861,7 @@ function quickTaskFor(nombre) { closeDrawer(); openTareaModal(); document.getEle
 // ═══ MODAL OT ═══
 function renderTecMulti(selected) {
   const sel = new Set(selected || []);
-  document.getElementById('f-tec-multi').innerHTML = tecnicos.filter(t => !isPvTec(t.nombre)).map(t => {
+  document.getElementById('f-tec-multi').innerHTML = tecnicos.filter(t => !TECS_POSTVENTA.includes(t.nombre)).map(t => {
     const checked = sel.has(t.nombre), c = tecColor(t.nombre);
     return `<label class="f-tec-multi-item ${checked?'checked':''}"><input type="checkbox" value="${esc(t.nombre)}" ${checked?'checked':''} onchange="this.parentElement.classList.toggle('checked',this.checked)"><span style="width:7px;height:7px;border-radius:50%;background:${c};flex-shrink:0"></span>${t.nombre.split(' ')[0]}</label>`;
   }).join('');
@@ -1912,21 +1906,21 @@ async function saveOT() {
     btn.disabled = false; btn.textContent = 'Guardar OT';
     if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; }
     closeModal('modal-ot'); showToast(editingId ? 'OT actualizada' : 'OT creada'); renderCurrentView();
-  } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar OT'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveOT:', ex); }
+  } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar OT'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveOT error:', ex); }
 }
 
 // ═══ MODAL TAREA ═══
 function openTareaModal() { editingTareaId = null; document.getElementById('modal-tarea-title').innerHTML = 'Nueva <em>tarea</em>'; ['ft-titulo','ft-desc','ft-asig','ft-fecha'].forEach(id => document.getElementById(id).value = ''); document.getElementById('ft-pri').value = 'med'; document.getElementById('ft-zona').value = ''; document.getElementById('ft-edit-id').value = ''; document.getElementById('btn-del-tarea').style.display = 'none'; document.getElementById('modal-tarea').classList.add('open'); setTimeout(() => document.getElementById('ft-titulo').focus(), 100); }
 function openTareaModalEdit(id) { const t = tareas.find(x => x.id === id); if (!t) return; editingTareaId = id; document.getElementById('modal-tarea-title').innerHTML = 'Editar <em>tarea</em>'; document.getElementById('ft-titulo').value = t.titulo||''; document.getElementById('ft-desc').value = t.descripcion||''; document.getElementById('ft-pri').value = t.prioridad||'med'; document.getElementById('ft-fecha').value = t.fecha_recordatorio||''; document.getElementById('ft-zona').value = t.zona||''; document.getElementById('ft-asig').value = t.asignada_a||''; document.getElementById('ft-edit-id').value = id; document.getElementById('btn-del-tarea').style.display = 'inline-block'; document.getElementById('modal-tarea').classList.add('open'); }
-async function saveTarea() { const btn = document.getElementById('btn-save-tarea'); const titulo = document.getElementById('ft-titulo').value.trim(); if (!titulo) { showToast('Escribe el título', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; const payload = { titulo, descripcion: document.getElementById('ft-desc').value.trim()||null, prioridad: document.getElementById('ft-pri').value, fecha_recordatorio: document.getElementById('ft-fecha').value||null, asignada_a: document.getElementById('ft-asig').value.trim()||null }; let error; if (editingTareaId) { const res = await sb.from('tareas').update(payload).eq('id', editingTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareas.findIndex(x => x.id === editingTareaId); if (i >= 0) tareas[i] = res.data; } } else { payload.completada = false; const res = await sb.from('tareas').insert(payload).select().single(); error = res.error; if (!error && res.data) tareas.unshift(res.data); } btn.disabled = false; btn.textContent = 'Guardar'; if (error) { showToast('Error: ' + error.message, true); return; } closeModal('modal-tarea'); showToast(editingTareaId ? 'Tarea actualizada' : 'Tarea creada'); renderCurrentView(); }
+async function saveTarea() { const btn = document.getElementById('btn-save-tarea'); const titulo = document.getElementById('ft-titulo').value.trim(); if (!titulo) { showToast('Escribe el título', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; const payload = { titulo, descripcion: document.getElementById('ft-desc').value.trim()||null, prioridad: document.getElementById('ft-pri').value, fecha_recordatorio: document.getElementById('ft-fecha').value||null, zona: document.getElementById('ft-zona').value||null, asignada_a: document.getElementById('ft-asig').value.trim()||null }; let error; if (editingTareaId) { const res = await sb.from('tareas').update(payload).eq('id', editingTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareas.findIndex(x => x.id === editingTareaId); if (i >= 0) tareas[i] = res.data; } } else { payload.completada = false; const res = await sb.from('tareas').insert(payload).select().single(); error = res.error; if (!error && res.data) tareas.unshift(res.data); } btn.disabled = false; btn.textContent = 'Guardar'; if (error) { showToast('Error: ' + error.message, true); return; } closeModal('modal-tarea'); showToast(editingTareaId ? 'Tarea actualizada' : 'Tarea creada'); renderCurrentView(); }
 async function deleteTarea() { if (!editingTareaId) return; if (!confirm('¿Eliminar esta tarea?')) return; const { error } = await sb.from('tareas').delete().eq('id', editingTareaId); if (error) { showToast('Error: ' + error.message, true); return; } tareas = tareas.filter(t => t.id !== editingTareaId); closeModal('modal-tarea'); showToast('Tarea eliminada'); renderCurrentView(); }
 
 // ═══ MODAL APARATO ═══
 function openAparatoModal() { editingAparatoId = null; document.getElementById('modal-aparato-title').innerHTML = 'Nuevo <em>aparato</em>'; ['fa-num','fa-cli','fa-admin','fa-dir','fa-desc','fa-ot-ref','fa-notas','fa-tipo-contrato','fa-inicio','fa-fin'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); document.getElementById('fa-estado').value = 'En garantía'; document.getElementById('fa-zona').value = 'Centro'; document.getElementById('fa-contrato').checked = false; populatePvTecSelect(''); toggleContratoFields(); document.getElementById('btn-del-aparato').style.display = 'none'; document.getElementById('modal-aparato').classList.add('open'); }
 function openAparatoModalEdit(id) { const a = aparatos.find(x => x.id === id); if (!a) return; editingAparatoId = id; document.getElementById('modal-aparato-title').innerHTML = 'Editar <em>aparato</em>'; document.getElementById('fa-num').value = a.numero_aparato||''; document.getElementById('fa-cli').value = a.cliente||''; document.getElementById('fa-admin').value = a.administrador||''; document.getElementById('fa-dir').value = a.direccion||''; document.getElementById('fa-desc').value = a.descripcion||''; document.getElementById('fa-estado').value = a.estado||'En garantía'; document.getElementById('fa-zona').value = a.zona||'Centro'; populatePvTecSelect(a.tecnico_asignado||''); document.getElementById('fa-contrato').checked = !!a.contrato_mantenimiento; document.getElementById('fa-tipo-contrato').value = a.tipo_contrato||''; document.getElementById('fa-inicio').value = a.fecha_inicio_contrato||''; document.getElementById('fa-fin').value = a.fecha_fin_contrato||''; document.getElementById('fa-ot-ref').value = a.ot_ref||''; document.getElementById('fa-notas').value = a.notas||''; toggleContratoFields(); document.getElementById('btn-del-aparato').style.display = 'inline-block'; document.getElementById('modal-aparato').classList.add('open'); }
 function toggleContratoFields() { const show = document.getElementById('fa-contrato').checked; ['fa-tipo-contrato','fa-inicio','fa-fin'].forEach(id => document.getElementById(id).closest('.f-field').style.display = show ? '' : 'none'); }
-function populatePvTecSelect(selected) { document.getElementById('fa-tec').innerHTML = '<option value="">— Sin asignar —</option>' + getPvTecNames().map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
-async function saveAparato() { const btn = document.getElementById('btn-save-aparato'); const num = document.getElementById('fa-num').value.trim(), cli = document.getElementById('fa-cli').value.trim(); if (!num || !cli) { showToast('Nº aparato y cliente obligatorios', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const payload = { numero_aparato: num, cliente: cli, administrador: document.getElementById('fa-admin').value.trim()||null, direccion: document.getElementById('fa-dir').value.trim()||null, descripcion: document.getElementById('fa-desc').value, estado: document.getElementById('fa-estado').value, zona: document.getElementById('fa-zona').value, tecnico_asignado: document.getElementById('fa-tec').value||null, contrato_mantenimiento: document.getElementById('fa-contrato').checked, tipo_contrato: document.getElementById('fa-tipo-contrato').value||null, fecha_inicio_contrato: document.getElementById('fa-inicio').value||null, fecha_fin_contrato: document.getElementById('fa-fin').value||null, ot_ref: document.getElementById('fa-ot-ref').value.trim()||null, notas: document.getElementById('fa-notas').value.trim()||null }; let error; if (editingAparatoId) { const res = await sb.from('aparatos').update(payload).eq('id', editingAparatoId).select().single(); error = res.error; if (!error && res.data) { const i = aparatos.findIndex(x => x.id === editingAparatoId); if (i >= 0) aparatos[i] = res.data; } } else { const res = await sb.from('aparatos').insert(payload).select().single(); error = res.error; if (!error && res.data) aparatos.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar aparato'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-aparato'); showToast(editingAparatoId ? 'Aparato actualizado' : 'Aparato creado'); renderPostventa(); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar aparato'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveAparato:', ex); } }
+function populatePvTecSelect(selected) { document.getElementById('fa-tec').innerHTML = '<option value="">— Sin asignar —</option>' + TECS_POSTVENTA.map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
+async function saveAparato() { const btn = document.getElementById('btn-save-aparato'); const num = document.getElementById('fa-num').value.trim(), cli = document.getElementById('fa-cli').value.trim(); if (!num || !cli) { showToast('Nº aparato y cliente obligatorios', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const payload = { numero_aparato: num, cliente: cli, administrador: document.getElementById('fa-admin').value.trim()||null, direccion: document.getElementById('fa-dir').value.trim()||null, descripcion: document.getElementById('fa-desc').value, estado: document.getElementById('fa-estado').value, zona: document.getElementById('fa-zona').value, tecnico_asignado: document.getElementById('fa-tec').value||null, contrato_mantenimiento: document.getElementById('fa-contrato').checked, tipo_contrato: document.getElementById('fa-tipo-contrato').value||null, fecha_inicio_contrato: document.getElementById('fa-inicio').value||null, fecha_fin_contrato: document.getElementById('fa-fin').value||null, ot_ref: document.getElementById('fa-ot-ref').value.trim()||null, notas: document.getElementById('fa-notas').value.trim()||null }; let error; if (editingAparatoId) { const res = await sb.from('aparatos').update(payload).eq('id', editingAparatoId).select().single(); error = res.error; if (!error && res.data) { const i = aparatos.findIndex(x => x.id === editingAparatoId); if (i >= 0) aparatos[i] = res.data; } } else { const res = await sb.from('aparatos').insert(payload).select().single(); error = res.error; if (!error && res.data) aparatos.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar aparato'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-aparato'); showToast(editingAparatoId ? 'Aparato actualizado' : 'Aparato creado'); renderPostventa(); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar aparato'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveAparato error:', ex); } }
 async function deleteAparato() { if (!editingAparatoId) return; if (!confirm('¿Eliminar este aparato?')) return; const { error } = await sb.from('aparatos').delete().eq('id', editingAparatoId); if (error) { showToast('Error: ' + error.message, true); return; } aparatos = aparatos.filter(a => a.id !== editingAparatoId); closeModal('modal-aparato'); closePvDrawer(); showToast('Aparato eliminado'); renderPostventa(); }
 
 // ═══ MODAL TAREA POSTVENTA ═══
@@ -1934,10 +1928,10 @@ function openTareaPostventaModal() { editingPvTareaId = null; document.getElemen
 function openTareaPostventaModalForAparato(aparatoId) { openTareaPostventaModal(); const a = aparatos.find(x => x.id === aparatoId); if (a) { document.getElementById('pvt-aparato-search').value = `${a.numero_aparato} · ${a.cliente}`; document.getElementById('pvt-aparato-id').value = aparatoId; if (a.tecnico_asignado) document.getElementById('pvt-tec').value = a.tecnico_asignado; } }
 function editTareaPostventa(id) { const t = tareasPostventa.find(x => x.id === id); if (!t) return; editingPvTareaId = id; const a = aparatos.find(x => x.id === t.aparato_id); document.getElementById('modal-pvt-title').innerHTML = 'Editar <em>tarea</em> postventa'; document.getElementById('pvt-aparato-search').value = a ? `${a.numero_aparato} · ${a.cliente}` : ''; document.getElementById('pvt-aparato-id').value = t.aparato_id||''; document.getElementById('pvt-tipo').value = t.tipo||'reparacion'; document.getElementById('pvt-prioridad').value = t.prioridad||'normal'; document.getElementById('pvt-fecha').value = t.fecha_prevista||''; document.getElementById('pvt-estado').value = t.estado||'pendiente'; document.getElementById('pvt-desc').value = t.descripcion||''; document.getElementById('pvt-resolucion').value = t.notas_resolucion||''; document.getElementById('pvt-resolucion-wrap').style.display = t.estado === 'realizada' ? 'block' : 'none'; document.getElementById('btn-del-pvt').style.display = 'inline-block'; populatePvTecSelectTarea(t.tecnico_asignado||''); document.getElementById('modal-pv-tarea').classList.add('open'); }
 document.addEventListener('change', e => { if (e.target.id === 'pvt-estado') document.getElementById('pvt-resolucion-wrap').style.display = e.target.value === 'realizada' ? 'block' : 'none'; });
-function populatePvTecSelectTarea(selected) { document.getElementById('pvt-tec').innerHTML = '<option value="">— Sin asignar —</option>' + getPvTecNames().map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
+function populatePvTecSelectTarea(selected) { document.getElementById('pvt-tec').innerHTML = '<option value="">— Sin asignar —</option>' + TECS_POSTVENTA.map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
 function renderAparatoSuggestions() { const q = document.getElementById('pvt-aparato-search').value.toLowerCase().trim(); const wrap = document.getElementById('pvt-aparato-suggestions'); if (q.length < 2) { wrap.innerHTML = ''; return; } const matches = aparatos.filter(a => `${a.numero_aparato} ${a.cliente} ${a.direccion||''}`.toLowerCase().includes(q)).slice(0,5); if (!matches.length) { wrap.innerHTML = ''; return; } wrap.innerHTML = `<div style="position:absolute;top:2px;left:0;right:0;background:var(--surface);border:1px solid var(--line2);border-radius:var(--r2);z-index:10;box-shadow:var(--sh2);overflow:hidden">${matches.map(a=>`<div onclick="selectAparatoSuggestion('${esc(a.id)}')" style="padding:9px 12px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''"><span class="badge b-accent b-mono">${a.numero_aparato}</span><span style="font-weight:500">${a.cliente}</span></div>`).join('')}</div>`; }
 function selectAparatoSuggestion(id) { const a = aparatos.find(x => x.id === id); if (!a) return; document.getElementById('pvt-aparato-search').value = `${a.numero_aparato} · ${a.cliente}`; document.getElementById('pvt-aparato-id').value = id; document.getElementById('pvt-aparato-suggestions').innerHTML = ''; if (a.tecnico_asignado) document.getElementById('pvt-tec').value = a.tecnico_asignado; }
-async function saveTareaPostventa() { const btn = document.getElementById('btn-save-pvt'); const aparatoId = document.getElementById('pvt-aparato-id').value, fecha = document.getElementById('pvt-fecha').value; // aparatoId is now optional if (!fecha) { showToast('Fecha obligatoria', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; const estado = document.getElementById('pvt-estado').value; const payload = { aparato_id: aparatoId || null, tipo: document.getElementById('pvt-tipo').value, prioridad: document.getElementById('pvt-prioridad').value, tecnico_asignado: document.getElementById('pvt-tec').value||null, fecha_prevista: fecha, estado, descripcion: document.getElementById('pvt-desc').value.trim()||null, notas_resolucion: document.getElementById('pvt-resolucion').value.trim()||null, fecha_realizado: estado === 'realizada' ? todayISO() : null }; let error; if (editingPvTareaId) { const res = await sb.from('trabajos_postventa').update(payload).eq('id', editingPvTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareasPostventa.findIndex(x => x.id === editingPvTareaId); if (i >= 0) tareasPostventa[i] = res.data; } } else { const res = await sb.from('trabajos_postventa').insert(payload).select().single(); error = res.error; if (!error && res.data) tareasPostventa.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar tarea'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-pv-tarea'); showToast(editingPvTareaId ? 'Tarea actualizada' : 'Tarea creada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); }
+async function saveTareaPostventa() { const btn = document.getElementById('btn-save-pvt'); const aparatoId = document.getElementById('pvt-aparato-id').value, fecha = document.getElementById('pvt-fecha').value; if (!aparatoId) { showToast('Selecciona un aparato', true); return; } if (!fecha) { showToast('Fecha obligatoria', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; const estado = document.getElementById('pvt-estado').value; const payload = { aparato_id: aparatoId, tipo: document.getElementById('pvt-tipo').value, prioridad: document.getElementById('pvt-prioridad').value, tecnico_asignado: document.getElementById('pvt-tec').value||null, fecha_prevista: fecha, estado, descripcion: document.getElementById('pvt-desc').value.trim()||null, notas_resolucion: document.getElementById('pvt-resolucion').value.trim()||null, fecha_realizado: estado === 'realizada' ? todayISO() : null }; let error; if (editingPvTareaId) { const res = await sb.from('trabajos_postventa').update(payload).eq('id', editingPvTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareasPostventa.findIndex(x => x.id === editingPvTareaId); if (i >= 0) tareasPostventa[i] = res.data; } } else { const res = await sb.from('trabajos_postventa').insert(payload).select().single(); error = res.error; if (!error && res.data) tareasPostventa.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar tarea'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-pv-tarea'); showToast(editingPvTareaId ? 'Tarea actualizada' : 'Tarea creada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); }
 async function deleteTareaPostventa() { if (!editingPvTareaId) return; if (!confirm('¿Eliminar esta tarea?')) return; const { error } = await sb.from('trabajos_postventa').delete().eq('id', editingPvTareaId); if (error) { showToast('Error: ' + error.message, true); return; } tareasPostventa = tareasPostventa.filter(t => t.id !== editingPvTareaId); closeModal('modal-pv-tarea'); showToast('Tarea eliminada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); }
 
 // ═══ UTILS ═══
@@ -1952,7 +1946,6 @@ function getMonday(d) { const day = d.getDay(), diff = d.getDate() - day + (day 
 function esc(s) { return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
 let toastT;
 function showToast(msg, isError) { const el = document.getElementById('toast'); el.innerHTML = `${isError?'⚠':'✓'} ${msg}`; el.style.background = isError ? 'var(--red)' : 'var(--ink)'; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 2800); }
-
 </script>
 </body>
 </html>
