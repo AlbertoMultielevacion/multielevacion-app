@@ -1615,7 +1615,7 @@ async function markPiezaDone(id, done) {
   renderPiezas(); showToast(done ? 'Pieza completada' : 'Pieza reabierta');
 }
 async function asignarPieza(id) {
-  const tec = prompt('Asignar a técnico:', TECS_POSTVENTA[0]);
+  const tec = prompt('Asignar a técnico:', (getPvTecNames()[0]||''));
   if (!tec) return;
   const { error } = await sb.from('trabajos_postventa').update({ tecnico_asignado: tec, estado: 'asignada' }).eq('id', id);
   if (error) { showToast('Error: ' + error.message, true); return; }
@@ -1645,7 +1645,7 @@ function ocaCardHtml(t, asignada) {
   return `<div class="oca-card ${asignada?'asignada':''}" onclick="editTareaPostventa('${t.id}')"><div class="pz-card-h"><span class="pz-card-ap">${ap?ap.numero_aparato:'—'}</span>${asignada?`<span class="badge b-violet">${t.tecnico_asignado.split(' ')[0]}</span>`:`<button class="pz-card-asignar" onclick="event.stopPropagation();asignarOca('${t.id}')">Asignar</button>`}</div><div class="pz-card-title">${ap?ap.cliente:'—'}</div>${t.descripcion?`<div class="pz-card-desc">${t.descripcion}</div>`:''}<div class="pz-card-foot">${t.fecha_prevista?`<span class="badge b-line b-mono">${fmtDate(t.fecha_prevista).toUpperCase()}</span>`:''}<span class="badge b-${t.estado==='realizada'?'green':t.estado==='pendiente'?'amber':'slate'}">${t.estado}</span></div></div>`;
 }
 async function asignarOca(id) {
-  const tec = prompt('Asignar OCA a técnico:', TECS_POSTVENTA[0]);
+  const tec = prompt('Asignar OCA a técnico:', (getPvTecNames()[0]||''));
   if (!tec) return;
   const { error } = await sb.from('trabajos_postventa').update({ tecnico_asignado: tec }).eq('id', id);
   if (error) { showToast('Error: ' + error.message, true); return; }
