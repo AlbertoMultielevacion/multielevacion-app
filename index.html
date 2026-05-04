@@ -332,13 +332,18 @@ button,input,select,textarea{font-family:var(--font)}
 .pg-row-tec-zone{font-size:9.5px;color:var(--ink3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.3px}
 /* Celdas de fondo del día (5 por fila) */
 .pg-day-cells{display:grid;grid-template-columns:repeat(5,1fr);position:relative;border-bottom:1px solid var(--line);min-height:88px}
-.pg-day-cell{border-right:1px solid var(--line);min-height:88px;position:relative}
+.pg-day-cell{border-right:1px solid var(--line);min-height:88px;position:relative;padding-bottom:4px}
+.pg-zone-sep{grid-column:1/-1;height:3px;background:var(--ink3);opacity:0.3}
 .pg-day-cell:last-child{border-right:none}
 .pg-day-cell.today-bg{background:var(--accent2)}
 .pg-day-cell.drop-target{background:var(--accent2);box-shadow:inset 0 0 0 2px var(--accent)}
 /* Barras absolutas dentro del row */
-.pg-bar{position:absolute;top:7px;height:34px;background:var(--surface);border:1px solid var(--line2);border-left:3px solid var(--accent);border-radius:var(--r1);padding:4px 8px;cursor:grab;z-index:2;overflow:hidden;display:flex;flex-direction:column;justify-content:center;user-select:none;transition:box-shadow 0.15s}
-.pg-bar.tarea-bar{border-left-color:var(--amber);background:var(--amber-soft,#FEF3C7);height:28px;top:46px;opacity:0.9}
+.pg-bar{position:absolute;top:4px;min-height:34px;background:var(--surface);border:1px solid var(--line2);border-left:none;border-radius:var(--r1);padding:4px 8px 4px 0;cursor:grab;z-index:2;overflow:hidden;display:flex;flex-direction:column;justify-content:center;user-select:none;transition:box-shadow 0.15s}
+.pg-bar::before{content:'';position:absolute;left:0;top:0;bottom:0;width:20%;border-radius:var(--r1) 0 0 var(--r1);background:var(--bar-color,var(--amber));opacity:0.25;pointer-events:none}
+.pg-bar.hi-pri::before{opacity:0.85}
+.pg-bar .pg-bar-name,.pg-bar .pg-bar-cli,.pg-bar .pg-bar-eq{position:relative;z-index:1;padding-left:10px}
+.pg-bar.tarea-bar{top:auto;position:relative;margin-top:2px;min-height:28px}
+.pg-day-cells{display:grid;grid-template-columns:repeat(5,1fr);position:relative;min-height:46px}
 .pg-bar:hover{box-shadow:var(--sh2);z-index:5}
 .pg-bar:active{cursor:grabbing}
 .pg-bar.dragging{opacity:0.5;z-index:20}
@@ -619,12 +624,18 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 .pv-plan-head-cell.left{text-align:left;padding-left:14px;border-right:1px solid var(--line2)}
 .pv-plan-row{display:grid;grid-template-columns:140px repeat(5,1fr);border-bottom:1px solid var(--line);min-height:72px}
 .pv-plan-row:last-child{border-bottom:none}
+.pv-zone-sep{grid-column:1/-1;height:3px;background:var(--ink3);opacity:0.3}
 .pv-plan-tec{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--surface2);border-right:1px solid var(--line2)}
 .pv-plan-tec-name{font-size:12px;font-weight:600;color:var(--ink)}
 .pv-plan-cell{border-right:1px solid var(--line);padding:5px;position:relative}
 .pv-plan-cell:last-child{border-right:none}
 .pv-plan-cell.today-bg{background:var(--accent2)}
-.pv-task-pill{background:var(--surface);border:1px solid var(--line2);border-left:3px solid var(--blue);border-radius:5px;padding:4px 7px;font-size:11px;cursor:pointer;margin-bottom:3px;transition:all 0.12s;display:flex;align-items:center;gap:5px}
+.pv-plan-cell.drop-over{background:var(--accent2);outline:2px dashed var(--accent);outline-offset:-2px}
+.pv-task-pill{background:var(--surface);border:1px solid var(--line2);border-left:none;border-radius:5px;padding:4px 7px 4px 0;font-size:11px;cursor:pointer;margin-bottom:3px;transition:all 0.12s;display:flex;align-items:center;gap:5px;position:relative;overflow:hidden}
+.pv-task-pill::before{content:'';position:absolute;left:0;top:0;bottom:0;width:20%;border-radius:5px 0 0 5px;background:var(--pill-color,var(--blue));opacity:0.2;pointer-events:none}
+.pv-task-pill.urgente::before{opacity:0.8}
+.pv-task-pill>*{position:relative;z-index:1;padding-left:4px}
+.pv-task-pill[draggable]{cursor:grab}.pv-task-pill[draggable]:active{cursor:grabbing}
 .pv-task-pill:hover{box-shadow:var(--sh1);border-color:var(--line2)}
 .pv-task-pill.urgente{border-left-color:var(--red)}
 .pv-task-pill.mantenimiento{border-left-color:var(--amber)}
@@ -954,7 +965,11 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 <div class="modal-overlay" id="modal-tarea" onclick="handleOverlay(event,'modal-tarea')">
   <div class="modal">
     <div class="modal-title" id="modal-tarea-title">Nueva <em>tarea</em></div>
-    <div class="modal-sub">Añade un recordatorio o pendiente</div>
+    <div class="modal-sub">Añade un pendiente, ajuste o PEM</div>
+    <div class="f-row">
+      <div class="f-field"><label class="f-label">OT / Aparato (ref.)</label><input class="f-input" id="ft-ref" placeholder="Ej: OT4200, Ap123…"></div>
+      <div class="f-field"><label class="f-label">Tipo de tarea</label><select class="f-input" id="ft-tipo"><option value="planning">Tarea planning</option><option value="ajustes">Ajuste</option><option value="pem">PEM</option></select></div>
+    </div>
     <div class="f-field"><label class="f-label">Tarea</label><input class="f-input" id="ft-titulo" placeholder="Describe la tarea…"></div>
     <div class="f-field"><label class="f-label">Detalle</label><textarea class="f-ta" id="ft-desc" placeholder="Contexto adicional…"></textarea></div>
     <div class="f-row">
@@ -1090,6 +1105,10 @@ const COMERCIALES = ['Carolina','Monse','Sandra','Jorge','Salva'];
 const TECS_PV_NAMES = ['David Martin','Juan Carlos Miguélez','Alberto Fernandez','Juan Carlos Lebrón'];
 const TECS_LEVANTE_NAMES = ['Henry Ure','Israel Vázquez'];
 const PV_TIPO_COLOR = { reparacion:'var(--green)', aviso:'var(--blue)', oca:'var(--violet)', mantenimiento:'var(--amber)', otros:'var(--slate)' };
+const MONT_TIPO_COLOR = { ot:'var(--amber)', planning:'var(--blue)', ajustes:'var(--red)', pem:'var(--green)' };
+const MONT_TIPO_SOFT = { ot:'var(--amber-soft)', planning:'var(--blue-soft)', ajustes:'var(--red-soft)', pem:'var(--green-soft)' };
+function getTareaTipo(t) { const d = (t.descripcion||'').toUpperCase(); if (d.startsWith('[AJUSTES]')) return 'ajustes'; if (d.startsWith('[PEM]')) return 'pem'; if (d.startsWith('[PLANNING]')) return 'planning'; return 'planning'; }
+function getTareaTipoLabel(t) { const tipo = getTareaTipo(t); return {ajustes:'AJUSTE',pem:'PEM',planning:'TAREA'}[tipo]||'TAREA'; }
 
 // Sidebar display names (full names with proper accents for display)
 const OFICINA_CENTRO = ['Juan Diego Martínez','Alberto Lougedo','Víctor Gómez','Cristina Urgiles','Carolina Gascueña','María Mora','Jorge Arjona','Sandra Hernández','Tania Ortega','Josefa Rodríguez','Nacho Díez','Aura Acosta','Monserrat Rangel','Luiyi Rodríguez','Minerva Baroja'];
@@ -1156,7 +1175,9 @@ async function doLogout() { try { await sb.auth.signOut(); } catch(e) { console.
 function toggleUserDd() { document.getElementById('user-dd').classList.toggle('open'); }
 document.addEventListener('click', e => { if (!e.target.closest('#av-btn')) document.getElementById('user-dd')?.classList.remove('open'); });
 
-sb.auth.onAuthStateChange(async (_, session) => {
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'TOKEN_REFRESHED' && !session) return; /* don't flash login on token refresh */
+  if (event === 'SIGNED_OUT') { document.getElementById('login-screen').style.display = 'flex'; document.getElementById('app').style.display = 'none'; document.getElementById('li-btn').disabled = false; document.getElementById('li-btn').querySelector('span').textContent = 'Entrar'; return; }
   if (session) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
@@ -1169,7 +1190,8 @@ sb.auth.onAuthStateChange(async (_, session) => {
       renderSidebar();
       renderDashboard();
     } catch(ex) { console.error('Init error:', ex); alert('Error al cargar: ' + ex.message); }
-  } else {
+  } else if (event === 'INITIAL_SESSION') {
+    /* No session on initial load = not logged in */
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('app').style.display = 'none';
     document.getElementById('li-btn').disabled = false;
@@ -1422,14 +1444,18 @@ function renderPlanning() {
   const today = todayISO(), fmt = d => localISO(d), weekN = isoWeek(days[0]);
   document.getElementById('week-label').innerHTML = `${days[0].getDate()} ${MESES[days[0].getMonth()]} – ${days[4].getDate()} ${MESES[days[4].getMonth()]}<span class="week-tag">S${weekN}</span>`;
   const dayStrs = days.map(fmt);
-  const tecsMontaje = [...getTecsInSidebarOrder(TECS_MONTAJE_CENTRO_DISPLAY, tecnicos), ...getTecsInSidebarOrder(TECS_LEVANTE_DISPLAY, tecnicos)];
+  const tecsCentro = getTecsInSidebarOrder(TECS_MONTAJE_CENTRO_DISPLAY, tecnicos);
+  const tecsLev = getTecsInSidebarOrder(TECS_LEVANTE_DISPLAY, tecnicos);
+  const tecsMontaje = [...tecsCentro, ...tecsLev];
+  const levStartIdx = tecsCentro.length;
   let html = `<div class="pg-grid"><div class="pg-head left">Técnico</div>`;
   days.forEach(d => { const isT = fmt(d) === today; html += `<div class="pg-head${isT?' today-bg':''}">${DIAS[d.getDay()-1]} ${d.getDate()}${isT?'<div class="today-mark">HOY</div>':''}</div>`; });
   html += `</div>`;
-  tecsMontaje.forEach(tec => {
+  tecsMontaje.forEach((tec, tecIdx) => {
+    if (tecIdx === levStartIdx) html += `<div class="pg-zone-sep"></div>`;
     const c = tecColor(tec.nombre);
     html += `<div style="display:grid;grid-template-columns:140px repeat(5,minmax(140px,1fr))"><div class="pg-row-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div><div class="pg-row-tec-name">${tec.nombre}</div><div class="pg-row-tec-zone">${(tec.zona||'Centro').slice(0,3)}</div></div></div>`;
-    html += `<div class="pg-day-cells" data-tec="${esc(tec.nombre)}" style="grid-column:span 5">`;
+    html += `<div class="pg-day-cells" data-tec="${esc(tec.nombre)}">`;
     days.forEach((d,idx) => { const ds = fmt(d); html += `<div class="pg-day-cell${ds===today?' today-bg':''}" data-tec="${esc(tec.nombre)}" data-date="${ds}" data-idx="${idx}"></div>`; });
     const otsTec = expedientes.filter(e => (e.tecnicos || []).includes(tec.nombre) && e.fecha_instalacion);
     otsTec.forEach(ot => {
@@ -1439,7 +1465,7 @@ function renderPlanning() {
       if (rS === -1) rS = 0; if (rE === -1) rE = 4; if (rS < 0) rS = 0; if (rE > 4) rE = 4;
       const span = rE - rS + 1, leftPct = (rS/5)*100, widthPct = (span/5)*100;
       const oL = startIso < dayStrs[0], oR = endIso > dayStrs[4];
-      html += `<div class="pg-bar" data-id="${ot.id}" style="left:calc(${leftPct}% + 3px);width:calc(${widthPct}% - 6px)" onclick="openEditModal('${ot.id}')">${!oL?'<div class="pg-bar-resize left" data-id="'+ot.id+'" data-side="left"></div>':''}<span class="pg-bar-eq">${ot.equipo||''}${dur>1?' · '+dur+'d':''}</span><div class="pg-bar-name">${ot.nombre}</div><div class="pg-bar-cli">${ot.cliente||'—'}</div>${!oR?'<div class="pg-bar-resize right" data-id="'+ot.id+'" data-side="right"></div>':''}</div>`;
+      html += `<div class="pg-bar${ot.urgente?' hi-pri':''}" data-id="${ot.id}" style="--bar-color:var(--amber);left:calc(${leftPct}% + 3px);width:calc(${widthPct}% - 6px)" onclick="openEditModal('${ot.id}')">${!oL?'<div class="pg-bar-resize left" data-id="'+ot.id+'" data-side="left"></div>':''}<span class="pg-bar-eq">${ot.equipo||''}${dur>1?' · '+dur+'d':''}</span><div class="pg-bar-name">${ot.nombre}</div><div class="pg-bar-cli">${ot.cliente||'—'}</div>${!oR?'<div class="pg-bar-resize right" data-id="'+ot.id+'" data-side="right"></div>':''}</div>`;
     });
     /* Tareas assigned to this tech */
     const tareasTec = tareas.filter(t => t.asignada_a === tec.nombre && t.fecha_recordatorio && !t.completada);
@@ -1447,7 +1473,8 @@ function renderPlanning() {
       const idx = dayStrs.indexOf(t.fecha_recordatorio);
       if (idx === -1) return;
       const leftPct = (idx/5)*100;
-      html += `<div class="pg-bar tarea-bar" style="left:calc(${leftPct}% + 3px);width:calc(${100/5}% - 6px)" onclick="openTareaModalEdit('${t.id}')"><span class="pg-bar-eq">TAREA</span><div class="pg-bar-name">${t.titulo}</div></div>`;
+      const tipo = getTareaTipo(t); const barColor = MONT_TIPO_COLOR[tipo]||'var(--blue)';
+      html += `<div class="pg-bar tarea-bar${t.prioridad==='high'?' hi-pri':''}" style="--bar-color:${barColor};left:calc(${leftPct}% + 3px);width:calc(${100/5}% - 6px)" onclick="openTareaModalEdit('${t.id}')"><span class="pg-bar-eq">${getTareaTipoLabel(t)}</span><div class="pg-bar-name">${t.titulo}</div></div>`;
     });
     html += `</div></div>`;
   });
@@ -1508,16 +1535,36 @@ function changeWeek(d) { weekOffset += d; renderPlanning(); }
 // Ajustes/PEM (dentro de Montajes)
 function renderAjustes() {
   const isPem = currentMontTab === 'pem';
-  // title is handled by switchMontTab
-  let actualList;
-  if (isPem) { actualList = expedientes.filter(e => e.tipo_ajuste === 'pem' || (e.estado === 'Facturar' && !e.tipo_ajuste)); }
-  else { actualList = expedientes.filter(e => e.estado === 'Ajustes' && e.tipo_ajuste !== 'pem'); }
-  document.getElementById('mont-sub').textContent = `${actualList.length} OTs ${isPem ? 'EN PEM' : 'EN AJUSTES'}`;
-  if (!actualList.length) { document.getElementById('mont-content').innerHTML = `<div style="padding:40px 24px"><div class="empty"><p class="title">Sin pendientes</p><p>No hay OTs en ${isPem?'PEM':'ajustes'}</p></div></div>`; return; }
-  document.getElementById('mont-content').innerHTML = `<div style="padding:20px 24px"><div class="aj-cards">${actualList.map(e => {
+  const tipoKey = isPem ? 'pem' : 'ajustes';
+  const tipoLabel = isPem ? 'PEM' : 'Ajustes';
+  /* OTs in this state */
+  let otList;
+  if (isPem) { otList = expedientes.filter(e => e.tipo_ajuste === 'pem' || (e.estado === 'Facturar' && !e.tipo_ajuste)); }
+  else { otList = expedientes.filter(e => e.estado === 'Ajustes' && e.tipo_ajuste !== 'pem'); }
+  /* Tareas of this type */
+  const tarTipo = tareas.filter(t => getTareaTipo(t) === tipoKey && !t.completada);
+  const pendientes = tarTipo.filter(t => !t.asignada_a || !t.fecha_recordatorio);
+  const programados = tarTipo.filter(t => t.asignada_a && t.fecha_recordatorio);
+  document.getElementById('mont-sub').textContent = `${otList.length} OTs · ${tarTipo.length} TAREAS ${tipoLabel.toUpperCase()}`;
+  let html = '';
+  /* OTs section */
+  if (otList.length) {
+    html += `<div style="padding:20px 24px"><div class="aj-cards">${otList.map(e => {
     const tecsHtml = (e.tecnicos||[]).map(t => { const c = tecColor(t); return `<span class="badge" style="background:${c}1A;color:${c}">${t}</span>`; }).join('');
-    return `<div class="aj-card ${isPem?'pem':''}"><div class="aj-head">${e.urgente?'<span class="badge b-red b-mono" style="font-weight:600">URGENTE</span>':''}<div class="aj-h-text"><div class="aj-h-line1"><span class="aj-ot">${e.nombre}</span><span class="aj-name">${e.cliente}</span></div><div style="font-size:11px;color:var(--ink3)">${e.direccion||'—'}</div></div><button class="aj-edit-btn" onclick="openEditModal('${e.id}')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 2l3 3-9 9H2v-3z"/></svg>Editar</button></div>${tecsHtml?`<div class="aj-tecs">${tecsHtml}</div>`:''}<div class="aj-info"><div class="aj-field"><div class="aj-field-label">Pendiente</div><div class="aj-field-val ${e.pendiente_descripcion?'':'empty'}">${e.pendiente_descripcion||'Sin descripción'}</div></div><div class="aj-field"><div class="aj-field-label">Depende de</div><div class="aj-field-val ${e.pendiente_responsable?'':'empty'}">${e.pendiente_responsable||'—'}</div></div><div class="aj-field"><div class="aj-field-label">Comercial</div><div class="aj-field-val">${e.comercial||'—'}</div></div><div class="aj-field"><div class="aj-field-label">Fecha</div><div class="aj-field-val">${e.fecha_instalacion?fmtDate(e.fecha_instalacion):'—'}</div></div></div></div>`;
-  }).join('')}</div></div>`;
+    return `<div class="aj-card ${isPem?'pem':''}"><div class="aj-head">${e.urgente?'<span class="badge b-red b-mono" style="font-weight:600">URGENTE</span>':''}<div class="aj-h-text"><div class="aj-h-line1"><span class="aj-ot">${e.nombre}</span><span class="aj-name">${e.cliente||'—'}</span></div><div style="font-size:11px;color:var(--ink3)">${e.direccion||'—'}</div></div><button class="aj-edit-btn" onclick="openEditModal('${e.id}')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 2l3 3-9 9H2v-3z"/></svg>Editar</button></div>${tecsHtml?`<div class="aj-tecs">${tecsHtml}</div>`:''}<div class="aj-info"><div class="aj-field"><div class="aj-field-label">Pendiente</div><div class="aj-field-val ${e.pendiente_descripcion?'':'empty'}">${e.pendiente_descripcion||'Sin descripción'}</div></div><div class="aj-field"><div class="aj-field-label">Depende de</div><div class="aj-field-val ${e.pendiente_responsable?'':'empty'}">${e.pendiente_responsable||'—'}</div></div><div class="aj-field"><div class="aj-field-label">Comercial</div><div class="aj-field-val">${e.comercial||'—'}</div></div><div class="aj-field"><div class="aj-field-label">Fecha</div><div class="aj-field-val">${e.fecha_instalacion?fmtDate(e.fecha_instalacion):'—'}</div></div></div></div>`;
+    }).join('')}</div></div>`;
+  }
+  /* Tareas section - 2 columns */
+  html += `<div style="padding:0 24px 20px"><div class="pend-cols" style="grid-template-columns:1fr 1fr">`;
+  html += `<div class="pend-col"><div class="pend-col-h"><div class="pend-col-title">${tipoLabel} <em>pendientes</em></div><span class="badge b-amber b-mono">${pendientes.length}</span></div>`;
+  if (pendientes.length) pendientes.forEach(t => { html += `<div class="pend-item" onclick="openTareaModalEdit('${t.id}')"><div class="pend-main"><div class="pend-title">${t.titulo}</div>${t.asignada_a?`<div class="pend-foot"><span>${t.asignada_a.toUpperCase()}</span></div>`:''}</div></div>`; });
+  else html += '<div class="empty-mini">Sin pendientes</div>';
+  html += '</div>';
+  html += `<div class="pend-col"><div class="pend-col-h"><div class="pend-col-title">${tipoLabel} <em>programados</em></div><span class="badge b-green b-mono">${programados.length}</span></div>`;
+  if (programados.length) programados.forEach(t => { html += `<div class="pend-item" onclick="openTareaModalEdit('${t.id}')"><div class="pend-main"><div class="pend-title">${t.titulo}</div><div class="pend-foot"><span>${fmtDate(t.fecha_recordatorio).toUpperCase()}</span><span>${t.asignada_a.toUpperCase()}</span></div></div></div>`; });
+  else html += '<div class="empty-mini">Sin programados</div>';
+  html += '</div></div></div>';
+  document.getElementById('mont-content').innerHTML = html;
 }
 
 // ═══ TÉCNICOS (3 cols: Centro-Montajes | Centro-PV | Levante) ═══
@@ -1593,17 +1640,21 @@ function renderPvPlanning() {
   let html = `<div class="pv-planning-wrap"><div class="pv-plan-grid"><div class="pv-plan-head"><div class="pv-plan-head-cell left">Técnico</div>`;
   days.forEach(d => { const isT = fmt(d) === today; html += `<div class="pv-plan-head-cell${isT?' today-bg':''}">${DIAS[d.getDay()-1]} ${d.getDate()}${isT?'<br><span style="font-size:8px;color:var(--accent);font-weight:700">HOY</span>':''}</div>`; });
   html += `</div>`;
-  const pvTecsList = [...getTecsInSidebarOrder(TECS_PV_CENTRO_DISPLAY, tecnicos), ...getTecsInSidebarOrder(TECS_LEVANTE_DISPLAY, tecnicos)];
-  pvTecsList.forEach(tecObj => {
+  const pvCentro = getTecsInSidebarOrder(TECS_PV_CENTRO_DISPLAY, tecnicos);
+  const pvLev = getTecsInSidebarOrder(TECS_LEVANTE_DISPLAY, tecnicos);
+  const pvTecsList = [...pvCentro, ...pvLev];
+  const pvLevStartIdx = pvCentro.length;
+  pvTecsList.forEach((tecObj, tecIdx) => {
+    if (tecIdx === pvLevStartIdx) html += `<div class="pv-zone-sep"></div>`;
     const tec = tecObj.nombre; const t = tecObj; const c = t ? tecColor(t.nombre) : 'var(--blue)';
     html += `<div class="pv-plan-row"><div class="pv-plan-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div class="pv-plan-tec-name">${tec}</div></div>`;
     days.forEach(d => {
       const ds = fmt(d), isT = ds === today;
       const tareasDia = tareasPostventa.filter(t => t.tecnico_asignado === tec && t.fecha_prevista === ds && t.estado !== 'cancelada');
-      html += `<div class="pv-plan-cell${isT?' today-bg':''}">`;
+      html += `<div class="pv-plan-cell${isT?' today-bg':''}" data-date="${ds}" data-tec="${esc(tec)}">`;
       tareasDia.forEach(t => {
         const ap = aparatos.find(a => a.id === t.aparato_id);
-        html += `<div class="pv-task-pill ${t.tipo}" onclick="editTareaPostventa('${esc(t.id)}')"><div style="width:5px;height:5px;border-radius:50%;background:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'};flex-shrink:0"></div><div><div class="pv-task-pill-name">${ap?ap.cliente.split(' ')[0]:(t.descripcion||t.tipo||'—')}</div><div class="pv-task-pill-num">${ap?ap.numero_aparato:(t.tipo||'PV').toUpperCase()}</div></div>${t.prioridad==='urgente'?'<span style="margin-left:auto;font-size:8px;color:var(--red);font-weight:700">URG</span>':''}</div>`;
+        html += `<div class="pv-task-pill ${t.tipo}${t.prioridad==='urgente'?' urgente':''}" draggable="true" data-pvt-id="${t.id}" style="--pill-color:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}" onclick="editTareaPostventa('${esc(t.id)}')"><div style="width:5px;height:5px;border-radius:50%;background:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'};flex-shrink:0"></div><div><div class="pv-task-pill-name">${ap?ap.cliente.split(' ')[0]:(t.descripcion||t.tipo||'—')}</div><div class="pv-task-pill-num">${ap?ap.numero_aparato:(t.tipo||'PV').toUpperCase()}</div></div>${t.prioridad==='urgente'?'<span style="margin-left:auto;font-size:8px;color:var(--red);font-weight:700">URG</span>':''}</div>`;
       });
       html += `</div>`;
     });
@@ -1611,49 +1662,55 @@ function renderPvPlanning() {
   });
   html += `</div></div>`;
   document.getElementById('pv-content').innerHTML = html;
+  initPvPlanningDragDrop();
+}
+function initPvPlanningDragDrop() {
+  let dragPvId = null;
+  document.querySelectorAll('.pv-task-pill[draggable]').forEach(el => {
+    el.addEventListener('dragstart', e => { dragPvId = el.dataset.pvtId; el.style.opacity = '0.4'; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', dragPvId); } catch(_) {} });
+    el.addEventListener('dragend', () => { el.style.opacity = '1'; dragPvId = null; document.querySelectorAll('.pv-plan-cell.drop-over').forEach(c => c.classList.remove('drop-over')); });
+  });
+  document.querySelectorAll('.pv-plan-cell').forEach(cell => {
+    cell.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; cell.classList.add('drop-over'); });
+    cell.addEventListener('dragleave', () => cell.classList.remove('drop-over'));
+    cell.addEventListener('drop', async e => {
+      e.preventDefault(); cell.classList.remove('drop-over');
+      let id = dragPvId; try { const dt = e.dataTransfer.getData('text/plain'); if (dt) id = dt; } catch(_) {}
+      if (!id) return;
+      const newDate = cell.dataset.date, newTec = cell.dataset.tec;
+      if (!newDate) return;
+      const update = { fecha_prevista: newDate };
+      if (newTec) update.tecnico_asignado = newTec;
+      const { error } = await sb.from('trabajos_postventa').update(update).eq('id', id);
+      if (error) { showToast('Error: ' + error.message, true); return; }
+      const t = tareasPostventa.find(x => x.id === id); if (t) { t.fecha_prevista = newDate; if (newTec) t.tecnico_asignado = newTec; }
+      renderPvPlanning(); showToast(`Movida al ${fmtDate(newDate)}`);
+    });
+  });
 }
 
 // ═══ PIEZAS (kanban 2 columnas) ═══
 function renderPiezas() {
-  document.getElementById('pv-sub').textContent = 'PIEZAS · PEDIDAS Y RECIBIDAS';
-  const piezasTareas = tareasPostventa.filter(t => t.tipo === 'reparacion' && t.estado !== 'cancelada');
-  const pedidas = piezasTareas.filter(t => t.estado === 'pendiente');
-  const recibidas = piezasTareas.filter(t => t.estado === 'en_curso' || t.estado === 'asignada');
-  const completadas = piezasTareas.filter(t => t.estado === 'realizada');
+  document.getElementById('pv-sub').textContent = 'PIEZAS · PENDIENTES Y PROGRAMADAS';
+  const piezasTareas = tareasPostventa.filter(t => t.tipo === 'reparacion' && t.estado !== 'cancelada' && t.estado !== 'realizada');
+  const pendientes = piezasTareas.filter(t => !t.tecnico_asignado || !t.fecha_prevista);
+  const programadas = piezasTareas.filter(t => t.tecnico_asignado && t.fecha_prevista);
+  const completadas = tareasPostventa.filter(t => t.tipo === 'reparacion' && t.estado === 'realizada');
   let html = `<div class="pz-board">`;
-  // Col 1: Piezas pedidas
-  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">Piezas <em>pedidas</em></div><span class="badge b-amber b-mono">${pedidas.length}</span></div><div class="pz-col-body" id="pz-pedidas">`;
-  pedidas.forEach(t => { html += piezaCardHtml(t, false); });
-  if (!pedidas.length) html += `<div class="empty-mini">Sin piezas pedidas</div>`;
+  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">Piezas <em>pendientes</em></div><span class="badge b-amber b-mono">${pendientes.length}</span></div><div class="pz-col-body" id="pz-pedidas">`;
+  pendientes.forEach(t => { html += piezaCardHtml(t, true); });
+  if (!pendientes.length) html += `<div class="empty-mini">Sin piezas pendientes</div>`;
   html += `</div></div>`;
-  // Col 2: Piezas recibidas
-  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">Piezas <em>recibidas</em></div><span class="badge b-green b-mono">${recibidas.length}</span></div><div class="pz-col-body" id="pz-recibidas">`;
-  recibidas.forEach(t => { html += piezaCardHtml(t, true); });
-  if (!recibidas.length) html += `<div class="empty-mini">Sin piezas recibidas</div>`;
-  // Completadas desplegable
+  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">Piezas <em>programadas</em></div><span class="badge b-green b-mono">${programadas.length}</span></div><div class="pz-col-body" id="pz-recibidas">`;
+  programadas.forEach(t => { html += piezaCardHtml(t, false); });
+  if (!programadas.length) html += `<div class="empty-mini">Sin piezas programadas</div>`;
   if (completadas.length) {
     html += `<div class="pz-done-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>Completadas · ${completadas.length}</div><div class="pz-done-list">`;
-    completadas.forEach(t => { html += piezaCardHtml(t, true, true); });
+    completadas.forEach(t => { html += piezaCardHtml(t, false, true); });
     html += `</div>`;
   }
   html += `</div></div></div>`;
   document.getElementById('pv-content').innerHTML = html;
-  // SortableJS drag entre columnas
-  ['pz-pedidas','pz-recibidas'].forEach(colId => {
-    const el = document.getElementById(colId);
-    if (!el) return;
-    Sortable.create(el, { group:'piezas', animation:180, ghostClass:'sortable-ghost',
-      onEnd: async evt => {
-        const card = evt.item; if (!card) return;
-        const id = card.dataset.id, toCol = evt.to.id;
-        const newEstado = toCol === 'pz-recibidas' ? 'en_curso' : 'pendiente';
-        const { error } = await sb.from('trabajos_postventa').update({ estado: newEstado }).eq('id', id);
-        if (error) { showToast('Error: ' + error.message, true); renderPiezas(); return; }
-        const t = tareasPostventa.find(x => x.id === id); if (t) t.estado = newEstado;
-        renderPiezas(); showToast(newEstado === 'en_curso' ? 'Pieza marcada como recibida' : 'Pieza movida a pedidas');
-      }
-    });
-  });
 }
 function piezaCardHtml(t, showAsignar, isDone) {
   const ap = aparatos.find(a => a.id === t.aparato_id);
@@ -1680,24 +1737,30 @@ async function asignarPieza(id) {
 
 // ═══ OCAS ═══
 function renderOcas() {
-  document.getElementById('pv-sub').textContent = 'OCAS · INSPECCIONES Y REPARACIONES';
-  const ocaTareas = tareasPostventa.filter(t => t.tipo === 'oca');
-  const asignadas = ocaTareas.filter(t => t.tecnico_asignado && t.estado !== 'cancelada');
-  const sinAsignar = ocaTareas.filter(t => !t.tecnico_asignado && t.estado !== 'cancelada');
-  let html = `<div class="oca-board">
-    <div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">OCAS <em>asignadas</em></div><span class="badge b-violet b-mono">${asignadas.length}</span></div><div class="pz-col-body">`;
-  asignadas.forEach(t => { html += ocaCardHtml(t, true); });
-  if (!asignadas.length) html += `<div class="empty-mini">Sin OCAS asignadas</div>`;
+  document.getElementById('pv-sub').textContent = 'OCAS · PENDIENTES Y PROGRAMADAS';
+  const ocaTareas = tareasPostventa.filter(t => t.tipo === 'oca' && t.estado !== 'cancelada' && t.estado !== 'realizada');
+  const pendientes = ocaTareas.filter(t => !t.tecnico_asignado || !t.fecha_prevista);
+  const programadas = ocaTareas.filter(t => t.tecnico_asignado && t.fecha_prevista);
+  const completadas = tareasPostventa.filter(t => t.tipo === 'oca' && t.estado === 'realizada');
+  let html = `<div class="pz-board">`;
+  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">OCAs <em>pendientes</em></div><span class="badge b-violet b-mono">${pendientes.length}</span></div><div class="pz-col-body">`;
+  pendientes.forEach(t => { html += ocaCardHtml(t, false); });
+  if (!pendientes.length) html += `<div class="empty-mini">Sin OCAs pendientes</div>`;
   html += `</div></div>`;
-  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">OCAS <em>pendientes</em></div><span class="badge b-line b-mono">${sinAsignar.length}</span></div><div class="pz-col-body">`;
-  sinAsignar.forEach(t => { html += ocaCardHtml(t, false); });
-  if (!sinAsignar.length) html += `<div class="empty-mini">Sin OCAS pendientes</div>`;
+  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">OCAs <em>programadas</em></div><span class="badge b-green b-mono">${programadas.length}</span></div><div class="pz-col-body">`;
+  programadas.forEach(t => { html += ocaCardHtml(t, true); });
+  if (!programadas.length) html += `<div class="empty-mini">Sin OCAs programadas</div>`;
+  if (completadas.length) {
+    html += `<div class="pz-done-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>Completadas · ${completadas.length}</div><div class="pz-done-list">`;
+    completadas.forEach(t => { html += ocaCardHtml(t, true, true); });
+    html += `</div>`;
+  }
   html += `</div></div></div>`;
   document.getElementById('pv-content').innerHTML = html;
 }
-function ocaCardHtml(t, asignada) {
+function ocaCardHtml(t, asignada, isDone) {
   const ap = aparatos.find(a => a.id === t.aparato_id);
-  return `<div class="oca-card ${asignada?'asignada':''}" onclick="editTareaPostventa('${t.id}')"><div class="pz-card-h"><span class="pz-card-ap">${ap?ap.numero_aparato:'—'}</span>${asignada?`<span class="badge b-violet">${t.tecnico_asignado.split(' ')[0]}</span>`:`<button class="pz-card-asignar" onclick="event.stopPropagation();asignarOca('${t.id}')">Asignar</button>`}</div><div class="pz-card-title">${ap?ap.cliente:'—'}</div>${t.descripcion?`<div class="pz-card-desc">${t.descripcion}</div>`:''}<div class="pz-card-foot">${t.fecha_prevista?`<span class="badge b-line b-mono">${fmtDate(t.fecha_prevista).toUpperCase()}</span>`:''}<span class="badge b-${t.estado==='realizada'?'green':t.estado==='pendiente'?'amber':'slate'}">${t.estado}</span></div></div>`;
+  return `<div class="oca-card ${asignada?'asignada':''}" onclick="editTareaPostventa('${t.id}')"><div class="pz-card-h"><span class="pz-card-ap">${ap?ap.numero_aparato:(t.descripcion||'—')}</span>${asignada&&t.tecnico_asignado?`<span class="badge b-violet">${t.tecnico_asignado.split(' ')[0]}</span>`:`<button class="pz-card-asignar" onclick="event.stopPropagation();asignarOca('${t.id}')">Asignar</button>`}</div><div class="pz-card-title">${ap?ap.cliente:'—'}</div>${t.descripcion?`<div class="pz-card-desc">${t.descripcion}</div>`:''}<div class="pz-card-foot">${t.fecha_prevista?`<span class="badge b-line b-mono">${fmtDate(t.fecha_prevista).toUpperCase()}</span>`:''}<span class="badge b-${isDone?'green':t.estado==='pendiente'?'amber':'slate'}">${isDone?'Completada':t.estado}</span></div></div>`;
 }
 async function asignarOca(id) {
   const tec = prompt('Asignar OCA a técnico:', (getPvTecNames()[0]||''));
@@ -1999,9 +2062,9 @@ async function saveOT() {
 
 // ═══ MODAL TAREA ═══
 function populateTareaAsigSelect(selected) { const allPeople = [...oficina.map(p=>p.nombre), ...tecnicos.map(t=>t.nombre)].filter(Boolean); document.getElementById('ft-asig').innerHTML = '<option value="">— Sin asignar —</option>' + allPeople.map(n => `<option value="${n}"${n===selected?' selected':''}>${n}</option>`).join(''); }
-function openTareaModal() { editingTareaId = null; document.getElementById('modal-tarea-title').innerHTML = 'Nueva <em>tarea</em>'; ['ft-titulo','ft-desc','ft-fecha'].forEach(id => document.getElementById(id).value = ''); document.getElementById('ft-pri').value = 'med'; document.getElementById('ft-edit-id').value = ''; document.getElementById('btn-del-tarea').style.display = 'none'; populateTareaAsigSelect(''); document.getElementById('modal-tarea').classList.add('open'); setTimeout(() => document.getElementById('ft-titulo').focus(), 100); }
-function openTareaModalEdit(id) { const t = tareas.find(x => x.id === id); if (!t) return; editingTareaId = id; document.getElementById('modal-tarea-title').innerHTML = 'Editar <em>tarea</em>'; document.getElementById('ft-titulo').value = t.titulo||''; document.getElementById('ft-desc').value = t.descripcion||''; document.getElementById('ft-pri').value = t.prioridad||'med'; document.getElementById('ft-fecha').value = t.fecha_recordatorio||''; populateTareaAsigSelect(t.asignada_a||''); document.getElementById('ft-edit-id').value = id; document.getElementById('btn-del-tarea').style.display = 'inline-block'; document.getElementById('modal-tarea').classList.add('open'); }
-async function saveTarea() { const btn = document.getElementById('btn-save-tarea'); const titulo = document.getElementById('ft-titulo').value.trim(); if (!titulo) { showToast('Escribe el título', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const payload = { titulo, descripcion: document.getElementById('ft-desc').value.trim()||null, prioridad: document.getElementById('ft-pri').value, fecha_recordatorio: document.getElementById('ft-fecha').value||null, asignada_a: document.getElementById('ft-asig').value||null }; let error; if (editingTareaId) { const res = await sb.from('tareas').update(payload).eq('id', editingTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareas.findIndex(x => x.id === editingTareaId); if (i >= 0) tareas[i] = res.data; } } else { payload.completada = false; const res = await sb.from('tareas').insert(payload).select().single(); error = res.error; if (!error && res.data) tareas.unshift(res.data); } btn.disabled = false; btn.textContent = 'Guardar'; if (error) { showToast('Error: ' + error.message, true); return; } closeModal('modal-tarea'); showToast(editingTareaId ? 'Tarea actualizada' : 'Tarea creada'); renderCurrentView(); } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveTarea:', ex); } }
+function openTareaModal() { editingTareaId = null; document.getElementById('modal-tarea-title').innerHTML = 'Nueva <em>tarea</em>'; ['ft-titulo','ft-desc','ft-fecha','ft-ref'].forEach(id => document.getElementById(id).value = ''); document.getElementById('ft-pri').value = 'med'; document.getElementById('ft-tipo').value = 'planning'; document.getElementById('ft-edit-id').value = ''; document.getElementById('btn-del-tarea').style.display = 'none'; populateTareaAsigSelect(''); document.getElementById('modal-tarea').classList.add('open'); setTimeout(() => document.getElementById('ft-titulo').focus(), 100); }
+function openTareaModalEdit(id) { const t = tareas.find(x => x.id === id); if (!t) return; editingTareaId = id; document.getElementById('modal-tarea-title').innerHTML = 'Editar <em>tarea</em>'; document.getElementById('ft-titulo').value = t.titulo||''; const tipo = getTareaTipo(t); const descClean = (t.descripcion||'').replace(/^\[(PLANNING|AJUSTES|PEM)\]\s*/i,''); document.getElementById('ft-desc').value = descClean; document.getElementById('ft-pri').value = t.prioridad||'med'; document.getElementById('ft-fecha').value = t.fecha_recordatorio||''; document.getElementById('ft-tipo').value = tipo; document.getElementById('ft-ref').value = (t.titulo?.match(/OT\d+|Ap\d+/i)||[''])[0]||''; populateTareaAsigSelect(t.asignada_a||''); document.getElementById('ft-edit-id').value = id; document.getElementById('btn-del-tarea').style.display = 'inline-block'; document.getElementById('modal-tarea').classList.add('open'); }
+async function saveTarea() { const btn = document.getElementById('btn-save-tarea'); const titulo = document.getElementById('ft-titulo').value.trim(); if (!titulo) { showToast('Escribe el título', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const tipo = document.getElementById('ft-tipo').value; const descRaw = document.getElementById('ft-desc').value.trim(); const descripcion = `[${tipo.toUpperCase()}] ${descRaw}`.trim(); const payload = { titulo, descripcion: descripcion||null, prioridad: document.getElementById('ft-pri').value, fecha_recordatorio: document.getElementById('ft-fecha').value||null, asignada_a: document.getElementById('ft-asig').value||null }; let error; if (editingTareaId) { const res = await sb.from('tareas').update(payload).eq('id', editingTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareas.findIndex(x => x.id === editingTareaId); if (i >= 0) tareas[i] = res.data; } } else { payload.completada = false; const res = await sb.from('tareas').insert(payload).select().single(); error = res.error; if (!error && res.data) tareas.unshift(res.data); } btn.disabled = false; btn.textContent = 'Guardar'; if (error) { showToast('Error: ' + error.message, true); return; } closeModal('modal-tarea'); showToast(editingTareaId ? 'Tarea actualizada' : 'Tarea creada'); renderCurrentView(); } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveTarea:', ex); } }
 async function deleteTarea() { if (!editingTareaId) return; if (!confirm('¿Eliminar esta tarea?')) return; const { error } = await sb.from('tareas').delete().eq('id', editingTareaId); if (error) { showToast('Error: ' + error.message, true); return; } tareas = tareas.filter(t => t.id !== editingTareaId); closeModal('modal-tarea'); showToast('Tarea eliminada'); renderCurrentView(); }
 
 // ═══ MODAL APARATO ═══
@@ -2020,13 +2083,13 @@ document.addEventListener('change', e => { if (e.target.id === 'pvt-estado') doc
 function populatePvTecSelectTarea(selected) { document.getElementById('pvt-tec').innerHTML = '<option value="">— Sin asignar —</option>' + getPvTecNames().map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
 function renderAparatoSuggestions() { const q = document.getElementById('pvt-aparato-search').value.toLowerCase().trim(); const wrap = document.getElementById('pvt-aparato-suggestions'); if (q.length < 2) { wrap.innerHTML = ''; return; } const matches = aparatos.filter(a => `${a.numero_aparato} ${a.cliente} ${a.direccion||''}`.toLowerCase().includes(q)).slice(0,5); if (!matches.length) { wrap.innerHTML = ''; return; } wrap.innerHTML = `<div style="position:absolute;top:2px;left:0;right:0;background:var(--surface);border:1px solid var(--line2);border-radius:var(--r2);z-index:10;box-shadow:var(--sh2);overflow:hidden">${matches.map(a=>`<div onclick="selectAparatoSuggestion('${esc(a.id)}')" style="padding:9px 12px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''"><span class="badge b-accent b-mono">${a.numero_aparato}</span><span style="font-weight:500">${a.cliente}</span></div>`).join('')}</div>`; }
 function selectAparatoSuggestion(id) { const a = aparatos.find(x => x.id === id); if (!a) return; document.getElementById('pvt-aparato-search').value = `${a.numero_aparato} · ${a.cliente}`; document.getElementById('pvt-aparato-id').value = id; document.getElementById('pvt-aparato-suggestions').innerHTML = ''; if (a.tecnico_asignado) document.getElementById('pvt-tec').value = a.tecnico_asignado; }
-async function saveTareaPostventa() { const btn = document.getElementById('btn-save-pvt'); const aparatoId = document.getElementById('pvt-aparato-id').value, fecha = document.getElementById('pvt-fecha').value; /* aparatoId is now optional */ if (!fecha) { showToast('Fecha obligatoria', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; const estado = document.getElementById('pvt-estado').value; const payload = { aparato_id: aparatoId || null, tipo: document.getElementById('pvt-tipo').value, prioridad: document.getElementById('pvt-prioridad').value, tecnico_asignado: document.getElementById('pvt-tec').value||null, fecha_prevista: fecha, estado, descripcion: document.getElementById('pvt-desc').value.trim()||null, notas_resolucion: document.getElementById('pvt-resolucion').value.trim()||null, fecha_realizado: estado === 'realizada' ? todayISO() : null }; let error; if (editingPvTareaId) { const res = await sb.from('trabajos_postventa').update(payload).eq('id', editingPvTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareasPostventa.findIndex(x => x.id === editingPvTareaId); if (i >= 0) tareasPostventa[i] = res.data; } } else { const res = await sb.from('trabajos_postventa').insert(payload).select().single(); error = res.error; if (!error && res.data) tareasPostventa.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar tarea'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-pv-tarea'); showToast(editingPvTareaId ? 'Tarea actualizada' : 'Tarea creada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); }
+async function saveTareaPostventa() { const btn = document.getElementById('btn-save-pvt'); const aparatoId = document.getElementById('pvt-aparato-id').value, fecha = document.getElementById('pvt-fecha').value; /* aparatoId is now optional */ if (!fecha) { showToast('Fecha obligatoria', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const estado = document.getElementById('pvt-estado').value; const descField = document.getElementById('pvt-desc').value.trim(); const searchText = document.getElementById('pvt-aparato-search').value.trim(); const descripcion = descField || (!aparatoId && searchText ? searchText : null); const payload = { aparato_id: aparatoId || null, tipo: document.getElementById('pvt-tipo').value, prioridad: document.getElementById('pvt-prioridad').value, tecnico_asignado: document.getElementById('pvt-tec').value||null, fecha_prevista: fecha, estado, descripcion: descripcion||null, notas_resolucion: document.getElementById('pvt-resolucion').value.trim()||null, fecha_realizado: estado === 'realizada' ? todayISO() : null }; let error; if (editingPvTareaId) { const res = await sb.from('trabajos_postventa').update(payload).eq('id', editingPvTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareasPostventa.findIndex(x => x.id === editingPvTareaId); if (i >= 0) tareasPostventa[i] = res.data; } } else { const res = await sb.from('trabajos_postventa').insert(payload).select().single(); error = res.error; if (!error && res.data) tareasPostventa.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar tarea'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-pv-tarea'); showToast(editingPvTareaId ? 'Tarea actualizada' : 'Tarea creada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar tarea'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('savePvTarea:', ex); } }
 async function deleteTareaPostventa() { if (!editingPvTareaId) return; if (!confirm('¿Eliminar esta tarea?')) return; const { error } = await sb.from('trabajos_postventa').delete().eq('id', editingPvTareaId); if (error) { showToast('Error: ' + error.message, true); return; } tareasPostventa = tareasPostventa.filter(t => t.id !== editingPvTareaId); closeModal('modal-pv-tarea'); showToast('Tarea eliminada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); }
 
 // ═══ UTILS ═══
 function closeCreateDd() { document.getElementById('create-dd-wrap').classList.remove('open'); }
 document.addEventListener('click', e => { if (!e.target.closest('#create-dd-wrap')) closeCreateDd(); });
-function openMontTareaModal(tipo) { openTareaModal(); const labels = {planning:'Tarea de planning', ajustes:'Nuevo ajuste', pem:'Nueva PEM'}; document.getElementById('modal-tarea-title').innerHTML = labels[tipo]||'Nueva <em>tarea</em>'; document.getElementById('ft-desc').value = '[' + tipo.toUpperCase() + '] '; }
+function openMontTareaModal(tipo) { openTareaModal(); const labels = {planning:'Tarea de planning', ajustes:'Nuevo ajuste', pem:'Nueva PEM'}; document.getElementById('modal-tarea-title').innerHTML = labels[tipo]||'Nueva <em>tarea</em>'; document.getElementById('ft-tipo').value = tipo; }
 function openTareaPostventaModalTyped(tipo) { openTareaPostventaModal(); document.getElementById('pvt-tipo').value = tipo; }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function handleOverlay(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
