@@ -98,6 +98,12 @@ button,input,select,textarea{font-family:var(--font)}
 .btn-new{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--accent);color:white;border:none;border-radius:var(--r2);font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s}
 .btn-new:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:var(--sh2)}
 .btn-new svg{width:14px;height:14px}
+.create-dd-wrap{position:relative}
+.create-dd{display:none;position:absolute;top:100%;right:0;margin-top:6px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r2);box-shadow:var(--sh3);min-width:190px;z-index:150;padding:6px 0}
+.create-dd-wrap.open .create-dd{display:block}
+.create-dd-title{padding:6px 14px 3px;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.5px;font-family:var(--mono)}
+.create-dd-item{padding:7px 14px;font-size:13px;color:var(--ink);cursor:pointer;transition:background 0.1s}
+.create-dd-item:hover{background:var(--surface2)}
 .theme-toggle{width:32px;height:32px;border-radius:50%;border:1px solid var(--line2);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink2);transition:all 0.15s}
 .theme-toggle:hover{background:var(--surface2);color:var(--ink);transform:rotate(15deg)}
 .theme-toggle svg{width:15px;height:15px}
@@ -707,7 +713,25 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
         <svg class="icon-moon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 9.5A6.5 6.5 0 1 1 6.5 2a5 5 0 0 0 7.5 7.5z"/></svg>
         <svg class="icon-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.5 1.5M11.5 11.5L13 13M3 13l1.5-1.5M11.5 4.5L13 3"/></svg>
       </button>
-      <button class="btn-new" onclick="openModal()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg>Nueva OT</button>
+      <div class="create-dd-wrap" id="create-dd-wrap">
+        <button class="btn-new" onclick="document.getElementById('create-dd-wrap').classList.toggle('open')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg>Crear</button>
+        <div class="create-dd" id="create-dd">
+          <div class="create-dd-title">Montajes</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openModal()">Nueva OT</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openMontTareaModal('planning')">Tarea de planning</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openMontTareaModal('ajustes')">Nuevo ajuste</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openMontTareaModal('pem')">Nueva PEM</div>
+          <div class="create-dd-title" style="margin-top:6px">Postventa</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('reparacion')">Reparación</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('aviso')">Aviso</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('mantenimiento')">Mantenimiento</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('oca')">OCA</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('otros')">Otros</div>
+          <div class="create-dd-title" style="margin-top:6px">General</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openAparatoModal()">Nuevo aparato</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaModal()">Nueva tarea</div>
+        </div>
+      </div>
       <div class="avatar-btn" id="av-btn" onclick="toggleUserDd()">
         <span id="av-initials">ME</span>
         <div class="user-dd" id="user-dd">
@@ -804,7 +828,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
             <button id="pv-tab-ocas" onclick="switchPvTab('ocas')">OCAS</button>
             <button id="pv-tab-aparatos" onclick="switchPvTab('aparatos')">Aparatos</button>
           </div>
-          <button class="btn-new" id="pv-btn-new" onclick="openAparatoModal()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg><span>Nuevo aparato</span></button>
+          <button class="btn-new" id="pv-btn-new" onclick="openTareaPostventaModal()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg><span>Nueva tarea PV</span></button>
         </div>
         <!-- Planning PV toolbar -->
         <div id="pv-planning-toolbar" class="kanban-toolbar" style="gap:10px">
@@ -933,7 +957,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
       <div class="f-field"><label class="f-label">Recordatorio</label><input class="f-input" type="date" id="ft-fecha"></div>
       <div class="f-field"><label class="f-label">Zona</label><select class="f-input" id="ft-zona"><option value="">—</option><option>Centro</option><option>Levante</option></select></div>
     </div>
-    <div class="f-field"><label class="f-label">Asignar a</label><input class="f-input" id="ft-asig" placeholder="Nombre de la persona"></div>
+    <div class="f-field"><label class="f-label">Asignar a</label><select class="f-input" id="ft-asig"><option value="">— Sin asignar —</option></select></div>
     <input type="hidden" id="ft-edit-id">
     <div class="modal-actions">
       <button class="btn-cancel" id="btn-del-tarea" onclick="deleteTarea()" style="margin-right:auto;color:var(--red)">Eliminar</button>
@@ -1070,24 +1094,39 @@ const TECS_MONTAJE_CENTRO_DISPLAY = ['Javier Alonso','Pablo Piedra','Alejandro B
 const TECS_PV_CENTRO_DISPLAY = ['David Martín','Juan Carlos Miguélez','Alberto Fernández','Juan Carlos Lebrón'];
 const TECS_LEVANTE_DISPLAY = ['Henry Ure','Israel Vázquez'];
 
-// Fuzzy match: is this technician a PV tech?
+// Classify technicians by matching first+second name fragments
 function isPvTec(nombre) {
   if (!nombre) return false;
-  const n = nombre.toLowerCase();
+  const n = nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   return TECS_PV_NAMES.some(pv => {
-    const p = pv.toLowerCase();
-    return n.includes(p.split(' ')[0]) && (p.split(' ').length < 2 || n.includes(p.split(' ')[1]?.slice(0,4)||''));
+    const parts = pv.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(' ');
+    if (parts.length < 2) return n.includes(parts[0]);
+    return n.includes(parts[0]) && n.includes(parts[1]);
   });
 }
 function isLevanteTec(nombre) {
   if (!nombre) return false;
-  const n = nombre.toLowerCase();
-  return TECS_LEVANTE_NAMES.some(lv => n.includes(lv.toLowerCase().split(' ')[0]));
+  const n = nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  return TECS_LEVANTE_NAMES.some(lv => {
+    const parts = lv.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(' ');
+    if (parts.length < 2) return n.includes(parts[0]);
+    return n.includes(parts[0]) && n.includes(parts[1]);
+  });
 }
 function isMontajeTec(t) { return !isPvTec(t.nombre) && !isLevanteTec(t.nombre); }
-// Get all PV tech names from DB
+function getTecRole(nombre) {
+  if (isPvTec(nombre)) return 'Postventa';
+  if (isLevanteTec(nombre)) return 'Levante';
+  return 'Montajes';
+}
+function getTecRoleFull(nombre, zona) {
+  if (isLevanteTec(nombre)) return 'Levante';
+  const z = zona || 'Centro';
+  if (isPvTec(nombre)) return z + ' · Postventa';
+  return z + ' · Montajes';
+}
 function getPvTecs() { return tecnicos.filter(t => isPvTec(t.nombre)); }
-function getMontajeTecs() { return tecnicos.filter(t => !isPvTec(t.nombre)); }
+function getMontajeTecs() { return tecnicos.filter(t => !isPvTec(t.nombre) && !isLevanteTec(t.nombre)); }
 function getPvTecNames() { return getPvTecs().map(t => t.nombre); }
 
 function tecColor(name) { const i = tecnicos.findIndex(t => t.nombre === name); return TEC_PALETTE[(i >= 0 ? i : 0) % TEC_PALETTE.length]; }
@@ -1183,7 +1222,7 @@ function renderSidebar() {
 function openProfileByName(type, name) {
   currentProfile = { type, id: null, data: { nombre: name, email: null, telefono: null, notas: '' } };
   document.getElementById('drawer-name').textContent = name;
-  document.getElementById('drawer-rol').textContent = type === 'tec' ? 'Técnico' : 'Oficina';
+  document.getElementById('drawer-rol').textContent = type === 'tec' ? getTecRoleFull(name, null) : 'Oficina';
   document.getElementById('drawer-av').style.background = 'var(--slate-soft)';
   document.getElementById('drawer-av').style.color = 'var(--slate)';
   document.getElementById('drawer-av').textContent = getInitials(name);
@@ -1816,8 +1855,8 @@ function openProfile(type, id) {
   const p = list.find(x => x.id === id); if (!p) return;
   currentProfile = { type, id, data: p };
   document.getElementById('drawer-name').textContent = p.nombre;
-  if (type === 'tec') { const c = tecColor(p.nombre); document.getElementById('drawer-rol').textContent = p.zona||'Centro'; document.getElementById('drawer-av').style.background = c+'1A'; document.getElementById('drawer-av').style.color = c; }
-  else { document.getElementById('drawer-rol').textContent = p.rol||'—'; document.getElementById('drawer-av').style.background = 'var(--slate-soft)'; document.getElementById('drawer-av').style.color = 'var(--slate)'; }
+  if (type === 'tec') { const c = tecColor(p.nombre); document.getElementById('drawer-rol').textContent = getTecRoleFull(p.nombre, p.zona); document.getElementById('drawer-av').style.background = c+'1A'; document.getElementById('drawer-av').style.color = c; }
+  else { document.getElementById('drawer-rol').textContent = p.rol||'Oficina'; document.getElementById('drawer-av').style.background = 'var(--slate-soft)'; document.getElementById('drawer-av').style.color = 'var(--slate)'; }
   document.getElementById('drawer-av').textContent = getInitials(p.nombre);
   renderDrawerBody(); document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open');
 }
@@ -1902,10 +1941,10 @@ function openEditModal(id) {
 async function saveOT() {
   const btn = document.getElementById('btn-save-ot');
   const nombre = document.getElementById('f-nombre').value.trim(), cliente = document.getElementById('f-cliente').value.trim();
-  if (!nombre || !cliente) { showToast('Nombre y cliente obligatorios', true); return; }
+  if (!nombre) { showToast('El nº de OT es obligatorio', true); return; }
   btn.disabled = true; btn.textContent = 'Guardando…';
   try {
-    const payload = { nombre, cliente, direccion: document.getElementById('f-dir').value.trim()||null, equipo: document.getElementById('f-equipo').value, estado: document.getElementById('f-estado').value, zona: document.getElementById('f-zona').value, tecnicos: getSelectedTecs(), fecha_instalacion: document.getElementById('f-fecha').value||null, dias_montaje: parseInt(document.getElementById('f-dias').value)||1, tipo_ajuste: document.getElementById('f-tipo-ajuste').value, comercial: document.getElementById('f-comercial').value||null, condicionante: document.getElementById('f-cond').value.trim()||null, pendiente_descripcion: document.getElementById('f-pend').value.trim()||null, observaciones: document.getElementById('f-obs').value.trim()||null, urgente: document.getElementById('f-urgente').checked };
+    const payload = { nombre, cliente: cliente||null, direccion: document.getElementById('f-dir').value.trim()||null, equipo: document.getElementById('f-equipo').value||null, estado: document.getElementById('f-estado').value||'Contratada', zona: document.getElementById('f-zona').value||'Centro', tecnicos: getSelectedTecs(), fecha_instalacion: document.getElementById('f-fecha').value||null, dias_montaje: parseInt(document.getElementById('f-dias').value)||1, tipo_ajuste: document.getElementById('f-tipo-ajuste').value||null, comercial: document.getElementById('f-comercial').value||null, condicionante: document.getElementById('f-cond').value.trim()||null, pendiente_descripcion: document.getElementById('f-pend').value.trim()||null, observaciones: document.getElementById('f-obs').value.trim()||null, urgente: document.getElementById('f-urgente').checked };
     let error;
     if (editingId) { const res = await sb.from('expedientes').update(payload).eq('id', editingId).select().single(); error = res.error; if (!error && res.data) { const i = expedientes.findIndex(x => x.id === editingId); if (i >= 0) expedientes[i] = res.data; } }
     else { const res = await sb.from('expedientes').insert(payload).select().single(); error = res.error; if (!error && res.data) expedientes.unshift(res.data); }
@@ -1916,9 +1955,10 @@ async function saveOT() {
 }
 
 // ═══ MODAL TAREA ═══
-function openTareaModal() { editingTareaId = null; document.getElementById('modal-tarea-title').innerHTML = 'Nueva <em>tarea</em>'; ['ft-titulo','ft-desc','ft-asig','ft-fecha'].forEach(id => document.getElementById(id).value = ''); document.getElementById('ft-pri').value = 'med'; document.getElementById('ft-zona').value = ''; document.getElementById('ft-edit-id').value = ''; document.getElementById('btn-del-tarea').style.display = 'none'; document.getElementById('modal-tarea').classList.add('open'); setTimeout(() => document.getElementById('ft-titulo').focus(), 100); }
-function openTareaModalEdit(id) { const t = tareas.find(x => x.id === id); if (!t) return; editingTareaId = id; document.getElementById('modal-tarea-title').innerHTML = 'Editar <em>tarea</em>'; document.getElementById('ft-titulo').value = t.titulo||''; document.getElementById('ft-desc').value = t.descripcion||''; document.getElementById('ft-pri').value = t.prioridad||'med'; document.getElementById('ft-fecha').value = t.fecha_recordatorio||''; document.getElementById('ft-zona').value = t.zona||''; document.getElementById('ft-asig').value = t.asignada_a||''; document.getElementById('ft-edit-id').value = id; document.getElementById('btn-del-tarea').style.display = 'inline-block'; document.getElementById('modal-tarea').classList.add('open'); }
-async function saveTarea() { const btn = document.getElementById('btn-save-tarea'); const titulo = document.getElementById('ft-titulo').value.trim(); if (!titulo) { showToast('Escribe el título', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; const payload = { titulo, descripcion: document.getElementById('ft-desc').value.trim()||null, prioridad: document.getElementById('ft-pri').value, fecha_recordatorio: document.getElementById('ft-fecha').value||null, asignada_a: document.getElementById('ft-asig').value.trim()||null }; let error; if (editingTareaId) { const res = await sb.from('tareas').update(payload).eq('id', editingTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareas.findIndex(x => x.id === editingTareaId); if (i >= 0) tareas[i] = res.data; } } else { payload.completada = false; const res = await sb.from('tareas').insert(payload).select().single(); error = res.error; if (!error && res.data) tareas.unshift(res.data); } btn.disabled = false; btn.textContent = 'Guardar'; if (error) { showToast('Error: ' + error.message, true); return; } closeModal('modal-tarea'); showToast(editingTareaId ? 'Tarea actualizada' : 'Tarea creada'); renderCurrentView(); }
+function populateTareaAsigSelect(selected) { const allPeople = [...oficina.map(p=>p.nombre), ...tecnicos.map(t=>t.nombre)].filter(Boolean); document.getElementById('ft-asig').innerHTML = '<option value="">— Sin asignar —</option>' + allPeople.map(n => `<option value="${n}"${n===selected?' selected':''}>${n}</option>`).join(''); }
+function openTareaModal() { editingTareaId = null; document.getElementById('modal-tarea-title').innerHTML = 'Nueva <em>tarea</em>'; ['ft-titulo','ft-desc','ft-fecha'].forEach(id => document.getElementById(id).value = ''); document.getElementById('ft-pri').value = 'med'; document.getElementById('ft-zona').value = ''; document.getElementById('ft-edit-id').value = ''; document.getElementById('btn-del-tarea').style.display = 'none'; populateTareaAsigSelect(''); document.getElementById('modal-tarea').classList.add('open'); setTimeout(() => document.getElementById('ft-titulo').focus(), 100); }
+function openTareaModalEdit(id) { const t = tareas.find(x => x.id === id); if (!t) return; editingTareaId = id; document.getElementById('modal-tarea-title').innerHTML = 'Editar <em>tarea</em>'; document.getElementById('ft-titulo').value = t.titulo||''; document.getElementById('ft-desc').value = t.descripcion||''; document.getElementById('ft-pri').value = t.prioridad||'med'; document.getElementById('ft-fecha').value = t.fecha_recordatorio||''; document.getElementById('ft-zona').value = t.zona||''; populateTareaAsigSelect(t.asignada_a||''); document.getElementById('ft-edit-id').value = id; document.getElementById('btn-del-tarea').style.display = 'inline-block'; document.getElementById('modal-tarea').classList.add('open'); }
+async function saveTarea() { const btn = document.getElementById('btn-save-tarea'); const titulo = document.getElementById('ft-titulo').value.trim(); if (!titulo) { showToast('Escribe el título', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const payload = { titulo, descripcion: document.getElementById('ft-desc').value.trim()||null, prioridad: document.getElementById('ft-pri').value, fecha_recordatorio: document.getElementById('ft-fecha').value||null, zona: document.getElementById('ft-zona').value||null, asignada_a: document.getElementById('ft-asig').value||null }; let error; if (editingTareaId) { const res = await sb.from('tareas').update(payload).eq('id', editingTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareas.findIndex(x => x.id === editingTareaId); if (i >= 0) tareas[i] = res.data; } } else { payload.completada = false; const res = await sb.from('tareas').insert(payload).select().single(); error = res.error; if (!error && res.data) tareas.unshift(res.data); } btn.disabled = false; btn.textContent = 'Guardar'; if (error) { showToast('Error: ' + error.message, true); return; } closeModal('modal-tarea'); showToast(editingTareaId ? 'Tarea actualizada' : 'Tarea creada'); renderCurrentView(); } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveTarea:', ex); } }
 async function deleteTarea() { if (!editingTareaId) return; if (!confirm('¿Eliminar esta tarea?')) return; const { error } = await sb.from('tareas').delete().eq('id', editingTareaId); if (error) { showToast('Error: ' + error.message, true); return; } tareas = tareas.filter(t => t.id !== editingTareaId); closeModal('modal-tarea'); showToast('Tarea eliminada'); renderCurrentView(); }
 
 // ═══ MODAL APARATO ═══
@@ -1926,7 +1966,7 @@ function openAparatoModal() { editingAparatoId = null; document.getElementById('
 function openAparatoModalEdit(id) { const a = aparatos.find(x => x.id === id); if (!a) return; editingAparatoId = id; document.getElementById('modal-aparato-title').innerHTML = 'Editar <em>aparato</em>'; document.getElementById('fa-num').value = a.numero_aparato||''; document.getElementById('fa-cli').value = a.cliente||''; document.getElementById('fa-admin').value = a.administrador||''; document.getElementById('fa-dir').value = a.direccion||''; document.getElementById('fa-desc').value = a.descripcion||''; document.getElementById('fa-estado').value = a.estado||'En garantía'; document.getElementById('fa-zona').value = a.zona||'Centro'; populatePvTecSelect(a.tecnico_asignado||''); document.getElementById('fa-contrato').checked = !!a.contrato_mantenimiento; document.getElementById('fa-tipo-contrato').value = a.tipo_contrato||''; document.getElementById('fa-inicio').value = a.fecha_inicio_contrato||''; document.getElementById('fa-fin').value = a.fecha_fin_contrato||''; document.getElementById('fa-ot-ref').value = a.ot_ref||''; document.getElementById('fa-notas').value = a.notas||''; toggleContratoFields(); document.getElementById('btn-del-aparato').style.display = 'inline-block'; document.getElementById('modal-aparato').classList.add('open'); }
 function toggleContratoFields() { const show = document.getElementById('fa-contrato').checked; ['fa-tipo-contrato','fa-inicio','fa-fin'].forEach(id => document.getElementById(id).closest('.f-field').style.display = show ? '' : 'none'); }
 function populatePvTecSelect(selected) { document.getElementById('fa-tec').innerHTML = '<option value="">— Sin asignar —</option>' + getPvTecNames().map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
-async function saveAparato() { const btn = document.getElementById('btn-save-aparato'); const num = document.getElementById('fa-num').value.trim(), cli = document.getElementById('fa-cli').value.trim(); if (!num || !cli) { showToast('Nº aparato y cliente obligatorios', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const payload = { numero_aparato: num, cliente: cli, administrador: document.getElementById('fa-admin').value.trim()||null, direccion: document.getElementById('fa-dir').value.trim()||null, descripcion: document.getElementById('fa-desc').value, estado: document.getElementById('fa-estado').value, zona: document.getElementById('fa-zona').value, tecnico_asignado: document.getElementById('fa-tec').value||null, contrato_mantenimiento: document.getElementById('fa-contrato').checked, tipo_contrato: document.getElementById('fa-tipo-contrato').value||null, fecha_inicio_contrato: document.getElementById('fa-inicio').value||null, fecha_fin_contrato: document.getElementById('fa-fin').value||null, ot_ref: document.getElementById('fa-ot-ref').value.trim()||null, notas: document.getElementById('fa-notas').value.trim()||null }; let error; if (editingAparatoId) { const res = await sb.from('aparatos').update(payload).eq('id', editingAparatoId).select().single(); error = res.error; if (!error && res.data) { const i = aparatos.findIndex(x => x.id === editingAparatoId); if (i >= 0) aparatos[i] = res.data; } } else { const res = await sb.from('aparatos').insert(payload).select().single(); error = res.error; if (!error && res.data) aparatos.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar aparato'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-aparato'); showToast(editingAparatoId ? 'Aparato actualizado' : 'Aparato creado'); renderPostventa(); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar aparato'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveAparato:', ex); } }
+async function saveAparato() { const btn = document.getElementById('btn-save-aparato'); const num = document.getElementById('fa-num').value.trim(); if (!num) { showToast('El nº de aparato es obligatorio', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const payload = { numero_aparato: num, cliente: document.getElementById('fa-cli').value.trim()||null, administrador: document.getElementById('fa-admin').value.trim()||null, direccion: document.getElementById('fa-dir').value.trim()||null, descripcion: document.getElementById('fa-desc').value||null, estado: document.getElementById('fa-estado').value, zona: document.getElementById('fa-zona').value, tecnico_asignado: document.getElementById('fa-tec').value||null, contrato_mantenimiento: document.getElementById('fa-contrato').checked, tipo_contrato: document.getElementById('fa-tipo-contrato').value||null, fecha_inicio_contrato: document.getElementById('fa-inicio').value||null, fecha_fin_contrato: document.getElementById('fa-fin').value||null, ot_ref: document.getElementById('fa-ot-ref').value.trim()||null, notas: document.getElementById('fa-notas').value.trim()||null }; let error; if (editingAparatoId) { const res = await sb.from('aparatos').update(payload).eq('id', editingAparatoId).select().single(); error = res.error; if (!error && res.data) { const i = aparatos.findIndex(x => x.id === editingAparatoId); if (i >= 0) aparatos[i] = res.data; } } else { const res = await sb.from('aparatos').insert(payload).select().single(); error = res.error; if (!error && res.data) aparatos.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar aparato'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-aparato'); showToast(editingAparatoId ? 'Aparato actualizado' : 'Aparato creado'); renderPostventa(); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar aparato'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveAparato:', ex); } }
 async function deleteAparato() { if (!editingAparatoId) return; if (!confirm('¿Eliminar este aparato?')) return; const { error } = await sb.from('aparatos').delete().eq('id', editingAparatoId); if (error) { showToast('Error: ' + error.message, true); return; } aparatos = aparatos.filter(a => a.id !== editingAparatoId); closeModal('modal-aparato'); closePvDrawer(); showToast('Aparato eliminado'); renderPostventa(); }
 
 // ═══ MODAL TAREA POSTVENTA ═══
@@ -1941,6 +1981,10 @@ async function saveTareaPostventa() { const btn = document.getElementById('btn-s
 async function deleteTareaPostventa() { if (!editingPvTareaId) return; if (!confirm('¿Eliminar esta tarea?')) return; const { error } = await sb.from('trabajos_postventa').delete().eq('id', editingPvTareaId); if (error) { showToast('Error: ' + error.message, true); return; } tareasPostventa = tareasPostventa.filter(t => t.id !== editingPvTareaId); closeModal('modal-pv-tarea'); showToast('Tarea eliminada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); }
 
 // ═══ UTILS ═══
+function closeCreateDd() { document.getElementById('create-dd-wrap').classList.remove('open'); }
+document.addEventListener('click', e => { if (!e.target.closest('#create-dd-wrap')) closeCreateDd(); });
+function openMontTareaModal(tipo) { openTareaModal(); const labels = {planning:'Tarea de planning', ajustes:'Nuevo ajuste', pem:'Nueva PEM'}; document.getElementById('modal-tarea-title').innerHTML = labels[tipo]||'Nueva <em>tarea</em>'; document.getElementById('ft-desc').value = '[' + tipo.toUpperCase() + '] '; }
+function openTareaPostventaModalTyped(tipo) { openTareaPostventaModal(); document.getElementById('pvt-tipo').value = tipo; }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function handleOverlay(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
 function getInitials(name) { return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2); }
