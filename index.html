@@ -327,22 +327,30 @@ button,input,select,textarea{font-family:var(--font)}
 .pg-grid{display:grid;grid-template-columns:140px repeat(5,minmax(140px,1fr));position:relative;min-width:780px}
 .pg-head{padding:11px 9px;background:var(--surface2);border-bottom:1px solid var(--line);font-size:11px;font-weight:600;color:var(--ink2);text-align:center;text-transform:uppercase;letter-spacing:0.4px;position:relative}
 .pg-head.left{text-align:left;padding-left:14px;border-right:1px solid var(--line2)}
-.pg-row-tec{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--surface2);border-right:1px solid var(--line2);border-bottom:1px solid var(--line);min-height:88px}
+.pg-row-tec{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--surface2);border-right:1px solid var(--line2)}
 .pg-row-tec-name{font-size:12px;font-weight:600;color:var(--ink)}
 .pg-row-tec-zone{font-size:9.5px;color:var(--ink3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.3px}
 /* Celdas de fondo del día (5 por fila) */
-.pg-day-cells{display:grid;grid-template-columns:repeat(5,1fr);position:relative;border-bottom:1px solid var(--line);min-height:88px}
-.pg-day-cell{border-right:1px solid var(--line);min-height:88px;position:relative;padding-bottom:4px}
+.pg-tec-wrap{display:grid;grid-template-columns:140px repeat(5,minmax(140px,1fr));border-bottom:1px solid var(--line)}
+.pg-ot-layer{display:grid;grid-template-columns:repeat(5,1fr);grid-column:2/7}
+.pg-task-layer{display:grid;grid-template-columns:repeat(5,1fr);grid-column:2/7}
+.pg-task-cell{padding:2px 3px;min-height:0}
+.pg-day-bg{border-right:1px solid var(--line);min-height:4px}
+.pg-day-cell{border-right:1px solid var(--line);min-height:52px;position:relative;padding:2px 0}
 .pg-zone-sep{grid-column:1/-1;height:3px;background:var(--ink3);opacity:0.3}
 .pg-day-cell:last-child{border-right:none}
 .pg-day-cell.today-bg{background:var(--accent2)}
 .pg-day-cell.drop-target{background:var(--accent2);box-shadow:inset 0 0 0 2px var(--accent)}
 /* Barras absolutas dentro del row */
-.pg-bar{position:absolute;top:4px;min-height:34px;background:var(--surface);border:1px solid var(--line2);border-left:none;border-radius:var(--r1);padding:4px 8px 4px 0;cursor:grab;z-index:2;overflow:hidden;display:flex;flex-direction:column;justify-content:center;user-select:none;transition:box-shadow 0.15s}
-.pg-bar::before{content:'';position:absolute;left:0;top:0;bottom:0;width:20%;border-radius:var(--r1) 0 0 var(--r1);background:var(--bar-color,var(--amber));opacity:0.25;pointer-events:none}
-.pg-bar.hi-pri::before{opacity:0.85}
-.pg-bar .pg-bar-name,.pg-bar .pg-bar-cli,.pg-bar .pg-bar-eq{position:relative;z-index:1;padding-left:10px}
-.pg-bar.tarea-bar{top:auto;position:relative;margin-top:2px;min-height:28px}
+.pg-bar{background:var(--surface);border:1px solid var(--line2);border-radius:var(--r1);cursor:pointer;z-index:2;overflow:hidden;display:flex;align-items:stretch;user-select:none;transition:box-shadow 0.15s;margin:2px 3px}
+.pg-bar-label{display:flex;align-items:center;justify-content:center;min-width:32px;padding:2px 5px;background:var(--bar-color,var(--amber));opacity:0.3;font-size:8px;font-weight:700;color:var(--ink);letter-spacing:0.3px;flex-shrink:0;text-transform:uppercase}
+.pg-bar.hi-pri .pg-bar-label{opacity:0.85}
+.pg-bar-body{padding:3px 7px;min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.pg-bar .pg-bar-name{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg-bar .pg-bar-cli{font-size:10px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg-bar .pg-bar-eq{font-size:9px;font-weight:600;color:var(--ink2);font-family:var(--mono)}
+.pg-bar-resize{position:absolute;top:0;bottom:0;width:8px;cursor:col-resize;z-index:3}
+.pg-bar-resize.left{left:0}.pg-bar-resize.right{right:0}
 .pg-day-cells{display:grid;grid-template-columns:repeat(5,1fr);position:relative;min-height:46px}
 .pg-bar:hover{box-shadow:var(--sh2);z-index:5}
 .pg-bar:active{cursor:grabbing}
@@ -735,18 +743,16 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
         <div class="create-dd" id="create-dd">
           <div class="create-dd-title">Montajes</div>
           <div class="create-dd-item" onclick="closeCreateDd();openModal()">Nueva OT</div>
-          <div class="create-dd-item" onclick="closeCreateDd();openMontTareaModal('planning')">Tarea de planning</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openMontTareaModal('planning')">Nueva tarea</div>
           <div class="create-dd-item" onclick="closeCreateDd();openMontTareaModal('ajustes')">Nuevo ajuste</div>
           <div class="create-dd-item" onclick="closeCreateDd();openMontTareaModal('pem')">Nueva PEM</div>
           <div class="create-dd-title" style="margin-top:6px">Postventa</div>
-          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('reparacion')">Reparación</div>
-          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('aviso')">Aviso</div>
-          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('mantenimiento')">Mantenimiento</div>
-          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('oca')">OCA</div>
-          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('otros')">Otros</div>
-          <div class="create-dd-title" style="margin-top:6px">General</div>
           <div class="create-dd-item" onclick="closeCreateDd();openAparatoModal()">Nuevo aparato</div>
-          <div class="create-dd-item" onclick="closeCreateDd();openTareaModal()">Nueva tarea</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('')">Nueva tarea PV</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('reparacion')">Nueva reparación</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('aviso')">Nuevo aviso</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('mantenimiento')">Nuevo mantenimiento</div>
+          <div class="create-dd-item" onclick="closeCreateDd();openTareaPostventaModalTyped('oca')">Nueva OCA</div>
         </div>
       </div>
       <div class="avatar-btn" id="av-btn" onclick="toggleUserDd()">
@@ -1073,6 +1079,8 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 
 <div class="toast" id="toast"></div>
 <script>
+/* Global error handler to prevent UI hangs */
+window.addEventListener('unhandledrejection', e => { console.error('Unhandled promise:', e.reason); e.preventDefault(); showToast?.('Error inesperado, inténtalo de nuevo', true); document.querySelectorAll('button[disabled]').forEach(b => { b.disabled = false; if (b.textContent.includes('…')) b.textContent = b.textContent.replace('…',''); }); });
 // ═══ CONFIG ═══
 const SB_URL = 'https://dyvinpizkifxmsbffhwh.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5dmlucGl6a2lmeG1zYmZmaHdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzgyMTcsImV4cCI6MjA5Mjg1NDIxN30.Hc4QrXS5gEm_omseOVgewivBFm-hdtVkYwxlJ5owQIs';
@@ -1105,6 +1113,7 @@ const COMERCIALES = ['Carolina','Monse','Sandra','Jorge','Salva'];
 const TECS_PV_NAMES = ['David Martin','Juan Carlos Miguélez','Alberto Fernandez','Juan Carlos Lebrón'];
 const TECS_LEVANTE_NAMES = ['Henry Ure','Israel Vázquez'];
 const PV_TIPO_COLOR = { reparacion:'var(--green)', aviso:'var(--blue)', oca:'var(--violet)', mantenimiento:'var(--amber)', otros:'var(--slate)' };
+const PV_TIPO_LABEL = { reparacion:'REP', aviso:'AV', oca:'OCA', mantenimiento:'MAN', otros:'OTR' };
 const MONT_TIPO_COLOR = { ot:'var(--amber)', planning:'var(--blue)', ajustes:'var(--red)', pem:'var(--green)' };
 const MONT_TIPO_SOFT = { ot:'var(--amber-soft)', planning:'var(--blue-soft)', ajustes:'var(--red-soft)', pem:'var(--green-soft)' };
 function getTareaTipo(t) { const d = (t.descripcion||'').toUpperCase(); if (d.startsWith('[AJUSTES]')) return 'ajustes'; if (d.startsWith('[PEM]')) return 'pem'; if (d.startsWith('[PLANNING]')) return 'planning'; return 'planning'; }
@@ -1454,30 +1463,41 @@ function renderPlanning() {
   tecsMontaje.forEach((tec, tecIdx) => {
     if (tecIdx === levStartIdx) html += `<div class="pg-zone-sep"></div>`;
     const c = tecColor(tec.nombre);
-    html += `<div style="display:grid;grid-template-columns:140px repeat(5,minmax(140px,1fr))"><div class="pg-row-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div><div class="pg-row-tec-name">${tec.nombre}</div><div class="pg-row-tec-zone">${(tec.zona||'Centro').slice(0,3)}</div></div></div>`;
-    html += `<div class="pg-day-cells" data-tec="${esc(tec.nombre)}">`;
-    days.forEach((d,idx) => { const ds = fmt(d); html += `<div class="pg-day-cell${ds===today?' today-bg':''}" data-tec="${esc(tec.nombre)}" data-date="${ds}" data-idx="${idx}"></div>`; });
+    const dayBuckets = dayStrs.map(() => []);
     const otsTec = expedientes.filter(e => (e.tecnicos || []).includes(tec.nombre) && e.fecha_instalacion);
     otsTec.forEach(ot => {
       const dur = ot.dias_montaje || 1, startIso = ot.fecha_instalacion, endIso = addDays(startIso, dur-1);
       let rS = dayStrs.indexOf(startIso), rE = dayStrs.indexOf(endIso);
-      if (rS === -1 && rE === -1) { if (startIso > dayStrs[4] || endIso < dayStrs[0]) return; rS = startIso < dayStrs[0] ? 0 : dayStrs.indexOf(startIso); rE = endIso > dayStrs[4] ? 4 : dayStrs.indexOf(endIso); }
-      if (rS === -1) rS = 0; if (rE === -1) rE = 4; if (rS < 0) rS = 0; if (rE > 4) rE = 4;
-      const span = rE - rS + 1, leftPct = (rS/5)*100, widthPct = (span/5)*100;
-      const oL = startIso < dayStrs[0], oR = endIso > dayStrs[4];
-      html += `<div class="pg-bar${ot.urgente?' hi-pri':''}" data-id="${ot.id}" style="--bar-color:var(--amber);left:calc(${leftPct}% + 3px);width:calc(${widthPct}% - 6px)" onclick="openEditModal('${ot.id}')">${!oL?'<div class="pg-bar-resize left" data-id="'+ot.id+'" data-side="left"></div>':''}<span class="pg-bar-eq">${ot.equipo||''}${dur>1?' · '+dur+'d':''}</span><div class="pg-bar-name">${ot.nombre}</div><div class="pg-bar-cli">${ot.cliente||'—'}</div>${!oR?'<div class="pg-bar-resize right" data-id="'+ot.id+'" data-side="right"></div>':''}</div>`;
+      if (rS === -1 && rE === -1 && (startIso > dayStrs[4] || endIso < dayStrs[0])) return;
+      if (rS === -1) rS = startIso < dayStrs[0] ? 0 : -1; if (rE === -1) rE = endIso > dayStrs[4] ? 4 : -1;
+      if (rS < 0) rS = 0; if (rE < 0) return; if (rE > 4) rE = 4;
+      dayBuckets[rS].push({ type:'ot', ot, span: rE - rS + 1 });
     });
-    /* Tareas assigned to this tech */
     const tareasTec = tareas.filter(t => t.asignada_a === tec.nombre && t.fecha_recordatorio && !t.completada);
-    tareasTec.forEach(t => {
-      const idx = dayStrs.indexOf(t.fecha_recordatorio);
-      if (idx === -1) return;
-      const leftPct = (idx/5)*100;
-      const tipo = getTareaTipo(t); const barColor = MONT_TIPO_COLOR[tipo]||'var(--blue)';
-      html += `<div class="pg-bar tarea-bar${t.prioridad==='high'?' hi-pri':''}" style="--bar-color:${barColor};left:calc(${leftPct}% + 3px);width:calc(${100/5}% - 6px)" onclick="openTareaModalEdit('${t.id}')"><span class="pg-bar-eq">${getTareaTipoLabel(t)}</span><div class="pg-bar-name">${t.titulo}</div></div>`;
+    tareasTec.forEach(t => { const idx = dayStrs.indexOf(t.fecha_recordatorio); if (idx !== -1) dayBuckets[idx].push({ type:'tarea', tarea: t }); });
+    html += `<div class="pg-tec-wrap"><div class="pg-row-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div><div class="pg-row-tec-name">${tec.nombre}</div><div class="pg-row-tec-zone">${(tec.zona||'Centro').slice(0,3)}</div></div></div>`;
+    days.forEach((d, idx) => {
+      const ds = fmt(d);
+      html += `<div class="pg-day-cell${ds===today?' today-bg':''}" data-tec="${esc(tec.nombre)}" data-date="${ds}">`;
+      dayBuckets[idx].forEach(item => {
+        if (item.type === 'ot') {
+          const ot = item.ot, sp = item.span;
+          const wStyle = sp > 1 ? `width:calc(${sp*100}% + ${(sp-1)}px);position:relative;z-index:3` : '';
+          html += `<div class="pg-bar${ot.urgente?' hi-pri':''}" data-id="${ot.id}" style="--bar-color:var(--amber);${wStyle}" onclick="openEditModal('${ot.id}')"><div class="pg-bar-label">MON</div><div class="pg-bar-body"><div class="pg-bar-eq">${ot.equipo||''}${sp>1?' · '+sp+'d':''}</div><div class="pg-bar-name">${ot.nombre}</div><div class="pg-bar-cli">${ot.cliente||'—'}</div></div></div>`;
+        } else {
+          const t = item.tarea, tipo = getTareaTipo(t), barColor = MONT_TIPO_COLOR[tipo]||'var(--blue)';
+          const label = {ajustes:'AJ',pem:'PEM',planning:'TAR'}[tipo]||'TAR';
+          html += `<div class="pg-bar${t.prioridad==='high'?' hi-pri':''}" style="--bar-color:${barColor}" onclick="openTareaModalEdit('${t.id}')"><div class="pg-bar-label">${label}</div><div class="pg-bar-body"><div class="pg-bar-name">${t.titulo}</div></div></div>`;
+        }
+      });
+      html += `</div>`;
     });
-    html += `</div></div>`;
+    html += `</div>`;
   });
+  html += '<div style="padding:8px 14px;display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:var(--ink3)">';
+  [['var(--amber)','Montaje'],['var(--blue)','Tarea'],['var(--red)','Ajuste'],['var(--green)','PEM']].forEach(([col,lbl]) => { html += `<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${col};opacity:0.4;vertical-align:middle;margin-right:3px"></span>${lbl}</span>`; });
+  html += '</div>';
+  document.getElementById('mont-sub').textContent = dayStrs.reduce((n,ds) => n + expedientes.filter(e => isOnDate(e,ds)).length, 0) + ' OTs · SEMANA ' + weekN;
   document.getElementById('mont-content').innerHTML = `<div class="pg-wrapper">${html}</div>`;
   initPlanningDragDrop(dayStrs); initPlanningResize();
 }
@@ -1654,7 +1674,7 @@ function renderPvPlanning() {
       html += `<div class="pv-plan-cell${isT?' today-bg':''}" data-date="${ds}" data-tec="${esc(tec)}">`;
       tareasDia.forEach(t => {
         const ap = aparatos.find(a => a.id === t.aparato_id);
-        html += `<div class="pv-task-pill ${t.tipo}${t.prioridad==='urgente'?' urgente':''}" draggable="true" data-pvt-id="${t.id}" style="--pill-color:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}" onclick="editTareaPostventa('${esc(t.id)}')"><div style="width:5px;height:5px;border-radius:50%;background:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'};flex-shrink:0"></div><div><div class="pv-task-pill-name">${ap?ap.cliente.split(' ')[0]:(t.descripcion||t.tipo||'—')}</div><div class="pv-task-pill-num">${ap?ap.numero_aparato:(t.tipo||'PV').toUpperCase()}</div></div>${t.prioridad==='urgente'?'<span style="margin-left:auto;font-size:8px;color:var(--red);font-weight:700">URG</span>':''}</div>`;
+        html += `<div class="pv-task-pill ${t.tipo}${t.prioridad==='urgente'?' urgente':''}" draggable="true" data-pvt-id="${t.id}" style="--pill-color:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}" onclick="editTareaPostventa('${esc(t.id)}')"><div class="pg-bar-label" style="background:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'};min-width:26px;padding:2px 4px;font-size:8px;font-weight:700;color:white;opacity:0.7">${PV_TIPO_LABEL[t.tipo]||'PV'}</div><div style="padding-left:5px;min-width:0"><div class="pv-task-pill-name">${ap?(ap.cliente||'').split(' ')[0]:(t.descripcion||t.tipo||'—')}</div><div class="pv-task-pill-num">${ap?ap.numero_aparato:''}</div></div>${t.prioridad==='urgente'?'<span style="margin-left:auto;font-size:8px;color:var(--red);font-weight:700">URG</span>':''}</div>`;
       });
       html += `</div>`;
     });
@@ -2061,7 +2081,7 @@ async function saveOT() {
 }
 
 // ═══ MODAL TAREA ═══
-function populateTareaAsigSelect(selected) { const allPeople = [...oficina.map(p=>p.nombre), ...tecnicos.map(t=>t.nombre)].filter(Boolean); document.getElementById('ft-asig').innerHTML = '<option value="">— Sin asignar —</option>' + allPeople.map(n => `<option value="${n}"${n===selected?' selected':''}>${n}</option>`).join(''); }
+function populateTareaAsigSelect(selected) { const allTecs = [...getTecsInSidebarOrder(TECS_MONTAJE_CENTRO_DISPLAY, tecnicos), ...getTecsInSidebarOrder(TECS_PV_CENTRO_DISPLAY, tecnicos), ...getTecsInSidebarOrder(TECS_LEVANTE_DISPLAY, tecnicos)].map(t=>t.nombre); const oficNames = oficina.map(p=>p.nombre).filter(Boolean); const allPeople = [...allTecs, ...oficNames.filter(n => !allTecs.includes(n))]; document.getElementById('ft-asig').innerHTML = '<option value="">— Sin asignar —</option>' + allPeople.map(n => `<option value="${n}"${n===selected?' selected':''}>${n}</option>`).join(''); }
 function openTareaModal() { editingTareaId = null; document.getElementById('modal-tarea-title').innerHTML = 'Nueva <em>tarea</em>'; ['ft-titulo','ft-desc','ft-fecha','ft-ref'].forEach(id => document.getElementById(id).value = ''); document.getElementById('ft-pri').value = 'med'; document.getElementById('ft-tipo').value = 'planning'; document.getElementById('ft-edit-id').value = ''; document.getElementById('btn-del-tarea').style.display = 'none'; populateTareaAsigSelect(''); document.getElementById('modal-tarea').classList.add('open'); setTimeout(() => document.getElementById('ft-titulo').focus(), 100); }
 function openTareaModalEdit(id) { const t = tareas.find(x => x.id === id); if (!t) return; editingTareaId = id; document.getElementById('modal-tarea-title').innerHTML = 'Editar <em>tarea</em>'; document.getElementById('ft-titulo').value = t.titulo||''; const tipo = getTareaTipo(t); const descClean = (t.descripcion||'').replace(/^\[(PLANNING|AJUSTES|PEM)\]\s*/i,''); document.getElementById('ft-desc').value = descClean; document.getElementById('ft-pri').value = t.prioridad||'med'; document.getElementById('ft-fecha').value = t.fecha_recordatorio||''; document.getElementById('ft-tipo').value = tipo; document.getElementById('ft-ref').value = (t.titulo?.match(/OT\d+|Ap\d+/i)||[''])[0]||''; populateTareaAsigSelect(t.asignada_a||''); document.getElementById('ft-edit-id').value = id; document.getElementById('btn-del-tarea').style.display = 'inline-block'; document.getElementById('modal-tarea').classList.add('open'); }
 async function saveTarea() { const btn = document.getElementById('btn-save-tarea'); const titulo = document.getElementById('ft-titulo').value.trim(); if (!titulo) { showToast('Escribe el título', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const tipo = document.getElementById('ft-tipo').value; const descRaw = document.getElementById('ft-desc').value.trim(); const descripcion = `[${tipo.toUpperCase()}] ${descRaw}`.trim(); const payload = { titulo, descripcion: descripcion||null, prioridad: document.getElementById('ft-pri').value, fecha_recordatorio: document.getElementById('ft-fecha').value||null, asignada_a: document.getElementById('ft-asig').value||null }; let error; if (editingTareaId) { const res = await sb.from('tareas').update(payload).eq('id', editingTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareas.findIndex(x => x.id === editingTareaId); if (i >= 0) tareas[i] = res.data; } } else { payload.completada = false; const res = await sb.from('tareas').insert(payload).select().single(); error = res.error; if (!error && res.data) tareas.unshift(res.data); } btn.disabled = false; btn.textContent = 'Guardar'; if (error) { showToast('Error: ' + error.message, true); return; } closeModal('modal-tarea'); showToast(editingTareaId ? 'Tarea actualizada' : 'Tarea creada'); renderCurrentView(); } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveTarea:', ex); } }
@@ -2071,7 +2091,7 @@ async function deleteTarea() { if (!editingTareaId) return; if (!confirm('¿Elim
 function openAparatoModal() { editingAparatoId = null; document.getElementById('modal-aparato-title').innerHTML = 'Nuevo <em>aparato</em>'; ['fa-num','fa-cli','fa-admin','fa-dir','fa-desc','fa-ot-ref','fa-notas','fa-tipo-contrato','fa-inicio','fa-fin'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); document.getElementById('fa-estado').value = 'En garantía'; document.getElementById('fa-zona').value = 'Centro'; document.getElementById('fa-contrato').checked = false; populatePvTecSelect(''); toggleContratoFields(); document.getElementById('btn-del-aparato').style.display = 'none'; document.getElementById('modal-aparato').classList.add('open'); }
 function openAparatoModalEdit(id) { const a = aparatos.find(x => x.id === id); if (!a) return; editingAparatoId = id; document.getElementById('modal-aparato-title').innerHTML = 'Editar <em>aparato</em>'; document.getElementById('fa-num').value = a.numero_aparato||''; document.getElementById('fa-cli').value = a.cliente||''; document.getElementById('fa-admin').value = a.administrador||''; document.getElementById('fa-dir').value = a.direccion||''; document.getElementById('fa-desc').value = a.descripcion||''; document.getElementById('fa-estado').value = a.estado||'En garantía'; document.getElementById('fa-zona').value = a.zona||'Centro'; populatePvTecSelect(a.tecnico_asignado||''); document.getElementById('fa-contrato').checked = !!a.contrato_mantenimiento; document.getElementById('fa-tipo-contrato').value = a.tipo_contrato||''; document.getElementById('fa-inicio').value = a.fecha_inicio_contrato||''; document.getElementById('fa-fin').value = a.fecha_fin_contrato||''; document.getElementById('fa-ot-ref').value = a.ot_ref||''; document.getElementById('fa-notas').value = a.notas||''; toggleContratoFields(); document.getElementById('btn-del-aparato').style.display = 'inline-block'; document.getElementById('modal-aparato').classList.add('open'); }
 function toggleContratoFields() { const show = document.getElementById('fa-contrato').checked; ['fa-tipo-contrato','fa-inicio','fa-fin'].forEach(id => document.getElementById(id).closest('.f-field').style.display = show ? '' : 'none'); }
-function populatePvTecSelect(selected) { document.getElementById('fa-tec').innerHTML = '<option value="">— Sin asignar —</option>' + getPvTecNames().map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
+function populatePvTecSelect(selected) { const allTecs = [...getTecsInSidebarOrder(TECS_PV_CENTRO_DISPLAY, tecnicos), ...getTecsInSidebarOrder(TECS_LEVANTE_DISPLAY, tecnicos), ...getTecsInSidebarOrder(TECS_MONTAJE_CENTRO_DISPLAY, tecnicos)].map(t=>t.nombre); document.getElementById('fa-tec').innerHTML = '<option value="">— Sin asignar —</option>' + allTecs.map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
 async function saveAparato() { const btn = document.getElementById('btn-save-aparato'); const num = document.getElementById('fa-num').value.trim(); if (!num) { showToast('El nº de aparato es obligatorio', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const payload = { numero_aparato: num, cliente: document.getElementById('fa-cli').value.trim()||null, administrador: document.getElementById('fa-admin').value.trim()||null, direccion: document.getElementById('fa-dir').value.trim()||null, descripcion: document.getElementById('fa-desc').value||null, estado: document.getElementById('fa-estado').value, zona: document.getElementById('fa-zona').value, tecnico_asignado: document.getElementById('fa-tec').value||null, contrato_mantenimiento: document.getElementById('fa-contrato').checked, tipo_contrato: document.getElementById('fa-tipo-contrato').value||null, fecha_inicio_contrato: document.getElementById('fa-inicio').value||null, fecha_fin_contrato: document.getElementById('fa-fin').value||null, ot_ref: document.getElementById('fa-ot-ref').value.trim()||null, notas: document.getElementById('fa-notas').value.trim()||null }; let error; if (editingAparatoId) { const res = await sb.from('aparatos').update(payload).eq('id', editingAparatoId).select().single(); error = res.error; if (!error && res.data) { const i = aparatos.findIndex(x => x.id === editingAparatoId); if (i >= 0) aparatos[i] = res.data; } } else { const res = await sb.from('aparatos').insert(payload).select().single(); error = res.error; if (!error && res.data) aparatos.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar aparato'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-aparato'); showToast(editingAparatoId ? 'Aparato actualizado' : 'Aparato creado'); renderPostventa(); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar aparato'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveAparato:', ex); } }
 async function deleteAparato() { if (!editingAparatoId) return; if (!confirm('¿Eliminar este aparato?')) return; const { error } = await sb.from('aparatos').delete().eq('id', editingAparatoId); if (error) { showToast('Error: ' + error.message, true); return; } aparatos = aparatos.filter(a => a.id !== editingAparatoId); closeModal('modal-aparato'); closePvDrawer(); showToast('Aparato eliminado'); renderPostventa(); }
 
@@ -2080,7 +2100,7 @@ function openTareaPostventaModal() { editingPvTareaId = null; document.getElemen
 function openTareaPostventaModalForAparato(aparatoId) { openTareaPostventaModal(); const a = aparatos.find(x => x.id === aparatoId); if (a) { document.getElementById('pvt-aparato-search').value = `${a.numero_aparato} · ${a.cliente}`; document.getElementById('pvt-aparato-id').value = aparatoId; if (a.tecnico_asignado) document.getElementById('pvt-tec').value = a.tecnico_asignado; } }
 function editTareaPostventa(id) { const t = tareasPostventa.find(x => x.id === id); if (!t) return; editingPvTareaId = id; const a = aparatos.find(x => x.id === t.aparato_id); document.getElementById('modal-pvt-title').innerHTML = 'Editar <em>tarea</em> postventa'; document.getElementById('pvt-aparato-search').value = a ? `${a.numero_aparato} · ${a.cliente}` : ''; document.getElementById('pvt-aparato-id').value = t.aparato_id||''; document.getElementById('pvt-tipo').value = t.tipo||'reparacion'; document.getElementById('pvt-prioridad').value = t.prioridad||'normal'; document.getElementById('pvt-fecha').value = t.fecha_prevista||''; document.getElementById('pvt-estado').value = t.estado||'pendiente'; document.getElementById('pvt-desc').value = t.descripcion||''; document.getElementById('pvt-resolucion').value = t.notas_resolucion||''; document.getElementById('pvt-resolucion-wrap').style.display = t.estado === 'realizada' ? 'block' : 'none'; document.getElementById('btn-del-pvt').style.display = 'inline-block'; populatePvTecSelectTarea(t.tecnico_asignado||''); document.getElementById('modal-pv-tarea').classList.add('open'); }
 document.addEventListener('change', e => { if (e.target.id === 'pvt-estado') document.getElementById('pvt-resolucion-wrap').style.display = e.target.value === 'realizada' ? 'block' : 'none'; });
-function populatePvTecSelectTarea(selected) { document.getElementById('pvt-tec').innerHTML = '<option value="">— Sin asignar —</option>' + getPvTecNames().map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
+function populatePvTecSelectTarea(selected) { const allTecs = [...getTecsInSidebarOrder(TECS_PV_CENTRO_DISPLAY, tecnicos), ...getTecsInSidebarOrder(TECS_LEVANTE_DISPLAY, tecnicos), ...getTecsInSidebarOrder(TECS_MONTAJE_CENTRO_DISPLAY, tecnicos)].map(t=>t.nombre); document.getElementById('pvt-tec').innerHTML = '<option value="">— Sin asignar —</option>' + allTecs.map(t => `<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join(''); }
 function renderAparatoSuggestions() { const q = document.getElementById('pvt-aparato-search').value.toLowerCase().trim(); const wrap = document.getElementById('pvt-aparato-suggestions'); if (q.length < 2) { wrap.innerHTML = ''; return; } const matches = aparatos.filter(a => `${a.numero_aparato} ${a.cliente} ${a.direccion||''}`.toLowerCase().includes(q)).slice(0,5); if (!matches.length) { wrap.innerHTML = ''; return; } wrap.innerHTML = `<div style="position:absolute;top:2px;left:0;right:0;background:var(--surface);border:1px solid var(--line2);border-radius:var(--r2);z-index:10;box-shadow:var(--sh2);overflow:hidden">${matches.map(a=>`<div onclick="selectAparatoSuggestion('${esc(a.id)}')" style="padding:9px 12px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''"><span class="badge b-accent b-mono">${a.numero_aparato}</span><span style="font-weight:500">${a.cliente}</span></div>`).join('')}</div>`; }
 function selectAparatoSuggestion(id) { const a = aparatos.find(x => x.id === id); if (!a) return; document.getElementById('pvt-aparato-search').value = `${a.numero_aparato} · ${a.cliente}`; document.getElementById('pvt-aparato-id').value = id; document.getElementById('pvt-aparato-suggestions').innerHTML = ''; if (a.tecnico_asignado) document.getElementById('pvt-tec').value = a.tecnico_asignado; }
 async function saveTareaPostventa() { const btn = document.getElementById('btn-save-pvt'); const aparatoId = document.getElementById('pvt-aparato-id').value, fecha = document.getElementById('pvt-fecha').value; /* aparatoId is now optional */ if (!fecha) { showToast('Fecha obligatoria', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const estado = document.getElementById('pvt-estado').value; const descField = document.getElementById('pvt-desc').value.trim(); const searchText = document.getElementById('pvt-aparato-search').value.trim(); const descripcion = descField || (!aparatoId && searchText ? searchText : null); const payload = { aparato_id: aparatoId || null, tipo: document.getElementById('pvt-tipo').value, prioridad: document.getElementById('pvt-prioridad').value, tecnico_asignado: document.getElementById('pvt-tec').value||null, fecha_prevista: fecha, estado, descripcion: descripcion||null, notas_resolucion: document.getElementById('pvt-resolucion').value.trim()||null, fecha_realizado: estado === 'realizada' ? todayISO() : null }; let error; if (editingPvTareaId) { const res = await sb.from('trabajos_postventa').update(payload).eq('id', editingPvTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareasPostventa.findIndex(x => x.id === editingPvTareaId); if (i >= 0) tareasPostventa[i] = res.data; } } else { const res = await sb.from('trabajos_postventa').insert(payload).select().single(); error = res.error; if (!error && res.data) tareasPostventa.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar tarea'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-pv-tarea'); showToast(editingPvTareaId ? 'Tarea actualizada' : 'Tarea creada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar tarea'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('savePvTarea:', ex); } }
