@@ -17,28 +17,28 @@
   --line:rgba(20,20,18,0.06);--line2:rgba(20,20,18,0.10);--line3:rgba(20,20,18,0.16);
   --ink:#15140F;--ink2:#5A5851;--ink3:#94918A;--ink4:#BFBDB5;
   --accent:#D9450B;--accent2:#FBE9DD;--accent-hover:#B8390A;
-  --green:#0F6E3D;--green-soft:#E5F1E9;
-  --amber:#7C4A03;--amber-soft:#FBEFD9;
-  --red:#9F1B14;--red-soft:#FBE5E2;
-  --blue:#1E3A8A;--blue-soft:#E5EAF7;
-  --violet:#5B21B6;--violet-soft:#EDE7F8;
+  --green:#0D8B4A;--green-soft:#DFFBE9;
+  --amber:#C67A08;--amber-soft:#FFF3D6;
+  --red:#DC2626;--red-soft:#FEE2E2;
+  --blue:#2563EB;--blue-soft:#DBEAFE;
+  --violet:#7C3AED;--violet-soft:#EDE9FE;
   --slate:#475569;--slate-soft:#EEF0F3;
   --sh1:0 1px 0 rgba(20,20,18,0.04);
   --sh2:0 4px 12px rgba(20,20,18,0.06),0 1px 3px rgba(20,20,18,0.04);
   --sh3:0 16px 48px rgba(20,20,18,0.10),0 2px 8px rgba(20,20,18,0.05);
 }
 [data-theme="dark"]{
-  --bg:#0F0E0C;--bg2:#161513;
-  --surface:#1A1917;--surface2:#1F1E1B;--surface3:#26241F;
-  --line:rgba(255,255,250,0.06);--line2:rgba(255,255,250,0.10);--line3:rgba(255,255,250,0.16);
-  --ink:#F2F0EA;--ink2:#A09D94;--ink3:#6B6862;--ink4:#454340;
+  --bg:#0E0D0B;--bg2:#141311;
+  --surface:#1C1B18;--surface2:#232220;--surface3:#2D2C28;
+  --line:rgba(255,255,250,0.08);--line2:rgba(255,255,250,0.13);--line3:rgba(255,255,250,0.20);
+  --ink:#F0EDE6;--ink2:#B8B4AC;--ink3:#7D7A73;--ink4:#504E48;
   --accent:#FF6B2B;--accent2:#2A1409;--accent-hover:#FF8854;
-  --green:#4ADE80;--green-soft:#0E2218;
-  --amber:#FBBF24;--amber-soft:#241808;
-  --red:#F87171;--red-soft:#220C0A;
-  --blue:#7AAAFF;--blue-soft:#0D1632;
-  --violet:#B991FF;--violet-soft:#1A0F2E;
-  --slate:#94A3B8;--slate-soft:#1A1D22;
+  --green:#34D399;--green-soft:#0B2D1D;
+  --amber:#FBBF24;--amber-soft:#2A1F08;
+  --red:#F87171;--red-soft:#2D0F0F;
+  --blue:#60A5FA;--blue-soft:#0C1B36;
+  --violet:#A78BFA;--violet-soft:#1B1033;
+  --slate:#CBD5E1;--slate-soft:#1E2128;
   --sh1:0 1px 0 rgba(0,0,0,0.3);
   --sh2:0 4px 12px rgba(0,0,0,0.45);
   --sh3:0 16px 48px rgba(0,0,0,0.55);
@@ -331,20 +331,20 @@ button,input,select,textarea{font-family:var(--font)}
 .pg-row-tec-name{font-size:12px;font-weight:600;color:var(--ink)}
 .pg-row-tec-zone{font-size:9.5px;color:var(--ink3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.3px}
 /* Celdas de fondo del día (5 por fila) */
-.pg-tec-wrap{display:grid;grid-template-columns:140px repeat(5,minmax(140px,1fr));border-bottom:1px solid var(--line)}
+.pg-tec-wrap{display:grid;grid-template-columns:140px repeat(5,minmax(140px,1fr));border-bottom:1px solid var(--line3)}
 .pg-ot-layer{display:grid;grid-template-columns:repeat(5,1fr);grid-column:2/7}
 .pg-task-layer{display:grid;grid-template-columns:repeat(5,1fr);grid-column:2/7}
 .pg-task-cell{padding:2px 3px;min-height:0}
 .pg-day-bg{border-right:1px solid var(--line);min-height:4px}
-.pg-day-cell{border-right:1px solid var(--line);min-height:52px;position:relative;padding:2px 0}
+.pg-day-cell{border-right:1px solid var(--line3);min-height:52px;position:relative;padding:2px 0}
 .pg-zone-sep{grid-column:1/-1;height:3px;background:var(--ink3);opacity:0.3}
 .pg-day-cell:last-child{border-right:none}
 .pg-day-cell.today-bg{background:var(--accent2)}
 .pg-day-cell.drop-target{background:var(--accent2);box-shadow:inset 0 0 0 2px var(--accent)}
 /* Barras absolutas dentro del row */
 .pg-bar{background:var(--surface);border:1px solid var(--line2);border-radius:var(--r1);cursor:pointer;z-index:2;overflow:hidden;display:flex;align-items:stretch;user-select:none;transition:box-shadow 0.15s;margin:2px 3px}
-.pg-bar-label{display:flex;align-items:center;justify-content:center;min-width:32px;padding:2px 5px;background:var(--bar-color,var(--amber));opacity:0.3;font-size:8px;font-weight:700;color:var(--ink);letter-spacing:0.3px;flex-shrink:0;text-transform:uppercase}
-.pg-bar.hi-pri .pg-bar-label{opacity:0.85}
+.pg-bar-label{display:flex;align-items:center;justify-content:center;min-width:32px;padding:2px 5px;background:var(--bar-color,var(--amber));font-size:8px;font-weight:700;color:white;letter-spacing:0.3px;flex-shrink:0;text-transform:uppercase;border-radius:var(--r1) 0 0 var(--r1)}
+.pg-bar.hi-pri{background:color-mix(in srgb, var(--bar-color) 15%, var(--surface))}
 .pg-bar-body{padding:3px 7px;min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center}
 .pg-bar .pg-bar-name{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pg-bar .pg-bar-cli{font-size:10px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -630,19 +630,18 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 .pv-plan-head{display:grid;grid-template-columns:140px repeat(5,1fr);background:var(--surface2);border-bottom:1px solid var(--line)}
 .pv-plan-head-cell{padding:9px 8px;font-size:10.5px;font-weight:600;color:var(--ink2);text-align:center;text-transform:uppercase;letter-spacing:0.4px;font-family:var(--mono)}
 .pv-plan-head-cell.left{text-align:left;padding-left:14px;border-right:1px solid var(--line2)}
-.pv-plan-row{display:grid;grid-template-columns:140px repeat(5,1fr);border-bottom:1px solid var(--line);min-height:72px}
+.pv-plan-row{display:grid;grid-template-columns:140px repeat(5,1fr);border-bottom:1px solid var(--line3);min-height:52px}
 .pv-plan-row:last-child{border-bottom:none}
 .pv-zone-sep{grid-column:1/-1;height:3px;background:var(--ink3);opacity:0.3}
 .pv-plan-tec{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--surface2);border-right:1px solid var(--line2)}
 .pv-plan-tec-name{font-size:12px;font-weight:600;color:var(--ink)}
-.pv-plan-cell{border-right:1px solid var(--line);padding:5px;position:relative}
+.pv-plan-cell{border-right:1px solid var(--line3);padding:3px;position:relative;min-height:0}
 .pv-plan-cell:last-child{border-right:none}
 .pv-plan-cell.today-bg{background:var(--accent2)}
 .pv-plan-cell.drop-over{background:var(--accent2);outline:2px dashed var(--accent);outline-offset:-2px}
-.pv-task-pill{background:var(--surface);border:1px solid var(--line2);border-left:none;border-radius:5px;padding:4px 7px 4px 0;font-size:11px;cursor:pointer;margin-bottom:3px;transition:all 0.12s;display:flex;align-items:center;gap:5px;position:relative;overflow:hidden}
-.pv-task-pill::before{content:'';position:absolute;left:0;top:0;bottom:0;width:20%;border-radius:5px 0 0 5px;background:var(--pill-color,var(--blue));opacity:0.2;pointer-events:none}
-.pv-task-pill.urgente::before{opacity:0.8}
-.pv-task-pill>*{position:relative;z-index:1;padding-left:4px}
+.pv-task-pill{background:var(--surface);border:1px solid var(--line2);border-radius:var(--r1);cursor:pointer;margin-bottom:3px;transition:all 0.12s;display:flex;align-items:stretch;overflow:hidden}
+.pv-task-pill .pg-bar-label{min-width:26px;padding:2px 4px;font-size:8px;font-weight:700;color:white;letter-spacing:0.3px;display:flex;align-items:center;justify-content:center;border-radius:var(--r1) 0 0 var(--r1)}
+.pv-task-pill.urgente{background:color-mix(in srgb, var(--pill-color,var(--blue)) 15%, var(--surface))}
 .pv-task-pill[draggable]{cursor:grab}.pv-task-pill[draggable]:active{cursor:grabbing}
 .pv-task-pill:hover{box-shadow:var(--sh1);border-color:var(--line2)}
 .pv-task-pill.urgente{border-left-color:var(--red)}
@@ -943,7 +942,10 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
     </div>
     <div class="f-field"><label class="f-label">Dirección</label><input class="f-input" id="f-dir" placeholder="C/ Ejemplo 12, Madrid"></div>
     <div class="f-row-3">
-      <div class="f-field"><label class="f-label">Familia</label><select class="f-input" id="f-equipo"><option>STR</option><option>STC</option><option>PETR</option><option>PETC</option><option>EVP</option><option>EVA</option><option>PRV</option></select></div>
+      <div class="f-row">
+        <div class="f-field"><label class="f-label">Familia</label><select class="f-input" id="f-equipo" onchange="updateModelSelect()"><option value="">—</option><option>STR</option><option>STC</option><option>PETR</option><option>PETC</option><option>EVP</option><option>EVA</option><option>PRV</option></select></div>
+        <div class="f-field"><label class="f-label">Modelo</label><div style="display:flex;gap:4px"><select class="f-input" id="f-modelo" style="flex:1"><option value="">—</option></select><button type="button" class="btn-cancel" style="padding:4px 8px;font-size:11px" onclick="addModelToFamily()" title="Añadir modelo">+</button></div></div>
+      </div>
       <div class="f-field"><label class="f-label">Estado</label><select class="f-input" id="f-estado"><option>Contratada</option><option>En fabricación</option><option>En tránsito</option><option>Almacen</option><option>Planificada</option><option>Empezada</option><option>Ajustes</option><option>Facturar</option><option>Terminada</option></select></div>
       <div class="f-field"><label class="f-label">Zona</label><select class="f-input" id="f-zona"><option>Centro</option><option>Levante</option></select></div>
     </div>
@@ -1085,7 +1087,8 @@ window.addEventListener('unhandledrejection', e => { console.error('Unhandled pr
 const SB_URL = 'https://dyvinpizkifxmsbffhwh.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5dmlucGl6a2lmeG1zYmZmaHdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzgyMTcsImV4cCI6MjA5Mjg1NDIxN30.Hc4QrXS5gEm_omseOVgewivBFm-hdtVkYwxlJ5owQIs';
 const DOMAIN = 'multielevacion.com';
-const sb = supabase.createClient(SB_URL, SB_KEY);
+const sb = supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, storageKey: 'mv-auth', storage: window.localStorage } });
+let appInitialized = false;
 
 // ═══ STATE ═══
 let expedientes = [], tecnicos = [], oficina = [], tareas = [], aparatos = [], tareasPostventa = [];
@@ -1185,8 +1188,6 @@ function toggleUserDd() { document.getElementById('user-dd').classList.toggle('o
 document.addEventListener('click', e => { if (!e.target.closest('#av-btn')) document.getElementById('user-dd')?.classList.remove('open'); });
 
 sb.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'TOKEN_REFRESHED' && !session) return; /* don't flash login on token refresh */
-  if (event === 'SIGNED_OUT') { document.getElementById('login-screen').style.display = 'flex'; document.getElementById('app').style.display = 'none'; document.getElementById('li-btn').disabled = false; document.getElementById('li-btn').querySelector('span').textContent = 'Entrar'; return; }
   if (session) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
@@ -1194,17 +1195,20 @@ sb.auth.onAuthStateChange(async (event, session) => {
     const initials = email.split('@')[0].split(/[._-]/).map(p => p[0]?.toUpperCase()).join('').slice(0,2) || 'ME';
     document.getElementById('av-initials').textContent = initials;
     document.getElementById('ud-email').textContent = email;
-    try {
-      await loadAll();
-      renderSidebar();
-      renderDashboard();
-    } catch(ex) { console.error('Init error:', ex); alert('Error al cargar: ' + ex.message); }
-  } else if (event === 'INITIAL_SESSION') {
-    /* No session on initial load = not logged in */
+    if (!appInitialized || event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+      try {
+        await loadAll();
+        renderSidebar();
+        renderDashboard();
+        appInitialized = true;
+      } catch(ex) { console.error('Init error:', ex); showToast('Error al cargar: ' + ex.message, true); }
+    }
+  } else if (event === 'SIGNED_OUT' || event === 'INITIAL_SESSION') {
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('app').style.display = 'none';
     document.getElementById('li-btn').disabled = false;
     document.getElementById('li-btn').querySelector('span').textContent = 'Entrar';
+    appInitialized = false;
   }
 });
 
@@ -1674,7 +1678,7 @@ function renderPvPlanning() {
       html += `<div class="pv-plan-cell${isT?' today-bg':''}" data-date="${ds}" data-tec="${esc(tec)}">`;
       tareasDia.forEach(t => {
         const ap = aparatos.find(a => a.id === t.aparato_id);
-        html += `<div class="pv-task-pill ${t.tipo}${t.prioridad==='urgente'?' urgente':''}" draggable="true" data-pvt-id="${t.id}" style="--pill-color:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}" onclick="editTareaPostventa('${esc(t.id)}')"><div class="pg-bar-label" style="background:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'};min-width:26px;padding:2px 4px;font-size:8px;font-weight:700;color:white;opacity:0.7">${PV_TIPO_LABEL[t.tipo]||'PV'}</div><div style="padding-left:5px;min-width:0"><div class="pv-task-pill-name">${ap?(ap.cliente||'').split(' ')[0]:(t.descripcion||t.tipo||'—')}</div><div class="pv-task-pill-num">${ap?ap.numero_aparato:''}</div></div>${t.prioridad==='urgente'?'<span style="margin-left:auto;font-size:8px;color:var(--red);font-weight:700">URG</span>':''}</div>`;
+        html += `<div class="pv-task-pill ${t.tipo}${t.prioridad==='urgente'?' urgente':''}" draggable="true" data-pvt-id="${t.id}" style="--pill-color:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}" onclick="editTareaPostventa('${esc(t.id)}')"><div class="pg-bar-label" style="background:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}">${PV_TIPO_LABEL[t.tipo]||'PV'}</div><div class="pg-bar-body"><div class="pv-task-pill-name">${ap?(ap.cliente||'').split(' ')[0]:(t.descripcion||t.tipo||'—')}</div><div class="pv-task-pill-num">${ap?ap.numero_aparato:''}</div></div>${t.prioridad==='urgente'?'<span style="padding:0 5px;font-size:8px;color:var(--red);font-weight:700;align-self:center">URG</span>':''}</div>`;
       });
       html += `</div>`;
     });
@@ -2044,6 +2048,7 @@ function openModal() {
   editingId = null; document.getElementById('modal-ot-title').innerHTML = 'Nueva <em>OT</em>';
   ['f-nombre','f-cliente','f-dir','f-cond','f-pend','f-obs','f-fecha'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   document.getElementById('f-equipo').value = 'STR'; document.getElementById('f-estado').value = 'Contratada';
+  updateModelSelect();
   document.getElementById('f-zona').value = 'Centro'; document.getElementById('f-dias').value = '1';
   document.getElementById('f-tipo-ajuste').value = 'ajustes'; document.getElementById('f-urgente').checked = false;
   document.getElementById('f-edit-id').value = ''; populateComercialSelect(''); renderTecMulti([]);
@@ -2054,7 +2059,8 @@ function openEditModal(id) {
   const e = expedientes.find(x => x.id === id); if (!e) return; editingId = id;
   document.getElementById('modal-ot-title').innerHTML = 'Editar <em>OT</em>';
   document.getElementById('f-nombre').value = e.nombre||''; document.getElementById('f-cliente').value = e.cliente||'';
-  document.getElementById('f-dir').value = e.direccion||''; document.getElementById('f-equipo').value = e.equipo||'STR';
+  document.getElementById('f-dir').value = e.direccion||'';
+  const eqParts = (e.equipo||'').split(' - '); document.getElementById('f-equipo').value = eqParts[0]||'STR'; updateModelSelect(); if (eqParts[1]) document.getElementById('f-modelo').value = eqParts[1];
   document.getElementById('f-estado').value = e.estado||'Contratada'; document.getElementById('f-zona').value = e.zona||'Centro';
   document.getElementById('f-fecha').value = e.fecha_instalacion||''; document.getElementById('f-dias').value = e.dias_montaje||1;
   document.getElementById('f-tipo-ajuste').value = e.tipo_ajuste||'ajustes';
@@ -2070,7 +2076,10 @@ async function saveOT() {
   if (!nombre) { showToast('El nº de OT es obligatorio', true); return; }
   btn.disabled = true; btn.textContent = 'Guardando…';
   try {
-    const payload = { nombre, cliente: cliente||null, direccion: document.getElementById('f-dir').value.trim()||null, equipo: document.getElementById('f-equipo').value||null, estado: document.getElementById('f-estado').value||'Contratada', zona: document.getElementById('f-zona').value||'Centro', tecnicos: getSelectedTecs(), fecha_instalacion: document.getElementById('f-fecha').value||null, dias_montaje: parseInt(document.getElementById('f-dias').value)||1, tipo_ajuste: document.getElementById('f-tipo-ajuste').value||null, comercial: document.getElementById('f-comercial').value||null, condicionante: document.getElementById('f-cond').value.trim()||null, pendiente_descripcion: document.getElementById('f-pend').value.trim()||null, observaciones: document.getElementById('f-obs').value.trim()||null, urgente: document.getElementById('f-urgente').checked };
+    const familia = document.getElementById('f-equipo').value||null;
+    const modelo = document.getElementById('f-modelo').value||null;
+    const equipo = familia ? (modelo ? familia + ' - ' + modelo : familia) : null;
+    const payload = { nombre, cliente: cliente||null, direccion: document.getElementById('f-dir').value.trim()||null, equipo, estado: document.getElementById('f-estado').value||'Contratada', zona: document.getElementById('f-zona').value||'Centro', tecnicos: getSelectedTecs(), fecha_instalacion: document.getElementById('f-fecha').value||null, dias_montaje: parseInt(document.getElementById('f-dias').value)||1, tipo_ajuste: document.getElementById('f-tipo-ajuste').value||null, comercial: document.getElementById('f-comercial').value||null, condicionante: document.getElementById('f-cond').value.trim()||null, pendiente_descripcion: document.getElementById('f-pend').value.trim()||null, observaciones: document.getElementById('f-obs').value.trim()||null, urgente: document.getElementById('f-urgente').checked };
     let error;
     if (editingId) { const res = await sb.from('expedientes').update(payload).eq('id', editingId).select().single(); error = res.error; if (!error && res.data) { const i = expedientes.findIndex(x => x.id === editingId); if (i >= 0) expedientes[i] = res.data; } }
     else { const res = await sb.from('expedientes').insert(payload).select().single(); error = res.error; if (!error && res.data) expedientes.unshift(res.data); }
@@ -2107,6 +2116,10 @@ async function saveTareaPostventa() { const btn = document.getElementById('btn-s
 async function deleteTareaPostventa() { if (!editingPvTareaId) return; if (!confirm('¿Eliminar esta tarea?')) return; const { error } = await sb.from('trabajos_postventa').delete().eq('id', editingPvTareaId); if (error) { showToast('Error: ' + error.message, true); return; } tareasPostventa = tareasPostventa.filter(t => t.id !== editingPvTareaId); closeModal('modal-pv-tarea'); showToast('Tarea eliminada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); }
 
 // ═══ UTILS ═══
+function getEquipoModels() { try { return JSON.parse(localStorage.getItem('mv-equipo-models')||'{}'); } catch(e) { return {}; } }
+function saveEquipoModels(m) { localStorage.setItem('mv-equipo-models', JSON.stringify(m)); }
+function updateModelSelect() { const fam = document.getElementById('f-equipo').value; const models = getEquipoModels(); const sel = document.getElementById('f-modelo'); sel.innerHTML = '<option value="">—</option>'; (models[fam]||[]).forEach(m => { sel.innerHTML += `<option value="${m}">${m}</option>`; }); }
+function addModelToFamily() { const fam = document.getElementById('f-equipo').value; if (!fam) { showToast('Selecciona primero una familia', true); return; } const name = prompt(`Nuevo modelo para ${fam}:`); if (!name || !name.trim()) return; const models = getEquipoModels(); if (!models[fam]) models[fam] = []; if (!models[fam].includes(name.trim())) models[fam].push(name.trim()); saveEquipoModels(models); updateModelSelect(); document.getElementById('f-modelo').value = name.trim(); showToast(`Modelo "${name.trim()}" añadido a ${fam}`); }
 function closeCreateDd() { document.getElementById('create-dd-wrap').classList.remove('open'); }
 document.addEventListener('click', e => { if (!e.target.closest('#create-dd-wrap')) closeCreateDd(); });
 function openMontTareaModal(tipo) { openTareaModal(); const labels = {planning:'Tarea de planning', ajustes:'Nuevo ajuste', pem:'Nueva PEM'}; document.getElementById('modal-tarea-title').innerHTML = labels[tipo]||'Nueva <em>tarea</em>'; document.getElementById('ft-tipo').value = tipo; }
