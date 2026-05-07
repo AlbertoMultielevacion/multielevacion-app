@@ -10,6 +10,83 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║  MAPA DE ESTRUCTURA — index.html (2143 líneas aprox.)          ║
+   ║                                                                 ║
+   ║  🅐 CSS ·················· L12–692                               ║
+   ║    A1  Variables / Reset ···· L14–57                             ║
+   ║    A2  Login ················ L59–80                             ║
+   ║    A3  App shell ············ L82–120                            ║
+   ║    A4  Sidebar ·············· L122–175                           ║
+   ║    A5  Content / Vistas ····· L176–367                           ║
+   ║        Dashboard ··········· L211–258                            ║
+   ║        Hoy ················· L259–279                            ║
+   ║        Kanban ·············· L281–313                            ║
+   ║        Planning grid ······· L315–366                            ║
+   ║        Técnicos ············ L368–387                            ║
+   ║        Almacén ············· L389–408                            ║
+   ║        Ajustes/PEM ········· L410–428                            ║
+   ║        Pendientes ·········· L430–454                            ║
+   ║        Tareas calendar ····· L456–477                            ║
+   ║        Búsqueda ············ L479–496                            ║
+   ║    A6  Drawer OT ············ L498–532                           ║
+   ║    A7  Modal + Toast ········ L534–569                           ║
+   ║    A8  Postventa módulo ····· L571–691                           ║
+   ║        Toolbar/Cards/Table · L572–603                            ║
+   ║        PV Drawer ··········· L604–625                            ║
+   ║        PV Planning ········· L626–653                            ║
+   ║        Piezas kanban ······· L658–685                            ║
+   ║        OCAS ················ L686–691                            ║
+   ║                                                                 ║
+   ║  🅑 HTML — Login + App Shell ·· L694–912                        ║
+   ║    B1  Login ················ L695–712                           ║
+   ║    B2  Topbar ··············· L714–765                           ║
+   ║    B3  Sidebar ·············· L767–786                           ║
+   ║    B4  Vistas (contenedores)  L788–912                          ║
+   ║                                                                 ║
+   ║  🅒 HTML — Drawers y Modales · L913–1082                        ║
+   ║    C1  Drawer OT (perfil) ··· L914–923                          ║
+   ║    C2  Drawer Aparato PV ···· L924–934                          ║
+   ║    C3  Modal OT ············· L935–970                          ║
+   ║    C4  Modal Tarea ·········· L972–995                          ║
+   ║    C5  Modal Aparato ········ L1012–1049                        ║
+   ║    C6  Modal Tarea PV ······· L1051–1080                        ║
+   ║    C7  Toast ················ L1082                              ║
+   ║                                                                 ║
+   ║  🅓 JS — Núcleo ··············· L1083–1557                      ║
+   ║    D1  Config + Estado global  L1083–1103                       ║
+   ║    D2  Constantes / Tecs ····· L1104–1168                       ║
+   ║    D3  Theme ················· L1169–1171                       ║
+   ║    D4  Auth ·················· L1173–1213                       ║
+   ║    D5  Init + loadAll ········ L1215–1226                       ║
+   ║    D6  Sidebar + Nav ········· L1228–1288                       ║
+   ║    D7  Dashboard ············· L1289–1337                       ║
+   ║    D8  Vista Hoy ············· L1347–1396                       ║
+   ║                                                                 ║
+   ║  🅔 JS — Vistas y Módulos ····· L1397–2139                     ║
+   ║    E1  Kanban / Fases ········ L1397–1434                       ║
+   ║    E2  Montajes planning ····· L1436–1557                       ║
+   ║    E3  Montajes ajustes/PEM ·· L1559–1592                       ║
+   ║    E4  Técnicos vista ········ L1594–1624                       ║
+   ║    E5  Almacén ··············· L1626–1638                       ║
+   ║    E6  Postventa módulo ······ L1639–1796                       ║
+   ║        switchPvTab ·········· L1640                              ║
+   ║        PV Planning ·········· L1657–1714                        ║
+   ║        Piezas ··············· L1716–1760                        ║
+   ║        OCAS ················· L1762–1796                        ║
+   ║    E7  Aparatos ·············· L1797–1878                       ║
+   ║    E8  Tareas calendario ····· L1880–1934                       ║
+   ║    E9  Pendientes ············ L1936–1966                       ║
+   ║    E10 Búsqueda ·············· L1968–1980                       ║
+   ║    E11 Drawer perfil ········· L1982–2035                       ║
+   ║    E12 Modal OT ·············· L2036–2091                       ║
+   ║    E13 Modal Tarea ··········· L2092–2097                       ║
+   ║    E14 Modal Aparato ········· L2099–2105                       ║
+   ║    E15 Modal Tarea PV ········ L2107–2116                       ║
+   ║    E16 Utils ················· L2118–2139                       ║
+   ╚══════════════════════════════════════════════════════════════════╝ */
+
+/* ═══ A1: VARIABLES / RESET ═══ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root,[data-theme="light"]{
   --bg:#FAFAF7;--bg2:#F4F3EE;
@@ -56,7 +133,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14p
 ::-webkit-scrollbar-thumb:hover{background:var(--line3);background-clip:content-box;border:3px solid transparent}
 button,input,select,textarea{font-family:var(--font)}
 
-/* LOGIN */
+/* ═══ A2: LOGIN ═══ */
 #login-screen{display:flex;align-items:center;justify-content:center;height:100vh;background:var(--bg);position:relative;overflow:hidden}
 #login-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 0%,var(--accent2) 0%,transparent 50%);opacity:0.5;pointer-events:none}
 #login-screen::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 100% 100%,var(--violet-soft) 0%,transparent 60%);opacity:0.4;pointer-events:none}
@@ -79,7 +156,7 @@ button,input,select,textarea{font-family:var(--font)}
 .l-err{background:var(--red-soft);color:var(--red);border-radius:var(--r2);padding:10px 13px;font-size:13px;margin-top:12px;display:none}
 .l-note{font-size:11px;color:var(--ink3);text-align:center;margin-top:18px;padding-top:18px;border-top:1px solid var(--line);font-family:var(--mono)}
 
-/* APP */
+/* ═══ A3: APP SHELL ═══ */
 #app{display:none;height:100vh;flex-direction:column}
 .topbar{height:var(--topbar);display:flex;align-items:center;gap:14px;padding:0 18px;background:var(--surface);border-bottom:1px solid var(--line);flex-shrink:0;z-index:50}
 .brand{display:flex;align-items:center;gap:9px;flex-shrink:0;cursor:pointer}
@@ -119,7 +196,7 @@ button,input,select,textarea{font-family:var(--font)}
 .user-dd-item svg{width:13px;height:13px}
 .app-body{display:flex;flex:1;overflow:hidden}
 
-/* SIDEBAR — retráctil y fijable */
+/* ═══ A4: SIDEBAR ═══ */
 :root{--sidebar:248px}
 .sidebar-wrap{position:relative;flex-shrink:0;display:flex}
 /* Tab de apertura siempre visible */
@@ -173,7 +250,7 @@ button,input,select,textarea{font-family:var(--font)}
 .sb-company-row a{color:var(--accent);text-decoration:none;font-size:11px}
 .sb-company-row a:hover{text-decoration:underline}
 
-/* CONTENT */
+/* ═══ A5: CONTENT / VISTAS ═══ */
 .content{flex:1;overflow:hidden;display:flex;flex-direction:column;background:var(--bg)}
 .view{display:none;flex:1;overflow:hidden;flex-direction:column}
 .view.active{display:flex}
@@ -208,7 +285,7 @@ button,input,select,textarea{font-family:var(--font)}
 .empty p.title{font-size:14px;color:var(--ink2);font-weight:500}
 .empty-mini{padding:20px;text-align:center;color:var(--ink3);font-size:12px;font-style:italic}
 
-/* DASHBOARD */
+/* ─── A5.1: DASHBOARD ─── */
 .dash-grid-12{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
 @media(max-width:900px){.dash-grid-12{grid-template-columns:1fr}}
 .dash-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px}
@@ -256,7 +333,7 @@ button,input,select,textarea{font-family:var(--font)}
 .dash-att-name{font-size:13px;font-weight:500;color:var(--ink);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dash-att-meta{font-size:11px;color:var(--ink3);font-family:var(--mono);flex-shrink:0}
 
-/* HOY zonas */
+/* ─── A5.2: HOY ZONAS ─── */
 .hoy-zonas{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
 @media(max-width:1100px){.hoy-zonas{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.hoy-zonas{grid-template-columns:1fr}}
@@ -278,7 +355,7 @@ button,input,select,textarea{font-family:var(--font)}
 .hoy-libre-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:var(--bg);border:1px dashed var(--line2);border-radius:20px;font-size:12px;color:var(--ink2)}
 .hoy-libre-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--ink4)}
 
-/* TABLERO (kanban) */
+/* ─── A5.3: TABLERO KANBAN ─── */
 .kanban-toolbar{display:flex;align-items:center;gap:10px;padding:12px 24px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap;flex-shrink:0}
 .k-toolbar-label{font-size:11px;color:var(--ink3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.4px}
 .k-col-checks{display:flex;flex-wrap:wrap;gap:5px}
@@ -312,7 +389,7 @@ button,input,select,textarea{font-family:var(--font)}
 .k-urgent{position:absolute;top:9px;right:9px;width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px var(--bg)}
 .k-empty{text-align:center;padding:24px 8px;font-size:11.5px;color:var(--ink4);border:1.5px dashed var(--line2);border-radius:var(--r2);margin:4px;font-style:italic}
 
-/* PLANNING / SEMANA */
+/* ─── A5.4: PLANNING / SEMANA ─── */
 .planning-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .week-nav{display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r2);padding:3px}
 .wbtn{width:28px;height:28px;border-radius:5px;border:none;background:transparent;cursor:pointer;color:var(--ink2);font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.12s;font-weight:500}
@@ -322,7 +399,7 @@ button,input,select,textarea{font-family:var(--font)}
 .btn-today{padding:6px 12px;font-size:12px;font-weight:500;border:1px solid var(--line2);border-radius:var(--r2);background:var(--surface);cursor:pointer;color:var(--ink2);transition:all 0.12s}
 .btn-today:hover{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 
-/* Planning grid (con barras multi-día) */
+/* ─── A5.5: PLANNING GRID (barras multi-día) ─── */
 .pg-wrapper{position:relative;overflow:auto;border:1px solid var(--line);border-radius:var(--r3);background:var(--surface)}
 .pg-grid{display:grid;grid-template-columns:140px repeat(5,minmax(140px,1fr));position:relative;min-width:780px}
 .pg-head{padding:11px 9px;background:var(--surface2);border-bottom:1px solid var(--line);font-size:11px;font-weight:600;color:var(--ink2);text-align:center;text-transform:uppercase;letter-spacing:0.4px;position:relative}
@@ -365,7 +442,7 @@ button,input,select,textarea{font-family:var(--font)}
 .pg-bar-resize.right{right:-2px}
 .today-mark{position:absolute;top:7px;right:7px;font-size:9px;font-family:var(--mono);color:var(--accent);font-weight:700;letter-spacing:0.4px}
 
-/* TÉCNICOS view */
+/* ─── A5.6: TÉCNICOS VIEW ─── */
 .tec-zone-h{font-family:var(--serif);font-size:22px;font-weight:400;font-style:italic;color:var(--ink2);margin:14px 0 12px;letter-spacing:-0.4px;display:flex;align-items:center;gap:10px}
 .tec-zone-h::after{content:'';flex:1;height:1px;background:var(--line)}
 .tec-zone-h em{color:var(--accent);font-style:italic}
@@ -386,7 +463,7 @@ button,input,select,textarea{font-family:var(--font)}
 .tec-card-row-status{font-size:10px;font-family:var(--mono);color:var(--ink3);text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0}
 .tec-card-empty{font-size:11.5px;color:var(--ink3);font-style:italic;padding:8px 4px;text-align:center}
 
-/* ALMACÉN columnas */
+/* ─── A5.7: ALMACÉN ─── */
 .alm-2cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:900px){.alm-2cols{grid-template-columns:1fr}}
 .alm-col{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);padding:14px 16px}
@@ -407,7 +484,7 @@ button,input,select,textarea{font-family:var(--font)}
 .alm-cond{display:flex;align-items:flex-start;gap:6px;background:var(--amber-soft);border-radius:var(--r1);padding:6px 9px;font-size:11px;color:var(--amber);line-height:1.4}
 .alm-cond svg{width:12px;height:12px;flex-shrink:0;margin-top:1px}
 
-/* AJUSTES/PEM */
+/* ─── A5.8: AJUSTES/PEM ─── */
 .aj-cards{display:flex;flex-direction:column;gap:8px}
 .aj-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);padding:14px 16px;border-left:3px solid var(--red)}
 .aj-card.pem{border-left-color:var(--blue)}
@@ -427,7 +504,7 @@ button,input,select,textarea{font-family:var(--font)}
 .aj-field-val{font-size:12px;color:var(--ink);line-height:1.45}
 .aj-field-val.empty{color:var(--ink3);font-style:italic}
 
-/* PENDIENTES en columnas */
+/* ─── A5.9: PENDIENTES ─── */
 .pend-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 @media(max-width:1100px){.pend-cols{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.pend-cols{grid-template-columns:1fr}}
@@ -453,7 +530,7 @@ button,input,select,textarea{font-family:var(--font)}
 .pend-foot span{display:inline-flex;align-items:center;gap:4px}
 .pend-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
 
-/* TAREAS calendar */
+/* ─── A5.10: TAREAS CALENDAR ─── */
 .tar-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .cal-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);overflow:hidden}
 .cal-head-row{display:grid;grid-template-columns:repeat(7,1fr);background:var(--surface2);border-bottom:1px solid var(--line)}
@@ -476,7 +553,7 @@ button,input,select,textarea{font-family:var(--font)}
 .cal-task.l{border-left-color:var(--green)}
 .cal-task.ot-fecha{border-left-color:var(--accent);background:var(--accent2);color:var(--accent);font-family:var(--mono);font-weight:600;font-size:10px}
 
-/* BÚSQUEDA */
+/* ─── A5.11: BÚSQUEDA ─── */
 .search-wrap{max-width:900px}
 .search-box{position:relative;margin-bottom:18px}
 .search-input{width:100%;padding:13px 18px 13px 46px;border:1px solid var(--line2);border-radius:var(--r2);background:var(--surface);color:var(--ink);font-size:15px;font-family:var(--font);transition:all 0.15s}
@@ -495,7 +572,7 @@ button,input,select,textarea{font-family:var(--font)}
 .search-result-meta{display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:240px}
 mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2px;font-weight:600}
 
-/* PERFIL DRAWER */
+/* ═══ A6: DRAWER PERFIL ═══ */
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(20,20,18,0.4);backdrop-filter:blur(4px);z-index:150}
 .drawer-overlay.open{display:block}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:92vw;background:var(--surface);box-shadow:var(--sh3);z-index:160;transform:translateX(100%);transition:transform 0.25s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
@@ -531,8 +608,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 .drawer-ot-name{flex:1;font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .drawer-ot-meta{font-size:10.5px;color:var(--ink3);font-family:var(--mono);flex-shrink:0}
 
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(20,20,18,0.5);backdrop-filter:blur(8px);z-index:200;align-items:center;justify-content:center;padding:20px}
+/* ═══ A7: MODAL + TOAST ═══ */{display:none;position:fixed;inset:0;background:rgba(20,20,18,0.5);backdrop-filter:blur(8px);z-index:200;align-items:center;justify-content:center;padding:20px}
 [data-theme="dark"] .modal-overlay{background:rgba(0,0,0,0.7)}
 .modal-overlay.open{display:flex}
 .modal{background:var(--surface);border-radius:var(--r4);padding:28px 30px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;box-shadow:var(--sh3);border:1px solid var(--line)}
@@ -564,11 +640,11 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 .btn-save:hover{background:var(--accent);transform:translateY(-1px);box-shadow:var(--sh2)}
 .btn-save:disabled{opacity:0.5;cursor:not-allowed;transform:none}
 
-/* TOAST */
+/* ─── A7.1: TOAST ─── */
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--surface);padding:11px 18px;border-radius:var(--r2);font-size:13px;font-weight:500;z-index:300;opacity:0;transition:all 0.25s;pointer-events:none;box-shadow:var(--sh3)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* POSTVENTA MODULE */
+/* ═══ A8: POSTVENTA MÓDULO ═══ */
 .pv-toolbar{display:flex;align-items:center;gap:8px;padding:12px 24px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap;flex-shrink:0}
 .pv-search{flex:1;min-width:200px;max-width:300px;position:relative}
 .pv-search-input{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--line2);border-radius:var(--r2);background:var(--bg);color:var(--ink);font-size:13px;font-family:var(--font)}
@@ -601,7 +677,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 .pv-table td{padding:10px 12px;border-bottom:1px solid var(--line);color:var(--ink);vertical-align:middle}
 .pv-table tr:hover td{background:var(--surface2)}
 .pv-table tr{cursor:pointer}
-/* Aparato detail drawer (reutiliza estilos drawer) */
+/* ─── A8.1: PV DRAWER ─── */
 .pv-drawer{position:fixed;top:0;right:0;bottom:0;width:520px;max-width:94vw;background:var(--surface);box-shadow:var(--sh3);z-index:160;transform:translateX(100%);transition:transform 0.25s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
 .pv-drawer.open{transform:translateX(0)}
 .pv-drawer-h{display:flex;align-items:flex-start;gap:14px;padding:20px 24px;border-bottom:1px solid var(--line);flex-shrink:0}
@@ -623,7 +699,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 .pv-hist-title{font-size:13px;font-weight:500;color:var(--ink)}
 .pv-hist-meta{font-size:11px;color:var(--ink3);margin-top:2px;font-family:var(--mono)}
 .pv-hist-desc{font-size:12.5px;color:var(--ink2);margin-top:4px;line-height:1.5}
-/* Planning Postventa */
+/* ─── A8.2: PV PLANNING ─── */
 .pv-planning-wrap{padding:0 24px 20px}
 .pv-plan-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .pv-plan-grid{border:1px solid var(--line);border-radius:var(--r3);background:var(--surface);overflow:hidden}
@@ -655,7 +731,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
   :root{--sidebar:0px}
   .sidebar{display:none}
   .brand-name,.brand-section,.brand-sep{display:none}
-/* PIEZAS KANBAN */
+/* ─── A8.3: PIEZAS KANBAN ─── */
 .pz-board{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 24px}
 @media(max-width:760px){.pz-board{grid-template-columns:1fr}}
 .pz-col{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);display:flex;flex-direction:column;max-height:calc(100vh - 220px)}
@@ -683,7 +759,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 .pz-done-toggle.open svg{transform:rotate(180deg)}
 .pz-done-list{display:none;padding-top:6px}
 .pz-done-list.open{display:block}
-/* OCAS */
+/* ─── A8.4: OCAS ─── */
 .oca-board{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 24px}
 @media(max-width:760px){.oca-board{grid-template-columns:1fr}}
 .oca-card{background:var(--bg);border:1px solid var(--line);border-radius:var(--r2);padding:11px 13px;margin-bottom:6px;cursor:pointer;transition:all 0.15s}
@@ -692,7 +768,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 </style>
 </head>
 <body>
-<!-- LOGIN -->
+<!-- ═══ B1: LOGIN ═══ -->
 <div id="login-screen">
   <div class="login-wrap">
     <div class="login-brand">
@@ -711,7 +787,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
   </div>
 </div>
 
-<!-- APP -->
+<!-- ═══ B2: APP + TOPBAR ═══ -->
 <div id="app">
   <div class="topbar">
     <div class="brand" onclick="switchView('dashboard',document.querySelector('.tab[data-v=dashboard]'))">
@@ -911,7 +987,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
   </div>
 </div>
 
-<!-- DRAWER PERFIL -->
+<!-- ═══ C1: DRAWER PERFIL ═══ -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-h">
@@ -922,7 +998,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
   <div class="drawer-body" id="drawer-body"></div>
 </div>
 
-<!-- PV APARATO DRAWER -->
+<!-- ═══ C2: PV APARATO DRAWER ═══ -->
 <div class="drawer-overlay" id="pv-drawer-overlay" onclick="closePvDrawer()"></div>
 <div class="pv-drawer" id="pv-drawer">
   <div class="pv-drawer-h">
@@ -969,7 +1045,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
   </div>
 </div>
 
-<!-- MODAL TAREA -->
+<!-- ═══ C4: MODAL TAREA ═══ -->
 <div class="modal-overlay" id="modal-tarea" onclick="handleOverlay(event,'modal-tarea')">
   <div class="modal">
     <div class="modal-title" id="modal-tarea-title">Nueva <em>tarea</em></div>
@@ -1009,7 +1085,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
   <div class="pv-drawer-body" id="pvd-body"></div>
 </div>
 
-<!-- MODAL APARATO -->
+<!-- ═══ C5: MODAL APARATO ═══ -->
 <div class="modal-overlay" id="modal-aparato" onclick="handleOverlay(event,'modal-aparato')">
   <div class="modal">
     <div class="modal-title" id="modal-aparato-title">Nuevo <em>aparato</em></div>
@@ -1048,7 +1124,7 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
   </div>
 </div>
 
-<!-- MODAL TAREA POSTVENTA -->
+<!-- ═══ C6: MODAL TAREA POSTVENTA ═══ -->
 <div class="modal-overlay" id="modal-pv-tarea" onclick="handleOverlay(event,'modal-pv-tarea')">
   <div class="modal">
     <div class="modal-title" id="modal-pvt-title">Nueva <em>tarea</em> postventa</div>
@@ -1083,14 +1159,14 @@ mark{background:var(--accent2);color:var(--accent);padding:0 2px;border-radius:2
 <script>
 /* Global error handler to prevent UI hangs */
 window.addEventListener('unhandledrejection', e => { console.error('Unhandled promise:', e.reason); e.preventDefault(); showToast?.('Error inesperado, inténtalo de nuevo', true); document.querySelectorAll('button[disabled]').forEach(b => { b.disabled = false; if (b.textContent.includes('…')) b.textContent = b.textContent.replace('…',''); }); });
-// ═══ CONFIG ═══
+// ═══ D1: CONFIG + ESTADO GLOBAL ═══
 const SB_URL = 'https://dyvinpizkifxmsbffhwh.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5dmlucGl6a2lmeG1zYmZmaHdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzgyMTcsImV4cCI6MjA5Mjg1NDIxN30.Hc4QrXS5gEm_omseOVgewivBFm-hdtVkYwxlJ5owQIs';
 const DOMAIN = 'multielevacion.com';
 const sb = supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, storageKey: 'mv-auth', storage: window.localStorage } });
 let appInitialized = false;
 
-// ═══ STATE ═══
+// ═══ D2: STATE ═══
 let expedientes = [], tecnicos = [], oficina = [], tareas = [], aparatos = [], tareasPostventa = [];
 let weekOffset = 0, monthOffset = 0, pvWeekOffset = 0;
 let currentView = 'dashboard', editingId = null, editingTareaId = null;
@@ -1166,11 +1242,11 @@ function getPvTecNames() { return getPvTecs().map(t => t.nombre); }
 
 function tecColor(name) { const i = tecnicos.findIndex(t => t.nombre === name); return TEC_PALETTE[(i >= 0 ? i : 0) % TEC_PALETTE.length]; }
 
-// ═══ THEME ═══
+// ═══ D3: THEME ═══
 function toggleTheme() { const c = document.documentElement.getAttribute('data-theme'); const n = c === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', n); localStorage.setItem('mv_theme', n); }
 (function initTheme() { const s = localStorage.getItem('mv_theme'); if (s) document.documentElement.setAttribute('data-theme', s); else if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) document.documentElement.setAttribute('data-theme', 'dark'); })();
 
-// ═══ AUTH ═══
+// ═══ D4: AUTH ═══
 async function doLogin() {
   const email = document.getElementById('li-email').value.trim().toLowerCase();
   const pass = document.getElementById('li-pass').value;
@@ -1231,7 +1307,7 @@ function getFiltered() {
   return expedientes;
 }
 
-// ═══ SIDEBAR ═══
+// ═══ D6: SIDEBAR ═══
 function findPerson(name, list) {
   const low = name.toLowerCase();
   return list.find(x => x.nombre && x.nombre.toLowerCase() === low) || list.find(x => x.nombre && x.nombre.toLowerCase().startsWith(low.split(' ')[0]));
@@ -1394,7 +1470,7 @@ function renderHoy() {
   html += '</div></div>';
   document.getElementById('hoy-zonas').innerHTML = html;
 }
-// ═══ KANBAN / FASES ═══
+// ═══ E1: KANBAN / FASES ═══
 function renderKanbanToolbar() {
   const togglable = FASES.filter(f => f !== 'Contratada' && f !== 'Terminada');
   document.getElementById('k-col-checks').innerHTML = togglable.map(f => {
@@ -1433,7 +1509,7 @@ function renderKanbanBoard() {
   });
 }
 
-// ═══ MONTAJES (planning + ajustes + PEM) ═══
+// ═══ E2: MONTAJES (planning + ajustes + PEM) ═══
 function switchMontTab(tab) {
   currentMontTab = tab;
   document.getElementById('mont-tab-planning').classList.toggle('active', tab === 'planning');
@@ -1467,7 +1543,9 @@ function renderPlanning() {
   tecsMontaje.forEach((tec, tecIdx) => {
     if (tecIdx === levStartIdx) html += `<div class="pg-zone-sep"></div>`;
     const c = tecColor(tec.nombre);
-    const dayBuckets = dayStrs.map(() => []);
+    /* Separate multi-day OTs from single-day items to prevent overlap */
+    const multiDayOTs = []; /* {ot, rS, rE, span} */
+    const singleDayBuckets = dayStrs.map(() => []); /* items per day */
     const otsTec = expedientes.filter(e => (e.tecnicos || []).includes(tec.nombre) && e.fecha_instalacion);
     otsTec.forEach(ot => {
       const dur = ot.dias_montaje || 1, startIso = ot.fecha_instalacion, endIso = addDays(startIso, dur-1);
@@ -1475,19 +1553,35 @@ function renderPlanning() {
       if (rS === -1 && rE === -1 && (startIso > dayStrs[4] || endIso < dayStrs[0])) return;
       if (rS === -1) rS = startIso < dayStrs[0] ? 0 : -1; if (rE === -1) rE = endIso > dayStrs[4] ? 4 : -1;
       if (rS < 0) rS = 0; if (rE < 0) return; if (rE > 4) rE = 4;
-      dayBuckets[rS].push({ type:'ot', ot, span: rE - rS + 1 });
+      const span = rE - rS + 1;
+      if (span > 1) { multiDayOTs.push({ ot, rS, rE, span }); }
+      else { singleDayBuckets[rS].push({ type:'ot', ot, span:1 }); }
     });
     const tareasTec = tareas.filter(t => t.asignada_a === tec.nombre && t.fecha_recordatorio && !t.completada);
-    tareasTec.forEach(t => { const idx = dayStrs.indexOf(t.fecha_recordatorio); if (idx !== -1) dayBuckets[idx].push({ type:'tarea', tarea: t }); });
+    tareasTec.forEach(t => { const idx = dayStrs.indexOf(t.fecha_recordatorio); if (idx !== -1) singleDayBuckets[idx].push({ type:'tarea', tarea: t }); });
     html += `<div class="pg-tec-wrap"><div class="pg-row-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div><div class="pg-row-tec-name">${tec.nombre}</div><div class="pg-row-tec-zone">${(tec.zona||'Centro').slice(0,3)}</div></div></div>`;
+    /* Multi-day OT layer — absolute rows spanning across day columns */
+    if (multiDayOTs.length) {
+      multiDayOTs.forEach(({ot, rS, span}) => {
+        html += `<div class="pg-ot-layer">`;
+        for (let i = 0; i < 5; i++) {
+          if (i === rS) {
+            html += `<div style="grid-column:${i+1}/span ${span};padding:2px 3px">`;
+            html += `<div class="pg-bar${ot.urgente?' hi-pri':''}" data-id="${ot.id}" style="--bar-color:var(--amber)" onclick="openEditModal('${ot.id}')"><div class="pg-bar-label">MON</div><div class="pg-bar-body"><div class="pg-bar-eq">${ot.equipo||''} · ${span}d</div><div class="pg-bar-name">${ot.nombre}</div><div class="pg-bar-cli">${ot.cliente||'—'}</div></div></div>`;
+            html += `</div>`;
+          }
+        }
+        html += `</div>`;
+      });
+    }
+    /* Single-day items layer — each in its own day cell */
     days.forEach((d, idx) => {
       const ds = fmt(d);
       html += `<div class="pg-day-cell${ds===today?' today-bg':''}" data-tec="${esc(tec.nombre)}" data-date="${ds}">`;
-      dayBuckets[idx].forEach(item => {
+      singleDayBuckets[idx].forEach(item => {
         if (item.type === 'ot') {
-          const ot = item.ot, sp = item.span;
-          const wStyle = sp > 1 ? `width:calc(${sp*100}% + ${(sp-1)}px);position:relative;z-index:3` : '';
-          html += `<div class="pg-bar${ot.urgente?' hi-pri':''}" data-id="${ot.id}" style="--bar-color:var(--amber);${wStyle}" onclick="openEditModal('${ot.id}')"><div class="pg-bar-label">MON</div><div class="pg-bar-body"><div class="pg-bar-eq">${ot.equipo||''}${sp>1?' · '+sp+'d':''}</div><div class="pg-bar-name">${ot.nombre}</div><div class="pg-bar-cli">${ot.cliente||'—'}</div></div></div>`;
+          const ot = item.ot;
+          html += `<div class="pg-bar${ot.urgente?' hi-pri':''}" data-id="${ot.id}" style="--bar-color:var(--amber)" onclick="openEditModal('${ot.id}')"><div class="pg-bar-label">MON</div><div class="pg-bar-body"><div class="pg-bar-eq">${ot.equipo||''}</div><div class="pg-bar-name">${ot.nombre}</div><div class="pg-bar-cli">${ot.cliente||'—'}</div></div></div>`;
         } else {
           const t = item.tarea, tipo = getTareaTipo(t), barColor = MONT_TIPO_COLOR[tipo]||'var(--blue)';
           const label = {ajustes:'AJ',pem:'PEM',planning:'TAR'}[tipo]||'TAR';
@@ -1591,7 +1685,7 @@ function renderAjustes() {
   document.getElementById('mont-content').innerHTML = html;
 }
 
-// ═══ TÉCNICOS (3 cols: Centro-Montajes | Centro-PV | Levante) ═══
+// ═══ E4: TÉCNICOS (3 cols: Centro-Montajes | Centro-PV | Levante) ═══
 function renderByTec() {
   const ESTADOS_ACTIVOS = ['Empezada','Ajustes','Facturar','Planificada'];
   let html = '<div class="hoy-zonas">';
@@ -1623,7 +1717,7 @@ function renderByTec() {
   document.getElementById('bytec-content').innerHTML = html;
 }
 
-// ═══ ALMACÉN ═══
+// ═══ E5: ALMACÉN ═══
 function renderAlmacen() {
   const alm = expedientes.filter(e => e.estado === 'Almacen');
   document.getElementById('alm-sub').textContent = `${alm.length} EQUIPOS EN ALMACÉN`;
@@ -1636,7 +1730,7 @@ function almCardHtml(e, type) {
   const tecsHtml = (e.tecnicos||[]).map(t => `<span class="badge" style="background:${tecColor(t)}1A;color:${tecColor(t)}">${t.split(' ')[0]}</span>`).join('');
   return `<div class="alm-card ${cls}" onclick="openEditModal('${e.id}')"><div class="alm-pri" style="${pri[1]}">${pri[0]}</div><div class="alm-body"><div class="alm-head"><span class="alm-ot">${e.nombre}</span><span class="alm-name">${e.cliente}</span></div>${e.direccion?`<div class="alm-addr">${e.direccion}</div>`:''}<div class="alm-meta"><span class="badge b-accent b-mono">${e.equipo||'—'}</span>${tecsHtml}${e.fecha_instalacion?`<span class="badge b-line b-mono">${fmtDate(e.fecha_instalacion).toUpperCase()}</span>`:''}<span class="badge b-line b-mono">${e.zona||'Centro'}</span></div>${e.condicionante?`<div class="alm-cond"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1L15 14H1z"/><path d="M8 6v3M8 11.5v.01"/></svg><span>${e.condicionante}</span></div>`:''}</div></div>`;
 }
-// ═══ POSTVENTA MODULE ═══
+// ═══ E6: POSTVENTA MODULE ═══
 function switchPvTab(tab) {
   currentPvTab = tab;
   ['planning','piezas','ocas','aparatos'].forEach(t => document.getElementById('pv-tab-'+t).classList.toggle('active', tab === t));
@@ -1654,51 +1748,63 @@ function renderPostventa() {
 }
 function changePvWeek(d) { pvWeekOffset += d; renderPvPlanning(); }
 
-// Planning PV (todos los técnicos como en montajes)
+// Planning PV (misma estética que montajes, usando clases pg-*)
 function renderPvPlanning() {
   const base = getMonday(new Date()); base.setDate(base.getDate() + pvWeekOffset * 7);
   const days = Array.from({length:5}, (_,i) => { const d = new Date(base); d.setDate(d.getDate()+i); return d; });
   const today = todayISO(), fmt = d => localISO(d), weekN = isoWeek(days[0]);
   document.getElementById('pv-week-label').innerHTML = `${days[0].getDate()} ${MESES[days[0].getMonth()]} – ${days[4].getDate()} ${MESES[days[4].getMonth()]}<span class="week-tag">S${weekN}</span>`;
   document.getElementById('pv-sub').textContent = `PLANNING POSTVENTA · SEMANA ${weekN}`;
-  let html = `<div class="pv-planning-wrap"><div class="pv-plan-grid"><div class="pv-plan-head"><div class="pv-plan-head-cell left">Técnico</div>`;
-  days.forEach(d => { const isT = fmt(d) === today; html += `<div class="pv-plan-head-cell${isT?' today-bg':''}">${DIAS[d.getDay()-1]} ${d.getDate()}${isT?'<br><span style="font-size:8px;color:var(--accent);font-weight:700">HOY</span>':''}</div>`; });
-  html += `</div>`;
+  const dayStrs = days.map(fmt);
   const pvCentro = getTecsInSidebarOrder(TECS_PV_CENTRO_DISPLAY, tecnicos);
+  const pvMontaje = getTecsInSidebarOrder(TECS_MONTAJE_CENTRO_DISPLAY, tecnicos);
   const pvLev = getTecsInSidebarOrder(TECS_LEVANTE_DISPLAY, tecnicos);
-  const pvTecsList = [...pvCentro, ...pvLev];
+  const pvTecsList = [...pvCentro, ...pvLev, ...pvMontaje];
   const pvLevStartIdx = pvCentro.length;
+  const pvMontStartIdx = pvCentro.length + pvLev.length;
+  let html = `<div class="pg-grid"><div class="pg-head left">Técnico</div>`;
+  days.forEach(d => { const isT = fmt(d) === today; html += `<div class="pg-head${isT?' today-bg':''}">${DIAS[d.getDay()-1]} ${d.getDate()}${isT?'<div class="today-mark">HOY</div>':''}</div>`; });
+  html += `</div>`;
   pvTecsList.forEach((tecObj, tecIdx) => {
-    if (tecIdx === pvLevStartIdx) html += `<div class="pv-zone-sep"></div>`;
-    const tec = tecObj.nombre; const t = tecObj; const c = t ? tecColor(t.nombre) : 'var(--blue)';
-    html += `<div class="pv-plan-row"><div class="pv-plan-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div class="pv-plan-tec-name">${tec}</div></div>`;
+    if (tecIdx === pvLevStartIdx || tecIdx === pvMontStartIdx) html += `<div class="pg-zone-sep"></div>`;
+    const tec = tecObj.nombre; const c = tecColor(tec);
+    /* Check if this tec has any tasks this week */
+    const weekTasks = tareasPostventa.filter(t => t.tecnico_asignado === tec && t.estado !== 'cancelada' && dayStrs.includes(t.fecha_prevista));
+    if (tecIdx >= pvMontStartIdx && !weekTasks.length) return; /* Hide montaje tecs with no PV tasks */
+    html += `<div class="pg-tec-wrap"><div class="pg-row-tec"><div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><div><div class="pg-row-tec-name">${tec}</div><div class="pg-row-tec-zone">${getTecRole(tec)}</div></div></div>`;
     days.forEach(d => {
       const ds = fmt(d), isT = ds === today;
       const tareasDia = tareasPostventa.filter(t => t.tecnico_asignado === tec && t.fecha_prevista === ds && t.estado !== 'cancelada');
-      html += `<div class="pv-plan-cell${isT?' today-bg':''}" data-date="${ds}" data-tec="${esc(tec)}">`;
+      html += `<div class="pg-day-cell${isT?' today-bg':''}" data-date="${ds}" data-tec="${esc(tec)}">`;
       tareasDia.forEach(t => {
         const ap = aparatos.find(a => a.id === t.aparato_id);
-        html += `<div class="pv-task-pill ${t.tipo}${t.prioridad==='urgente'?' urgente':''}" draggable="true" data-pvt-id="${t.id}" style="--pill-color:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}" onclick="editTareaPostventa('${esc(t.id)}')"><div class="pg-bar-label" style="background:${PV_TIPO_COLOR[t.tipo]||'var(--slate)'}">${PV_TIPO_LABEL[t.tipo]||'PV'}</div><div class="pg-bar-body"><div class="pv-task-pill-name">${ap?(ap.cliente||'').split(' ')[0]:(t.descripcion||t.tipo||'—')}</div><div class="pv-task-pill-num">${ap?ap.numero_aparato:''}</div></div>${t.prioridad==='urgente'?'<span style="padding:0 5px;font-size:8px;color:var(--red);font-weight:700;align-self:center">URG</span>':''}</div>`;
+        const barColor = PV_TIPO_COLOR[t.tipo]||'var(--slate)';
+        const label = PV_TIPO_LABEL[t.tipo]||'PV';
+        html += `<div class="pg-bar${t.prioridad==='urgente'?' hi-pri':''}" data-pvt-id="${t.id}" draggable="true" style="--bar-color:${barColor}" onclick="editTareaPostventa('${esc(t.id)}')"><div class="pg-bar-label">${label}</div><div class="pg-bar-body"><div class="pg-bar-name">${ap?(ap.cliente||'').split(' ')[0]:(t.descripcion||t.tipo||'—')}</div><div class="pg-bar-cli">${ap?ap.numero_aparato:''}</div></div>${t.prioridad==='urgente'?'<div class="pg-bar-eq" style="background:var(--red-soft);color:var(--red)">URG</div>':''}</div>`;
       });
       html += `</div>`;
     });
     html += `</div>`;
   });
-  html += `</div></div>`;
-  document.getElementById('pv-content').innerHTML = html;
+  html += '<div style="padding:8px 14px;display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:var(--ink3)">';
+  [['var(--green)','Reparación'],['var(--blue)','Aviso'],['var(--violet)','OCA'],['var(--amber)','Mantenimiento'],['var(--slate)','Otros']].forEach(([col,lbl]) => { html += `<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${col};opacity:0.4;vertical-align:middle;margin-right:3px"></span>${lbl}</span>`; });
+  html += '</div>';
+  document.getElementById('pv-content').innerHTML = `<div class="pg-wrapper">${html}</div>`;
   initPvPlanningDragDrop();
 }
 function initPvPlanningDragDrop() {
   let dragPvId = null;
-  document.querySelectorAll('.pv-task-pill[draggable]').forEach(el => {
+  const pvContent = document.getElementById('pv-content');
+  if (!pvContent) return;
+  pvContent.querySelectorAll('.pg-bar[draggable]').forEach(el => {
     el.addEventListener('dragstart', e => { dragPvId = el.dataset.pvtId; el.style.opacity = '0.4'; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', dragPvId); } catch(_) {} });
-    el.addEventListener('dragend', () => { el.style.opacity = '1'; dragPvId = null; document.querySelectorAll('.pv-plan-cell.drop-over').forEach(c => c.classList.remove('drop-over')); });
+    el.addEventListener('dragend', () => { el.style.opacity = '1'; dragPvId = null; pvContent.querySelectorAll('.pg-day-cell.drop-target').forEach(c => c.classList.remove('drop-target')); });
   });
-  document.querySelectorAll('.pv-plan-cell').forEach(cell => {
-    cell.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; cell.classList.add('drop-over'); });
-    cell.addEventListener('dragleave', () => cell.classList.remove('drop-over'));
+  pvContent.querySelectorAll('.pg-day-cell').forEach(cell => {
+    cell.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; cell.classList.add('drop-target'); });
+    cell.addEventListener('dragleave', () => cell.classList.remove('drop-target'));
     cell.addEventListener('drop', async e => {
-      e.preventDefault(); cell.classList.remove('drop-over');
+      e.preventDefault(); cell.classList.remove('drop-target');
       let id = dragPvId; try { const dt = e.dataTransfer.getData('text/plain'); if (dt) id = dt; } catch(_) {}
       if (!id) return;
       const newDate = cell.dataset.date, newTec = cell.dataset.tec;
@@ -1713,33 +1819,39 @@ function initPvPlanningDragDrop() {
   });
 }
 
-// ═══ PIEZAS (kanban 2 columnas) ═══
+// ═══ E6.2: PIEZAS (pendientes/programadas como Ajustes/PEM) ═══
 function renderPiezas() {
   document.getElementById('pv-sub').textContent = 'PIEZAS · PENDIENTES Y PROGRAMADAS';
   const piezasTareas = tareasPostventa.filter(t => t.tipo === 'reparacion' && t.estado !== 'cancelada' && t.estado !== 'realizada');
   const pendientes = piezasTareas.filter(t => !t.tecnico_asignado || !t.fecha_prevista);
   const programadas = piezasTareas.filter(t => t.tecnico_asignado && t.fecha_prevista);
   const completadas = tareasPostventa.filter(t => t.tipo === 'reparacion' && t.estado === 'realizada');
-  let html = `<div class="pz-board">`;
-  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">Piezas <em>pendientes</em></div><span class="badge b-amber b-mono">${pendientes.length}</span></div><div class="pz-col-body" id="pz-pedidas">`;
-  pendientes.forEach(t => { html += piezaCardHtml(t, true); });
-  if (!pendientes.length) html += `<div class="empty-mini">Sin piezas pendientes</div>`;
-  html += `</div></div>`;
-  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">Piezas <em>programadas</em></div><span class="badge b-green b-mono">${programadas.length}</span></div><div class="pz-col-body" id="pz-recibidas">`;
-  programadas.forEach(t => { html += piezaCardHtml(t, false); });
-  if (!programadas.length) html += `<div class="empty-mini">Sin piezas programadas</div>`;
+  let html = `<div style="padding:20px 24px"><div class="pend-cols" style="grid-template-columns:1fr 1fr">`;
+  /* Columna pendientes */
+  html += `<div class="pend-col"><div class="pend-col-h"><div class="pend-col-title">Piezas <em>pendientes</em></div><span class="badge b-amber b-mono">${pendientes.length}</span></div>`;
+  if (pendientes.length) pendientes.forEach(t => { html += pvPendItemHtml(t, 'reparacion', true); });
+  else html += '<div class="empty-mini">Sin piezas pendientes</div>';
+  html += '</div>';
+  /* Columna programadas */
+  html += `<div class="pend-col"><div class="pend-col-h"><div class="pend-col-title">Piezas <em>programadas</em></div><span class="badge b-green b-mono">${programadas.length}</span></div>`;
+  if (programadas.length) programadas.forEach(t => { html += pvPendItemHtml(t, 'reparacion', false); });
+  else html += '<div class="empty-mini">Sin piezas programadas</div>';
+  /* Completadas colapsable */
   if (completadas.length) {
     html += `<div class="pz-done-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>Completadas · ${completadas.length}</div><div class="pz-done-list">`;
-    completadas.forEach(t => { html += piezaCardHtml(t, false, true); });
+    completadas.slice(0,20).forEach(t => { html += pvPendItemHtml(t, 'reparacion', false, true); });
     html += `</div>`;
   }
-  html += `</div></div></div>`;
+  html += '</div></div></div>';
   document.getElementById('pv-content').innerHTML = html;
 }
-function piezaCardHtml(t, showAsignar, isDone) {
+/* Item reutilizable para Piezas y OCAS en formato pend-item */
+function pvPendItemHtml(t, tipoKey, showAsignar, isDone) {
   const ap = aparatos.find(a => a.id === t.aparato_id);
-  const asignada = t.tecnico_asignado && t.estado !== 'pendiente';
-  return `<div class="pz-card ${asignada?'asignada':''} ${isDone?'done':''}" data-id="${t.id}"><div class="pz-card-h"><span class="pz-card-ap">${ap?ap.numero_aparato:'—'}</span>${asignada?`<span class="badge b-green">${t.tecnico_asignado.split(' ')[0]}</span>`:''}</div><div class="pz-card-title">${ap?ap.cliente:'—'}</div>${t.descripcion?`<div class="pz-card-desc">${t.descripcion}</div>`:''}<div class="pz-card-foot">${isDone?`<label class="pz-card-check done"><input type="checkbox" checked disabled>Completada</label>`:`<label class="pz-card-check"><input type="checkbox" onchange="markPiezaDone('${t.id}',this.checked)">Completar</label>`}${showAsignar && !asignada && !isDone?`<button class="pz-card-asignar" onclick="event.stopPropagation();asignarPieza('${t.id}')">Asignar técnico</button>`:''}</div></div>`;
+  const color = PV_TIPO_COLOR[tipoKey]||'var(--slate)';
+  const tecName = t.tecnico_asignado ? t.tecnico_asignado.toUpperCase() : '';
+  const fechaStr = t.fecha_prevista ? fmtDate(t.fecha_prevista).toUpperCase() : '';
+  return `<div class="pend-item${isDone?' done-item':''}" onclick="editTareaPostventa('${t.id}')" style="cursor:pointer;${isDone?'opacity:0.5':''}"><div style="width:6px;height:6px;border-radius:50%;background:${color};flex-shrink:0;margin-top:7px"></div><div class="pend-main"><div class="pend-title${isDone?' done':''}">${ap?ap.cliente:'—'}${ap?' · '+ap.numero_aparato:''}</div>${t.descripcion?`<div class="pend-sub">${t.descripcion}</div>`:''}<div class="pend-foot">${fechaStr?`<span>${fechaStr}</span>`:''}${tecName?`<span>${tecName}</span>`:''}</div></div><div class="pend-right">${!isDone && showAsignar && !t.tecnico_asignado?`<button class="pz-card-asignar" onclick="event.stopPropagation();asignarPieza('${t.id}')" style="font-size:10px">Asignar</button>`:''}${isDone?'<span class="badge b-green">Hecha</span>':''}</div></div>`;
 }
 async function markPiezaDone(id, done) {
   const newEstado = done ? 'realizada' : 'en_curso';
@@ -1759,32 +1871,31 @@ async function asignarPieza(id) {
   renderPiezas(); showToast(`Asignada a ${tec.split(' ')[0]}`);
 }
 
-// ═══ OCAS ═══
+// ═══ E6.3: OCAS (pendientes/programadas como Ajustes/PEM) ═══
 function renderOcas() {
   document.getElementById('pv-sub').textContent = 'OCAS · PENDIENTES Y PROGRAMADAS';
   const ocaTareas = tareasPostventa.filter(t => t.tipo === 'oca' && t.estado !== 'cancelada' && t.estado !== 'realizada');
   const pendientes = ocaTareas.filter(t => !t.tecnico_asignado || !t.fecha_prevista);
   const programadas = ocaTareas.filter(t => t.tecnico_asignado && t.fecha_prevista);
   const completadas = tareasPostventa.filter(t => t.tipo === 'oca' && t.estado === 'realizada');
-  let html = `<div class="pz-board">`;
-  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">OCAs <em>pendientes</em></div><span class="badge b-violet b-mono">${pendientes.length}</span></div><div class="pz-col-body">`;
-  pendientes.forEach(t => { html += ocaCardHtml(t, false); });
-  if (!pendientes.length) html += `<div class="empty-mini">Sin OCAs pendientes</div>`;
-  html += `</div></div>`;
-  html += `<div class="pz-col"><div class="pz-col-head"><div class="pz-col-title">OCAs <em>programadas</em></div><span class="badge b-green b-mono">${programadas.length}</span></div><div class="pz-col-body">`;
-  programadas.forEach(t => { html += ocaCardHtml(t, true); });
-  if (!programadas.length) html += `<div class="empty-mini">Sin OCAs programadas</div>`;
+  let html = `<div style="padding:20px 24px"><div class="pend-cols" style="grid-template-columns:1fr 1fr">`;
+  /* Columna pendientes */
+  html += `<div class="pend-col"><div class="pend-col-h"><div class="pend-col-title">OCAs <em>pendientes</em></div><span class="badge b-violet b-mono">${pendientes.length}</span></div>`;
+  if (pendientes.length) pendientes.forEach(t => { html += pvPendItemHtml(t, 'oca', true); });
+  else html += '<div class="empty-mini">Sin OCAs pendientes</div>';
+  html += '</div>';
+  /* Columna programadas */
+  html += `<div class="pend-col"><div class="pend-col-h"><div class="pend-col-title">OCAs <em>programadas</em></div><span class="badge b-green b-mono">${programadas.length}</span></div>`;
+  if (programadas.length) programadas.forEach(t => { html += pvPendItemHtml(t, 'oca', false); });
+  else html += '<div class="empty-mini">Sin OCAs programadas</div>';
+  /* Completadas colapsable */
   if (completadas.length) {
     html += `<div class="pz-done-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>Completadas · ${completadas.length}</div><div class="pz-done-list">`;
-    completadas.forEach(t => { html += ocaCardHtml(t, true, true); });
+    completadas.slice(0,20).forEach(t => { html += pvPendItemHtml(t, 'oca', false, true); });
     html += `</div>`;
   }
-  html += `</div></div></div>`;
+  html += '</div></div></div>';
   document.getElementById('pv-content').innerHTML = html;
-}
-function ocaCardHtml(t, asignada, isDone) {
-  const ap = aparatos.find(a => a.id === t.aparato_id);
-  return `<div class="oca-card ${asignada?'asignada':''}" onclick="editTareaPostventa('${t.id}')"><div class="pz-card-h"><span class="pz-card-ap">${ap?ap.numero_aparato:(t.descripcion||'—')}</span>${asignada&&t.tecnico_asignado?`<span class="badge b-violet">${t.tecnico_asignado.split(' ')[0]}</span>`:`<button class="pz-card-asignar" onclick="event.stopPropagation();asignarOca('${t.id}')">Asignar</button>`}</div><div class="pz-card-title">${ap?ap.cliente:'—'}</div>${t.descripcion?`<div class="pz-card-desc">${t.descripcion}</div>`:''}<div class="pz-card-foot">${t.fecha_prevista?`<span class="badge b-line b-mono">${fmtDate(t.fecha_prevista).toUpperCase()}</span>`:''}<span class="badge b-${isDone?'green':t.estado==='pendiente'?'amber':'slate'}">${isDone?'Completada':t.estado}</span></div></div>`;
 }
 async function asignarOca(id) {
   const tec = prompt('Asignar OCA a técnico:', (getPvTecNames()[0]||''));
@@ -1794,7 +1905,7 @@ async function asignarOca(id) {
   const t = tareasPostventa.find(x => x.id === id); if (t) t.tecnico_asignado = tec;
   renderOcas(); showToast(`OCA asignada a ${tec.split(' ')[0]}`);
 }
-// ═══ APARATOS ═══
+// ═══ E7: APARATOS ═══
 function setPvFilter(key, val) {
   pvFilter[key] = pvFilter[key] === val ? '' : val;
   if (key === 'estado') pvFilter.contrato = ''; if (key === 'contrato') pvFilter.estado = '';
@@ -1877,7 +1988,7 @@ function renderPvDrawerBody(a) {
   document.getElementById('pvd-body').innerHTML = html;
 }
 
-// ═══ TAREAS CALENDARIO ═══
+// ═══ E8: TAREAS CALENDARIO ═══
 function renderTareasCalendar() {
   const now = new Date(); now.setMonth(now.getMonth() + monthOffset);
   const year = now.getFullYear(), month = now.getMonth();
@@ -1933,7 +2044,7 @@ function initCalendarDragDrop() {
 }
 function changeMonth(d) { monthOffset += d; renderTareasCalendar(); }
 
-// ═══ PENDIENTES ═══
+// ═══ E9: PENDIENTES ═══
 function renderPendientes() {
   const today = todayISO(), pendT = tareas.filter(t => !t.completada);
   const byGroup = { 'Montajes': [], 'Postventa': [], 'General': [] };
@@ -1965,7 +2076,7 @@ async function toggleTarea(id, completada) {
   renderCurrentView(); showToast(completada ? 'Tarea completada' : 'Tarea reabierta');
 }
 
-// ═══ BÚSQUEDA ═══
+// ═══ E10: BÚSQUEDA ═══
 function renderSearchResults() {
   const q = document.getElementById('search-input').value.trim().toLowerCase();
   const info = document.getElementById('search-info'), out = document.getElementById('search-results');
@@ -1979,7 +2090,7 @@ function renderSearchResults() {
   out.innerHTML = results.slice(0,60).map(e => { const tecs = (e.tecnicos||[]).join(', '); return `<div class="search-result" onclick="openEditModal('${e.id}')"><div class="search-result-dot" style="background:${FASE_COLOR[e.estado]||'#888'}"></div><div class="search-result-main"><div class="search-result-h"><span class="search-result-ot">${hl(e.nombre)}</span><span class="search-result-name">${hl(e.cliente)}</span></div><div class="search-result-info">${hl(e.direccion||'—')}${tecs?' · '+hl(tecs):''}${e.comercial?' · Com: '+hl(e.comercial):''}</div></div><div class="search-result-meta"><span class="badge b-accent b-mono">${e.equipo||'—'}</span><span class="badge b-line b-mono">${e.estado}</span><span class="badge b-line b-mono">${e.zona||'—'}</span></div></div>`; }).join('');
 }
 
-// ═══ DRAWER PERFIL (FIXED) ═══
+// ═══ E11: DRAWER PERFIL ═══
 function openProfile(type, id) {
   const list = type === 'tec' ? tecnicos : oficina;
   const p = list.find(x => x.id === id); if (!p) return;
@@ -2033,7 +2144,7 @@ async function saveProfileNotas() {
   showToast('Notas guardadas');
 }
 function quickTaskFor(nombre) { closeDrawer(); openTareaModal(); document.getElementById('ft-asig').value = nombre; }
-// ═══ MODAL OT ═══
+// ═══ E12: MODAL OT ═══
 function renderTecMulti(selected) {
   const sel = new Set(selected || []);
   document.getElementById('f-tec-multi').innerHTML = tecnicos.filter(t => !isPvTec(t.nombre)).map(t => {
@@ -2089,14 +2200,14 @@ async function saveOT() {
   } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar OT'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveOT:', ex); }
 }
 
-// ═══ MODAL TAREA ═══
+// ═══ E13: MODAL TAREA ═══
 function populateTareaAsigSelect(selected) { const allTecs = [...getTecsInSidebarOrder(TECS_MONTAJE_CENTRO_DISPLAY, tecnicos), ...getTecsInSidebarOrder(TECS_PV_CENTRO_DISPLAY, tecnicos), ...getTecsInSidebarOrder(TECS_LEVANTE_DISPLAY, tecnicos)].map(t=>t.nombre); const oficNames = oficina.map(p=>p.nombre).filter(Boolean); const allPeople = [...allTecs, ...oficNames.filter(n => !allTecs.includes(n))]; document.getElementById('ft-asig').innerHTML = '<option value="">— Sin asignar —</option>' + allPeople.map(n => `<option value="${n}"${n===selected?' selected':''}>${n}</option>`).join(''); }
 function openTareaModal() { editingTareaId = null; document.getElementById('modal-tarea-title').innerHTML = 'Nueva <em>tarea</em>'; ['ft-titulo','ft-desc','ft-fecha','ft-ref'].forEach(id => document.getElementById(id).value = ''); document.getElementById('ft-pri').value = 'med'; document.getElementById('ft-tipo').value = 'planning'; document.getElementById('ft-edit-id').value = ''; document.getElementById('btn-del-tarea').style.display = 'none'; populateTareaAsigSelect(''); document.getElementById('modal-tarea').classList.add('open'); setTimeout(() => document.getElementById('ft-titulo').focus(), 100); }
 function openTareaModalEdit(id) { const t = tareas.find(x => x.id === id); if (!t) return; editingTareaId = id; document.getElementById('modal-tarea-title').innerHTML = 'Editar <em>tarea</em>'; document.getElementById('ft-titulo').value = t.titulo||''; const tipo = getTareaTipo(t); const descClean = (t.descripcion||'').replace(/^\[(PLANNING|AJUSTES|PEM)\]\s*/i,''); document.getElementById('ft-desc').value = descClean; document.getElementById('ft-pri').value = t.prioridad||'med'; document.getElementById('ft-fecha').value = t.fecha_recordatorio||''; document.getElementById('ft-tipo').value = tipo; document.getElementById('ft-ref').value = (t.titulo?.match(/OT\d+|Ap\d+/i)||[''])[0]||''; populateTareaAsigSelect(t.asignada_a||''); document.getElementById('ft-edit-id').value = id; document.getElementById('btn-del-tarea').style.display = 'inline-block'; document.getElementById('modal-tarea').classList.add('open'); }
 async function saveTarea() { const btn = document.getElementById('btn-save-tarea'); const titulo = document.getElementById('ft-titulo').value.trim(); if (!titulo) { showToast('Escribe el título', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const tipo = document.getElementById('ft-tipo').value; const descRaw = document.getElementById('ft-desc').value.trim(); const descripcion = `[${tipo.toUpperCase()}] ${descRaw}`.trim(); const payload = { titulo, descripcion: descripcion||null, prioridad: document.getElementById('ft-pri').value, fecha_recordatorio: document.getElementById('ft-fecha').value||null, asignada_a: document.getElementById('ft-asig').value||null }; let error; if (editingTareaId) { const res = await sb.from('tareas').update(payload).eq('id', editingTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareas.findIndex(x => x.id === editingTareaId); if (i >= 0) tareas[i] = res.data; } } else { payload.completada = false; const res = await sb.from('tareas').insert(payload).select().single(); error = res.error; if (!error && res.data) tareas.unshift(res.data); } btn.disabled = false; btn.textContent = 'Guardar'; if (error) { showToast('Error: ' + error.message, true); return; } closeModal('modal-tarea'); showToast(editingTareaId ? 'Tarea actualizada' : 'Tarea creada'); renderCurrentView(); } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveTarea:', ex); } }
 async function deleteTarea() { if (!editingTareaId) return; if (!confirm('¿Eliminar esta tarea?')) return; const { error } = await sb.from('tareas').delete().eq('id', editingTareaId); if (error) { showToast('Error: ' + error.message, true); return; } tareas = tareas.filter(t => t.id !== editingTareaId); closeModal('modal-tarea'); showToast('Tarea eliminada'); renderCurrentView(); }
 
-// ═══ MODAL APARATO ═══
+// ═══ E14: MODAL APARATO ═══
 function openAparatoModal() { editingAparatoId = null; document.getElementById('modal-aparato-title').innerHTML = 'Nuevo <em>aparato</em>'; ['fa-num','fa-cli','fa-admin','fa-dir','fa-desc','fa-ot-ref','fa-notas','fa-tipo-contrato','fa-inicio','fa-fin'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); document.getElementById('fa-estado').value = 'En garantía'; document.getElementById('fa-zona').value = 'Centro'; document.getElementById('fa-contrato').checked = false; populatePvTecSelect(''); toggleContratoFields(); document.getElementById('btn-del-aparato').style.display = 'none'; document.getElementById('modal-aparato').classList.add('open'); }
 function openAparatoModalEdit(id) { const a = aparatos.find(x => x.id === id); if (!a) return; editingAparatoId = id; document.getElementById('modal-aparato-title').innerHTML = 'Editar <em>aparato</em>'; document.getElementById('fa-num').value = a.numero_aparato||''; document.getElementById('fa-cli').value = a.cliente||''; document.getElementById('fa-admin').value = a.administrador||''; document.getElementById('fa-dir').value = a.direccion||''; document.getElementById('fa-desc').value = a.descripcion||''; document.getElementById('fa-estado').value = a.estado||'En garantía'; document.getElementById('fa-zona').value = a.zona||'Centro'; populatePvTecSelect(a.tecnico_asignado||''); document.getElementById('fa-contrato').checked = !!a.contrato_mantenimiento; document.getElementById('fa-tipo-contrato').value = a.tipo_contrato||''; document.getElementById('fa-inicio').value = a.fecha_inicio_contrato||''; document.getElementById('fa-fin').value = a.fecha_fin_contrato||''; document.getElementById('fa-ot-ref').value = a.ot_ref||''; document.getElementById('fa-notas').value = a.notas||''; toggleContratoFields(); document.getElementById('btn-del-aparato').style.display = 'inline-block'; document.getElementById('modal-aparato').classList.add('open'); }
 function toggleContratoFields() { const show = document.getElementById('fa-contrato').checked; ['fa-tipo-contrato','fa-inicio','fa-fin'].forEach(id => document.getElementById(id).closest('.f-field').style.display = show ? '' : 'none'); }
@@ -2104,7 +2215,7 @@ function populatePvTecSelect(selected) { const allTecs = [...getTecsInSidebarOrd
 async function saveAparato() { const btn = document.getElementById('btn-save-aparato'); const num = document.getElementById('fa-num').value.trim(); if (!num) { showToast('El nº de aparato es obligatorio', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const payload = { numero_aparato: num, cliente: document.getElementById('fa-cli').value.trim()||null, administrador: document.getElementById('fa-admin').value.trim()||null, direccion: document.getElementById('fa-dir').value.trim()||null, descripcion: document.getElementById('fa-desc').value||null, estado: document.getElementById('fa-estado').value, zona: document.getElementById('fa-zona').value, tecnico_asignado: document.getElementById('fa-tec').value||null, contrato_mantenimiento: document.getElementById('fa-contrato').checked, tipo_contrato: document.getElementById('fa-tipo-contrato').value||null, fecha_inicio_contrato: document.getElementById('fa-inicio').value||null, fecha_fin_contrato: document.getElementById('fa-fin').value||null, ot_ref: document.getElementById('fa-ot-ref').value.trim()||null, notas: document.getElementById('fa-notas').value.trim()||null }; let error; if (editingAparatoId) { const res = await sb.from('aparatos').update(payload).eq('id', editingAparatoId).select().single(); error = res.error; if (!error && res.data) { const i = aparatos.findIndex(x => x.id === editingAparatoId); if (i >= 0) aparatos[i] = res.data; } } else { const res = await sb.from('aparatos').insert(payload).select().single(); error = res.error; if (!error && res.data) aparatos.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar aparato'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-aparato'); showToast(editingAparatoId ? 'Aparato actualizado' : 'Aparato creado'); renderPostventa(); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar aparato'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('saveAparato:', ex); } }
 async function deleteAparato() { if (!editingAparatoId) return; if (!confirm('¿Eliminar este aparato?')) return; const { error } = await sb.from('aparatos').delete().eq('id', editingAparatoId); if (error) { showToast('Error: ' + error.message, true); return; } aparatos = aparatos.filter(a => a.id !== editingAparatoId); closeModal('modal-aparato'); closePvDrawer(); showToast('Aparato eliminado'); renderPostventa(); }
 
-// ═══ MODAL TAREA POSTVENTA ═══
+// ═══ E15: MODAL TAREA POSTVENTA ═══
 function openTareaPostventaModal() { editingPvTareaId = null; document.getElementById('modal-pvt-title').innerHTML = 'Nueva <em>tarea</em> postventa'; ['pvt-aparato-search','pvt-desc','pvt-resolucion'].forEach(id => document.getElementById(id).value = ''); document.getElementById('pvt-aparato-id').value = ''; document.getElementById('pvt-tipo').value = 'reparacion'; document.getElementById('pvt-prioridad').value = 'normal'; document.getElementById('pvt-estado').value = 'pendiente'; document.getElementById('pvt-fecha').value = todayISO(); document.getElementById('pvt-resolucion-wrap').style.display = 'none'; document.getElementById('btn-del-pvt').style.display = 'none'; populatePvTecSelectTarea(''); document.getElementById('modal-pv-tarea').classList.add('open'); }
 function openTareaPostventaModalForAparato(aparatoId) { openTareaPostventaModal(); const a = aparatos.find(x => x.id === aparatoId); if (a) { document.getElementById('pvt-aparato-search').value = `${a.numero_aparato} · ${a.cliente}`; document.getElementById('pvt-aparato-id').value = aparatoId; if (a.tecnico_asignado) document.getElementById('pvt-tec').value = a.tecnico_asignado; } }
 function editTareaPostventa(id) { const t = tareasPostventa.find(x => x.id === id); if (!t) return; editingPvTareaId = id; const a = aparatos.find(x => x.id === t.aparato_id); document.getElementById('modal-pvt-title').innerHTML = 'Editar <em>tarea</em> postventa'; document.getElementById('pvt-aparato-search').value = a ? `${a.numero_aparato} · ${a.cliente}` : ''; document.getElementById('pvt-aparato-id').value = t.aparato_id||''; document.getElementById('pvt-tipo').value = t.tipo||'reparacion'; document.getElementById('pvt-prioridad').value = t.prioridad||'normal'; document.getElementById('pvt-fecha').value = t.fecha_prevista||''; document.getElementById('pvt-estado').value = t.estado||'pendiente'; document.getElementById('pvt-desc').value = t.descripcion||''; document.getElementById('pvt-resolucion').value = t.notas_resolucion||''; document.getElementById('pvt-resolucion-wrap').style.display = t.estado === 'realizada' ? 'block' : 'none'; document.getElementById('btn-del-pvt').style.display = 'inline-block'; populatePvTecSelectTarea(t.tecnico_asignado||''); document.getElementById('modal-pv-tarea').classList.add('open'); }
@@ -2115,7 +2226,7 @@ function selectAparatoSuggestion(id) { const a = aparatos.find(x => x.id === id)
 async function saveTareaPostventa() { const btn = document.getElementById('btn-save-pvt'); const aparatoId = document.getElementById('pvt-aparato-id').value, fecha = document.getElementById('pvt-fecha').value; /* aparatoId is now optional */ if (!fecha) { showToast('Fecha obligatoria', true); return; } btn.disabled = true; btn.textContent = 'Guardando…'; try { const estado = document.getElementById('pvt-estado').value; const descField = document.getElementById('pvt-desc').value.trim(); const searchText = document.getElementById('pvt-aparato-search').value.trim(); const descripcion = descField || (!aparatoId && searchText ? searchText : null); const payload = { aparato_id: aparatoId || null, tipo: document.getElementById('pvt-tipo').value, prioridad: document.getElementById('pvt-prioridad').value, tecnico_asignado: document.getElementById('pvt-tec').value||null, fecha_prevista: fecha, estado, descripcion: descripcion||null, notas_resolucion: document.getElementById('pvt-resolucion').value.trim()||null, fecha_realizado: estado === 'realizada' ? todayISO() : null }; let error; if (editingPvTareaId) { const res = await sb.from('trabajos_postventa').update(payload).eq('id', editingPvTareaId).select().single(); error = res.error; if (!error && res.data) { const i = tareasPostventa.findIndex(x => x.id === editingPvTareaId); if (i >= 0) tareasPostventa[i] = res.data; } } else { const res = await sb.from('trabajos_postventa').insert(payload).select().single(); error = res.error; if (!error && res.data) tareasPostventa.push(res.data); } btn.disabled = false; btn.textContent = 'Guardar tarea'; if (error) { showToast('Error: ' + (error.message||'desconocido'), true); return; } closeModal('modal-pv-tarea'); showToast(editingPvTareaId ? 'Tarea actualizada' : 'Tarea creada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); } catch(ex) { btn.disabled = false; btn.textContent = 'Guardar tarea'; showToast('Error: ' + (ex.message||'desconocido'), true); console.error('savePvTarea:', ex); } }
 async function deleteTareaPostventa() { if (!editingPvTareaId) return; if (!confirm('¿Eliminar esta tarea?')) return; const { error } = await sb.from('trabajos_postventa').delete().eq('id', editingPvTareaId); if (error) { showToast('Error: ' + error.message, true); return; } tareasPostventa = tareasPostventa.filter(t => t.id !== editingPvTareaId); closeModal('modal-pv-tarea'); showToast('Tarea eliminada'); if (currentAparatoId) { const a = aparatos.find(x => x.id === currentAparatoId); if (a) renderPvDrawerBody(a); } renderPostventa(); }
 
-// ═══ UTILS ═══
+// ═══ E16: UTILS ═══
 function getEquipoModels() { try { return JSON.parse(localStorage.getItem('mv-equipo-models')||'{}'); } catch(e) { return {}; } }
 function saveEquipoModels(m) { localStorage.setItem('mv-equipo-models', JSON.stringify(m)); }
 function updateModelSelect() { const fam = document.getElementById('f-equipo').value; const models = getEquipoModels(); const sel = document.getElementById('f-modelo'); sel.innerHTML = '<option value="">—</option>'; (models[fam]||[]).forEach(m => { sel.innerHTML += `<option value="${m}">${m}</option>`; }); }
